@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulChat - AI Mental Health Support</title>
+    <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
+    <meta name="theme-color" content="#667eea">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            animation: fadeIn 0.3s ease-out;
+            line-height: 1.5;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            color: #333;
+            align-self: flex-start;
+            border: 1px solid rgba(103, 126, 234, 0.1);
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: #f0f0f0;
+            padding: 15px 20px;
+            border-radius: 18px;
+            margin-top: 10px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #999;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 15px;
+            border: 1px dashed rgba(102, 126, 234, 0.2);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+
+        .quick-action {
+            padding: 8px 16px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.85em;
+            color: #856404;
+            text-align: center;
+        }
+
+        .crisis-resources {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 0.9em;
+            color: #0c5460;
+        }
+
+        .crisis-resources h4 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+
+        .crisis-resources p {
+            margin: 5px 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                height: 100vh;
+                border-radius: 0;
+                max-width: 100%;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MindfulChat</h1>
+            <p>Your compassionate AI companion for mental wellness</p>
+        </div>
+        
+        <div class="chat-area" id="chatArea">
+            <div class="welcome-message">
+                <h3>Welcome to MindfulChat 🌱</h3>
+                <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgment-free space where you can share your thoughts and feelings.</p>
+                
+                <div class="disclaimer">
+                    <strong>Important:</strong> This is an AI tool for support and guidance. In case of crisis or emergency, please contact professional help immediately.
+                </div>
+
+                <div class="crisis-resources">
+                    <h4>🆘 Crisis Resources</h4>
+                    <p><strong>US:</strong> 988 (Suicide & Crisis Lifeline) | Text HOME to 741741</p>
+                    <p><strong>UK:</strong> 116 123 (Samaritans) | Text SHOUT to 85258</p>
+                    <p><strong>Emergency:</strong> 911 (US) | 999 (UK)</p>
+                </div>
+                
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="sendQuickMessage('I\'m feeling anxious today')">I'm feeling anxious</div>
+                    <div class="quick-action" onclick="sendQuickMessage('I need some motivation')">Need motivation</div>
+                    <div class="quick-action" onclick="sendQuickMessage('I\'m having trouble sleeping')">Sleep troubles</div>
+                    <div class="quick-action" onclick="sendQuickMessage('I feel overwhelmed')">Feeling overwhelmed</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+        <div class="input-area">
+            <input type="text" class="input-field" id="messageInput" placeholder="Share what's on your mind..." />
+            <button class="send-button" id="sendButton" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        
+        // Comprehensive AI responses for mental health support
+        const aiResponses = {
+            anxiety: [
+                "I hear that you're feeling anxious, and that takes courage to share. Anxiety can feel overwhelming, but you're not alone in this. Let's try a simple grounding technique: Can you name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste?",
+                "Anxiety is your mind's way of trying to protect you, even when there's no immediate danger. Take a deep breath with me - in for 4 counts, hold for 4, out for 6. Remember, this feeling is temporary and will pass.",
+                "Thank you for trusting me with how you're feeling. When anxiety hits, try to remember: you are safe right now, you have gotten through difficult times before, and you have the strength to handle this too.",
+                "I understand anxiety can feel consuming. Here's a quick technique: Focus on your breathing. Breathe in slowly through your nose for 4 counts, hold for 7, then exhale through your mouth for 8. This activates your body's relaxation response."
+            ],
+            sad: [
+                "I'm here with you in this difficult moment. Sadness is a natural human emotion, and it's okay to feel this way. Would you like to talk about what's contributing to these feelings, or would you prefer some gentle coping strategies?",
+                "Your feelings are valid, and it's important to honor them rather than push them away. Sometimes sadness needs to be felt fully before it can begin to lift. What would feel most supportive for you right now?",
+                "I can sense you're going through a tough time. Remember that it's okay not to be okay sometimes. Healing isn't linear, and you're being brave by reaching out and acknowledging your feelings.",
+                "Sadness can feel heavy, but you don't have to carry it alone. Sometimes it helps to do something small and kind for yourself - maybe make a cup of tea, listen to a favorite song, or step outside for a moment."
+            ],
+            overwhelmed: [
+                "When everything feels like too much, let's break it down together. You don't have to carry all of this at once. What feels like the most pressing thing on your mind right now? Sometimes addressing one thing at a time makes everything more manageable.",
+                "Feeling overwhelmed is a sign that you care deeply about many things. Let's create some breathing room. What's one small thing you could let go of or postpone today? Your well-being matters more than having everything perfect.",
+                "I understand that feeling of having too much on your plate. Remember: you don't have to solve everything today. Focus on just the next right step, not the entire staircase.",
+                "Being overwhelmed is your mind's way of saying you need a pause. Try this: Write down three things that are bothering you most. Then pick just one to focus on today. The others can wait."
+            ],
+            motivation: [
+                "Motivation often follows action, not the other way around. What's one tiny step you could take today toward something that matters to you? Even the smallest movement forward is progress worth celebrating.",
+                "It's completely normal to have days where motivation feels elusive. Be gentle with yourself. Sometimes the most productive thing we can do is rest and recharge. What would help you feel more energized?",
+                "You have overcome challenges before, and you have that same strength within you now. What's one thing you accomplished recently, no matter how small? Let's build on that momentum.",
+                "Low motivation doesn't mean you're lazy - it often means you need something different. Maybe a change of scenery, connecting with someone, or breaking a big task into tiny pieces. What feels possible right now?"
+            ],
+            sleep: [
+                "Sleep troubles can really affect how we feel during the day. Let's explore some gentle strategies. How would you describe your bedtime routine? Sometimes small changes can make a big difference.",
+                "Quality sleep is so important for mental health. Consider creating a wind-down routine: dim lights an hour before bed, avoid screens, try some gentle stretches or meditation. What sounds most appealing to you?",
+                "Racing thoughts at bedtime are common. Try the 4-7-8 breathing technique: breathe in for 4, hold for 7, out for 8. This can help calm your nervous system and prepare your body for rest.",
+                "Sleep challenges are frustrating. If your mind is racing, try writing down your thoughts in a journal before bed, or practice progressive muscle relaxation - tense and release each muscle group from your toes to your head."
+            ],
+            stress: [
+                "Stress affects us all, and recognizing it is the first step toward managing it better. What are the main sources of stress in your life right now? Sometimes just naming them can reduce their power over us.",
+                "Your body and mind are telling you something important when you feel stressed. Let's think about what boundaries you might need to set or what support you might need to ask for. You deserve care and peace.",
+                "Chronic stress can feel endless, but there are ways to find relief. Have you tried progressive muscle relaxation? Starting with your toes, tense each muscle group for 5 seconds, then release. It can help reset your nervous system.",
+                "Stress often comes from feeling like we have too much to handle. What's one thing you could delegate, postpone, or eliminate today? Sometimes the best self-care is saying no to things that drain us."
+            ],
+            general: [
+                "Thank you for sharing with me. I'm here to listen and support you. What's been on your mind lately? Remember, there's no judgment here - just compassion and understanding.",
+                "I appreciate you taking the time to reach out. That shows real strength and self-awareness. How are you taking care of yourself today? Even small acts of self-care matter.",
+                "Every person's journey is unique, and yours matters. What would feel most helpful for you right now - talking through something specific, exploring coping strategies, or something else entirely?",
+                "I'm glad you're here. Sometimes the hardest part is reaching out, and you've already done that. What's been the most challenging part of your day, or conversely, what's been going well?",
+                "Your mental health and well-being are important. I'm here to provide support and encouragement. What's one thing you're grateful for today, even if it's small?",
+                "I'm listening. Whether you're having a tough day or just need someone to talk to, this is a safe space. What would you like to share or explore together?",
+                "You've taken a positive step by being here. Mental health is just as important as physical health, and seeking support shows wisdom and courage. How can I best support you today?"
+            ]
+        };
+
+        function getAIResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('anxious') || message.includes('anxiety') || message.includes('worried') || message.includes('panic')) {
+                return aiResponses.anxiety[Math.floor(Math.random() * aiResponses.anxiety.length)];
+            }
+            if (message.includes('sad') || message.includes('depressed') || message.includes('down') || message.includes('cry')) {
+                return aiResponses.sad[Math.floor(Math.random() * aiResponses.sad.length)];
+            }
+            if (message.includes('overwhelmed') || message.includes('too much') || message.includes('can\'t cope')) {
+                return aiResponses.overwhelmed[Math.floor(Math.random() * aiResponses.overwhelmed.length)];
+            }
+            if (message.includes('motivation') || message.includes('unmotivated') || message.includes('lazy') || message.includes('procrastination')) {
+                return aiResponses.motivation[Math.floor(Math.random() * aiResponses.motivation.length)];
+            }
+            if (message.includes('sleep') || message.includes('insomnia') || message.includes('tired') || message.includes('exhausted')) {
+                return aiResponses.sleep[Math.floor(Math.random() * aiResponses.sleep.length)];
+            }
+            if (message.includes('stress') || message.includes('pressure') || message.includes('burden')) {
+                return aiResponses.stress[Math.floor(Math.random() * aiResponses.stress.length)];
+            }
+            
+            return aiResponses.general[Math.floor(Math.random() * aiResponses.general.length)];
+        }
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            messageDiv.textContent = content;
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                const aiResponse = getAIResponse(message);
+                addMessage(aiResponse, false);
+            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
+        }
+
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
+            // Hide welcome message after first interaction
+            const welcome = document.querySelector('.welcome-message');
+            if (welcome) {
+                setTimeout(() => welcome.style.display = 'none', 3000);
+            }
+        }
+
+        // Event listeners
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        messageInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            } else {
+                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #ccc 0%, #999 100%)';
+            }
+        });
+
+        // Welcome interaction
+        setTimeout(() => {
+            addMessage("Hello! I'm your MindfulChat companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?", false);
+        }, 1000);
+    </script>
+</body>
+</html>
