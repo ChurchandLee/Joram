@@ -1,122 +1,55 @@
-manifest.json// Enhanced features for MindfulChat PWA
-
-// 1. Offline support for crisis resources
-const offlineContent = {
-  crisisResources: `
-    🆘 Emergency Crisis Resources
-    
-    US: 988 (Suicide & Crisis Lifeline)
-    Text HOME to 741741 (Crisis Text Line)
-    Emergency: 911
-    
-    UK: 116 123 (Samaritans)
-    Text SHOUT to 85258
-    Emergency: 999
-    
-    Remember: You are not alone. Help is always available.
-  `,
-  breathingExercise: `
-    🌱 Quick Breathing Exercise
-    
-    1. Inhale slowly for 4 counts
-    2. Hold for 4 counts
-    3. Exhale slowly for 6 counts
-    4. Repeat 4-5 times
-    
-    This can help reduce anxiety and center your thoughts.
-  `
-};
-
-// 2. Add offline notification
-function showOfflineMessage() {
-  const offlineDiv = document.createElement('div');
-  offlineDiv.innerHTML = `
-    <div style="background: #fef3cd; border: 1px solid #fecaca; padding: 12px; margin: 10px; border-radius: 8px; text-align: center;">
-      📱 You're offline, but crisis resources are still available below
-    </div>
-  `;
-  document.body.insertBefore(offlineDiv, document.body.firstChild);
-}
-
-// 3. Check online/offline status
-window.addEventListener('online', () => {
-  console.log('Back online');
-  location.reload(); // Refresh to get latest content
-});
-
-window.addEventListener('offline', () => {
-  console.log('Gone offline');
-  showOfflineMessage();
-});
-
-// 4. Save user preferences locally (PWA-friendly)
-function saveUserPreferences(preferences) {
-  try {
-    // Use localStorage for PWA (available in installed PWAs)
-    localStorage.setItem('mindfulchat_prefs', JSON.stringify(preferences));
-  } catch (e) {
-    console.log('Unable to save preferences');
-  }
-}
-
-function getUserPreferences() {
-  try {
-    const prefs = localStorage.getItem('mindfulchat_prefs');
-    return prefs ? JSON.parse(prefs) : {};
-  } catch (e) {
-    return {};
-  }
-}
-
-// 5. Add installation analytics (privacy-friendly)
-if (isPWA()) {
-  // Track PWA usage without personal data
-  console.log('PWA session started');
-  
-  // You could send anonymous usage stats to help improve the app
-  // fetch('/api/pwa-usage', { method: 'POST', body: JSON.stringify({ type: 'pwa_session' }) });
-}
-
-// 6. Enhanced touch gestures for mobile
-function addMobileOptimizations() {
-  // Prevent zoom on double tap for app-like feel
-  let lastTouchEnd = 0;
-  document.addEventListener('touchend', function (event) {
-    const now = (new Date()).getTime();
-    if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
+manifest.json - PWA Manifest{
+  "name": "MindfulChat - Mental Health Support",
+  "short_name": "MindfulChat",
+  "description": "AI-powered mental health support and guidance in a safe, judgment-free space",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4ade80",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-    lastTouchEnd = now;
-  }, false);
-
-  // Add pull-to-refresh functionality
-  let startY = 0;
-  let pullDistance = 0;
-  
-  document.addEventListener('touchstart', (e) => {
-    startY = e.touches[0].pageY;
-  });
-  
-  document.addEventListener('touchmove', (e) => {
-    if (window.scrollY === 0 && e.touches[0].pageY > startY) {
-      pullDistance = e.touches[0].pageY - startY;
-      if (pullDistance > 100) {
-        // Show refresh indicator
-        document.body.style.transform = `translateY(${Math.min(pullDistance * 0.5, 50)}px)`;
-      }
-    }
-  });
-  
-  document.addEventListener('touchend', () => {
-    if (pullDistance > 100) {
-      location.reload();
-    }
-    document.body.style.transform = '';
-    pullDistance = 0;
-  });
-}
-
-// Initialize mobile optimizations when PWA loads
-if (isPWA()) {
-  addMobileOptimizations();
+  ],
+  "categories": ["health", "lifestyle", "medical"],
+  "lang": "en",
+  "dir": "ltr"
 }
