@@ -1,7 +1,7 @@
-manifest.json - PWA Manifest{
+{
   "name": "MindfulChat - Mental Health Support",
   "short_name": "MindfulChat",
-  "description": "AI-powered mental health support and guidance in a safe, judgment-free space",
+  "description": "AI-powered mental health support and guidance in a safe, judgment-free environment",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -36,7 +36,8 @@ manifest.json - PWA Manifest{
     {
       "src": "icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
       "src": "icons/icon-384x384.png",
@@ -46,7 +47,8 @@ manifest.json - PWA Manifest{
     {
       "src": "icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "maskable any"
     }
   ],
   "categories": ["health", "lifestyle", "medical"],
