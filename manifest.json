@@ -1,11 +1,11 @@
 {
-  "name": "MindfulChat - Mental Health Support",
-  "short_name": "MindfulChat",
+  "name": "Hear to Listen - Mental Health Support",
+  "short_name": "Hear to Listen",
   "description": "AI-powered mental health support and guidance in a safe, judgment-free environment",
   "start_url": "/ubiquitous-guacamole/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#add689",
+  "background_color": "#F7F9F5",
+  "theme_color": "#9CAF88",
   "orientation": "portrait-primary",
   "icons": [
     {
