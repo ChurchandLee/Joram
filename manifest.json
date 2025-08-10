@@ -5,7 +5,7 @@
   "start_url": "/ubiquitous-guacamole/",
   "display": "standalone",
   "background_color": "#9CAF88",
-  "theme_color": "#40E0D0",
+  "theme_color": "#9CAF88",
   "orientation": "portrait-primary",
   "icons": [
     {
