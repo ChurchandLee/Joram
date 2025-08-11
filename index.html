@@ -6,7 +6,7 @@
     <title>HeartoListen - AI Mental Health Support</title>
     <Link rel="manifest" href="manifest.json">
     <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#2E8B57">
     <style>
         * {
             margin: 0;
@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -80,7 +80,7 @@
         }
 
         .user-message {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
             color: white;
             align-self: flex-end;
         }
@@ -106,13 +106,13 @@
         }
 
         .input-field:focus {
-            border-color: #667eea;
+            border-color: #2E8B57;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .send-button {
             padding: 15px 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 25px;
@@ -187,7 +187,7 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
-            color: #667eea;
+            color: #2E8B57;
             transition: all 0.3s ease;
         }
 
@@ -298,6 +298,11 @@
     <meta name="msapplication-TileColor" content="#4ade80">
 </head>
 <script src="pwa.js"></script><body>
+    <div class="app-header">
+    <img src="icons/heartolisten-logo.png" alt="HeartoListen" class="logo">
+    <h1>HeartoListen</h1>
+    <p>AI Mental Health Support</p>
+</div>
     <div class="container">
         <div class="header">
             <h1>Hear to Listen</h1>
@@ -477,7 +482,7 @@
 
         messageInput.addEventListener('input', function() {
             if (this.value.trim()) {
-                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #2E8B57 0%, #764ba2 100%)';
             } else {
                 document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #ccc 0%, #999 100%)';
             }
