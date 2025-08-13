@@ -49,13 +49,6 @@
             padding: 20px;
         }
 
-        .logo {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 15px;
-            border-radius: 50%;
-        }
-
         .container {
             width: 100%;
             max-width: 800px;
@@ -66,25 +59,42 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 700px;
         }
 
-        .header {
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
-            padding: 20px;
+        .logo-header {
+            background: linear-gradient(135deg, #8BC34A 0%, #4CAF50 100%);
+            padding: 25px;
             text-align: center;
             color: white;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
         }
 
-        .header h1 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-            font-weight: 600;
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
         }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 0.9em;
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+            font-weight: 500;
         }
 
         .chat-area {
@@ -94,32 +104,36 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
         }
 
         .message {
-            max-width: 80%;
+            max-width: 85%;
             padding: 15px 20px;
             border-radius: 18px;
             animation: fadeIn 0.3s ease-out;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 15px;
         }
 
         .ai-message {
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            color: #333;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+            color: #2c3e50;
             align-self: flex-start;
-            border: 1px solid rgba(103, 126, 234, 0.1);
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .user-message {
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2E8B57 0%, #45a049 100%);
             color: white;
             align-self: flex-end;
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
         }
 
         .input-area {
             padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             gap: 15px;
@@ -135,16 +149,17 @@
             outline: none;
             transition: all 0.3s ease;
             background: white;
+            font-family: inherit;
         }
 
         .input-field:focus {
-            border-color: #2E8B57;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
         }
 
         .send-button {
             padding: 15px 25px;
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
             color: white;
             border: none;
             border-radius: 25px;
@@ -157,20 +172,27 @@
 
         .send-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
         }
 
         .send-button:active {
             transform: translateY(0);
         }
 
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .typing-indicator {
             display: none;
             align-self: flex-start;
-            background: #f0f0f0;
+            background: #f8f9fa;
             padding: 15px 20px;
             border-radius: 18px;
             margin-top: 10px;
+            border-left: 4px solid #4CAF50;
         }
 
         .typing-dots {
@@ -182,7 +204,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #999;
+            background: #4CAF50;
             animation: typing 1.4s infinite;
         }
 
@@ -194,68 +216,95 @@
             animation-delay: 0.4s;
         }
 
-        .welcome-message {
+        .welcome-section {
             text-align: center;
-            color: #666;
             margin: 20px 0;
-            padding: 20px;
-            background: rgba(102, 126, 234, 0.05);
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(139, 195, 74, 0.08) 100%);
             border-radius: 15px;
-            border: 1px dashed rgba(102, 126, 234, 0.2);
+            border: 2px dashed rgba(76, 175, 80, 0.2);
+        }
+
+        .welcome-section h2 {
+            color: #2E8B57;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .welcome-section p {
+            color: #5a6c57;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .crisis-resources {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border: 2px solid #81c784;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .crisis-resources h3 {
+            color: #2E8B57;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .crisis-info {
+            display: grid;
+            gap: 8px;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .crisis-info strong {
+            color: #2E8B57;
         }
 
         .quick-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin: 15px 0;
+            margin: 20px 0;
             justify-content: center;
         }
 
         .quick-action {
-            padding: 8px 16px;
-            background: rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 10px 16px;
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid rgba(76, 175, 80, 0.3);
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
             color: #2E8B57;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .quick-action:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(76, 175, 80, 0.2);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
         }
 
         .disclaimer {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
             padding: 15px;
-            border-radius: 10px;
             margin: 15px 0;
-            font-size: 0.85em;
-            color: #856404;
+            font-size: 13px;
+            color: #8b4513;
             text-align: center;
-        }
-
-        .crisis-resources {
-            background: #d1ecf1;
-            border: 1px solid #bee5eb;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-size: 0.9em;
-            color: #0c5460;
-        }
-
-        .crisis-resources h4 {
-            color: #0c5460;
-            margin-bottom: 10px;
-        }
-
-        .crisis-resources p {
-            margin: 5px 0;
+            font-weight: 500;
         }
 
         @keyframes fadeIn {
@@ -278,383 +327,303 @@
             }
         }
 
+        /* Responsive design */
         @media (max-width: 600px) {
             .container {
-                height: 100vh;
-                border-radius: 0;
-                max-width: 100%;
+                height: 90vh;
+                margin: 10px;
+            }
+            
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .logo-header h1 {
+                font-size: 1.8em;
             }
             
             .message {
-                max-width: 90%;
+                max-width: 95%;
             }
             
-            .header h1 {
-                font-size: 1.5em;
+            .quick-actions {
+                flex-direction: column;
+                align-items: center;
             }
-
-            body {
-                padding: 0;
+            
+            .quick-action {
+                width: 100%;
+                max-width: 250px;
+                text-align: center;
             }
         }
     </style>
 </head>
 <body>
-    <script src="pwa.js"></script>
-    
     <div class="container">
-        <div class="header">
-            <img src="heartolisten-logo.png.png" alt="HeartoListen" class="logo">
+        <!-- Logo Header Section -->
+        <div class="logo-header">
+            <img src="heartolisten-logo.png.png" alt="HeartoListen Logo" class="logo">
             <h1>HeartoListen</h1>
-            <p>Your compassionate AI companion for mental wellness</p>
+            <p>AI Mental Health Support - Self Discovery for Positive Mental Health</p>
         </div>
-        
+
+        <!-- Chat Area -->
         <div class="chat-area" id="chatArea">
-            <div class="welcome-message">
-                <h3>Welcome to HeartoListen</h3>
+            <!-- Welcome Message -->
+            <div class="welcome-section">
+                <h2>Welcome to Hear to Listen 🌿</h2>
                 <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgment-free space where you can share your thoughts and feelings.</p>
                 
+                <!-- Important Disclaimer -->
                 <div class="disclaimer">
                     <strong>Important:</strong> This is an AI tool for support and guidance. In case of crisis or emergency, please contact professional help immediately.
                 </div>
 
+                <!-- Crisis Resources -->
                 <div class="crisis-resources">
-                    <h4>🆘 Crisis Resources</h4>
-                    <p><strong>US:</strong> 988 (Suicide & Crisis Lifeline) </p>
-                    <p><strong>UK:</strong> 116 123 (Samaritans) | Text SHOUT to 85258</p>
-                    <p><strong>Emergency:</strong> 911 (US) | 999 (UK)</p>
+                    <h3>🆘 Crisis Resources</h3>
+                    <div class="crisis-info">
+                        <div><strong>US:</strong> 988 (Suicide & Crisis Lifeline) | Text HOME to 741741</div>
+                        <div><strong>UK:</strong> 116 123 (Samaritans) | Text SHOUT to 85258</div>
+                        <div><strong>Emergency:</strong> 911 (US) | 999 (UK)</div>
+                    </div>
                 </div>
-                
+
+                <!-- Quick Action Buttons -->
                 <div class="quick-actions">
-                    <div class="quick-action" onclick="sendQuickMessage('I\'m feeling anxious today')">I'm feeling anxious</div>
-                    <div class="quick-action" onclick="sendQuickMessage('I need some motivation')">Need motivation</div>
-                    <div class="quick-action" onclick="sendQuickMessage('I\'m having trouble sleeping')">Sleep troubles</div>
-                    <div class="quick-action" onclick="sendQuickMessage('I feel overwhelmed')">Feeling overwhelmed</div>
+                    <div class="quick-action" onclick="sendQuickMessage('I\'m feeling anxious')">I'm feeling anxious</div>
+                    <div class="quick-action" onclick="sendQuickMessage('Need motivation')">Need motivation</div>
+                    <div class="quick-action" onclick="sendQuickMessage('Sleep troubles')">Sleep troubles</div>
+                    <div class="quick-action" onclick="sendQuickMessage('Feeling overwhelmed')">Feeling overwhelmed</div>
+                </div>
+            </div>
+
+            <!-- AI Initial Message -->
+            <div class="message ai-message">
+                Hello! I'm your Hear to Listen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
         </div>
-        
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-        
+
+        <!-- Input Area -->
         <div class="input-area">
-            <input type="text" class="input-field" id="messageInput" placeholder="Share what's on your mind..." />
-            <button class="send-button" id="sendButton" onclick="sendMessage()">Send</button>
+            <input type="text" 
+                   id="messageInput" 
+                   class="input-field" 
+                   placeholder="Share what's on your mind..." 
+                   onkeypress="handleKeyPress(event)">
+            <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
     <script>
-        const chatArea = document.getElementById('chatArea');
-        const messageInput = document.getElementById('messageInput');
-        const typingIndicator = document.getElementById('typingIndicator');
-        
-        // Conversation tracking
+        // AI Mental Health Companion System Prompt
+        const SYSTEM_PROMPT = `You are an AI mental health companion whose primary role is to listen with empathy, patience, and genuine warmth. Your style is calm, validating, and encouraging, without judgment or criticism. You never give direct medical advice, diagnose conditions, or prescribe treatment. Instead, you:
+        - Reflect back what the user has said so they feel understood.
+        - Offer new perspectives gently, never forcefully.
+        - Suggest practical grounding techniques or coping strategies when appropriate.
+        - Recognise and acknowledge the user's emotions without dismissing or minimising them.
+        - Use plain, conversational language, avoiding clinical jargon.
+        - Where relevant, help the user reframe challenges in a hopeful, realistic way.
+
+        You watch for potential signs of crisis or harm to self/others, and in such cases, you:
+        - Respond with heightened compassion.
+        - Gently recommend the user seek immediate help from a trained mental health professional or helpline.
+        - Provide relevant helpline numbers for their region if possible.
+
+        Tone guide:
+        - Always sound human and present.
+        - Use short paragraphs for readability.
+        - Ask gentle, open-ended questions to encourage reflection.
+        - Never overwhelm the user with too much information at once.
+        - Prioritise emotional safety over problem-solving.
+
+        Your goal: Make the user feel heard, valued, and a little more hopeful at the end of each exchange.`;
+
+        // Chat functionality
         let conversationHistory = [];
-        let currentTopic = null;
-        let messageCount = 0;
-        let userEmotions = [];
-        
-        // CBT-based empathetic responses with conversation flow
-        const responseSystem = {
-            // Initial responses to emotions
-            anxiety: {
-                initial: [
-                    "I can hear the anxiety in what you're sharing, and I want you to know that what you're experiencing is real and valid. Anxiety often tells us stories about what might happen - what thoughts are going through your mind right now?",
-                    "It sounds like anxiety is really weighing on you today. That must feel exhausting. When you notice these anxious feelings, what do you typically tell yourself about them?",
-                    "Thank you for trusting me with how you're feeling. Anxiety can make everything feel urgent and overwhelming. I'm curious - when did you first start noticing these feelings today?"
-                ],
-                followUp: [
-                    "I'm hearing that this anxiety is persistent for you. Sometimes our minds try to protect us by imagining worst-case scenarios. What evidence do you have for and against the thoughts that are making you anxious?",
-                    "It sounds like you've been carrying this worry for a while. In CBT, we often explore whether our thoughts are helpful or just familiar. What would you tell a close friend if they shared this same concern with you?",
-                    "You mentioned feeling anxious about [topic]. Sometimes it can help to separate what we can control from what we can't. What aspects of this situation, if any, do you feel you have some influence over?"
-                ],
-                deeper: [
-                    "I notice you keep coming back to these anxious thoughts. That's really common - our brains sometimes get stuck in loops trying to solve problems. What do you think might happen if you allowed yourself to sit with the uncertainty for just a moment?",
-                    "It seems like this anxiety might be connected to some deeper concerns about [related theme]. Sometimes our current worries are our mind's way of processing bigger life questions. Does that resonate with you at all?"
-                ]
-            },
-            
-            sad: {
-                initial: [
-                    "I can feel the heaviness in your words, and I want you to know that it's okay to sit with these feelings. Sadness often carries important messages about what matters to us. What do you think your sadness might be trying to tell you?",
-                    "There's a real weight to what you're sharing, and I'm honored that you feel safe enough to express this here. When you think about this sadness, does it feel familiar, or is this something new you're experiencing?",
-                    "It takes courage to acknowledge feeling sad, especially when the world often tells us to 'just be positive.' What's it like for you to name these feelings out loud?"
-                ],
-                followUp: [
-                    "You've shared some really difficult experiences. I'm wondering - when you think about this sadness, what thoughts come up about yourself or your situation?",
-                    "I'm noticing that you seem to be really hard on yourself about feeling this way. What would it be like to treat yourself with the same compassion you'd show a good friend going through this?",
-                    "This sadness sounds connected to some significant losses or changes in your life. Sometimes our emotions are perfectly logical responses to difficult circumstances. What feels most important for you to be heard about right now?"
-                ],
-                deeper: [
-                    "You've been so open about this pain you're carrying. I'm curious about the story you tell yourself about why you're feeling this way. Are there any patterns or themes you notice?",
-                    "It seems like this sadness touches on some fundamental questions about [identity/relationships/purpose]. Sometimes our deepest emotions point us toward what we most need or value. What do you think this feeling might be highlighting for you?"
-                ]
-            },
-            
-            overwhelmed: {
-                initial: [
-                    "It sounds like you have so much on your plate right now. When everything feels like 'too much,' our minds can start racing to try to handle it all at once. What's the loudest voice in your head telling you right now?",
-                    "I can sense the weight of everything you're juggling. Feeling overwhelmed is often our system's way of saying we need to slow down and prioritize. What would it feel like to give yourself permission to not handle everything perfectly?",
-                    "There's a lot coming through in what you're sharing - it makes complete sense that you'd feel overwhelmed. When you imagine getting through this, what comes up for you?"
-                ],
-                followUp: [
-                    "You mentioned feeling like you 'should' be able to handle all of this. I'm curious about that word 'should' - where do you think that expectation comes from?",
-                    "It sounds like you're putting a lot of pressure on yourself to manage everything at once. What would it be like to approach this differently - maybe focusing on what truly needs your attention today?",
-                    "I hear you saying you feel like you're failing or not doing enough. What evidence do you have that challenges that thought? What would someone who cares about you say about how you're handling things?"
-                ],
-                deeper: [
-                    "We've talked about several areas where you feel overwhelmed. I'm noticing some themes around [control/perfectionism/others' expectations]. What do you think is really at the heart of this feeling?",
-                    "You've been so aware of all the external demands on you. I'm wondering about your internal experience - what do you most need emotionally to feel more grounded?"
-                ]
-            },
-            
-            stress: {
-                initial: [
-                    "I can hear the tension in what you're describing. Stress often builds up when we're facing demands that feel bigger than our current resources. What part of this stress feels most pressing to you right now?",
-                    "It sounds like stress has become a constant companion for you lately. Our bodies and minds are designed to handle short bursts of stress, but chronic stress is different. How is this showing up in your daily life?",
-                    "Thank you for sharing what's creating stress for you. Sometimes when we're in the middle of it, everything can feel equally urgent. What would it be like to imagine that not everything needs to be solved today?"
-                ],
-                followUp: [
-                    "You've described several stressful situations. I'm curious about your thoughts around these challenges - are you noticing any patterns in how you talk to yourself about them?",
-                    "It seems like this stress might be connected to feeling responsible for outcomes that may be partly outside your control. What parts of these situations do you feel you have genuine influence over?",
-                    "I hear you trying to anticipate and prepare for so many different scenarios. While planning can be helpful, sometimes our minds create stress by trying to solve problems that haven't happened yet. What's it like to consider focusing just on today?"
-                ],
-                deeper: [
-                    "We've explored several sources of stress in your life. There seems to be a theme around [perfectionism/control/others' approval]. How do you think you learned to carry stress this way?",
-                    "I'm noticing that beneath this stress, there might be some deeper concerns about [safety/worth/belonging]. Sometimes our stress is our mind's way of trying to protect something important to us. What do you think yours might be protecting?"
-                ]
-            },
-            
-            general: {
-                initial: [
-                    "I'm really glad you reached out today. There's something brave about taking the time to check in with yourself and seek support. What's been occupying your thoughts lately?",
-                    "Thank you for being here and sharing your time with me. I'm curious about what brought you here today - what's been on your mind or in your heart?",
-                    "I appreciate you taking this step to connect. Sometimes just having a space to think out loud can be really valuable. What would feel most helpful for you right now?"
-                ],
-                followUp: [
-                    "I'm hearing several different themes in what you're sharing. What feels most important to you to explore right now?",
-                    "It sounds like you've been doing a lot of thinking about this. I'm curious about your internal dialogue - what story are you telling yourself about your situation?",
-                    "You've shared some really meaningful reflections. What's it like for you to put these thoughts into words?"
-                ],
-                deeper: [
-                    "As we've been talking, I'm noticing some patterns in how you describe your experiences. What do you make of that?",
-                    "You've been so thoughtful in sharing your perspective. I'm wondering what insights you're having about yourself through our conversation?"
-                ]
-            }
-        };
-
-        // CBT-based thought exploration prompts
-        const thoughtExploration = [
-            "What evidence supports this thought, and what evidence challenges it?",
-            "If a close friend had this same thought, what would you tell them?",
-            "What would it feel like to consider a different perspective on this situation?",
-            "How might you think about this differently on a day when you're feeling more balanced?",
-            "What's the most realistic way to look at this situation?",
-            "What would be most helpful for you to believe about yourself right now?"
-        ];
-
-        // Conversation development prompts
-        const conversationDevelopers = [
-            "Tell me more about that...",
-            "What was that experience like for you?",
-            "How did that affect you?",
-            "What thoughts went through your mind when that happened?",
-            "What feelings came up for you in that moment?",
-            "How are you making sense of all this?",
-            "What's the hardest part about this for you?",
-            "What would it mean to you if you could work through this?"
-        ];
-
-        function analyzeEmotion(message) {
-            const emotionKeywords = {
-                anxiety: ['anxious', 'anxiety', 'worried', 'panic', 'nervous', 'scared', 'fear', 'afraid', 'terrified', 'uneasy'],
-                sad: ['sad', 'depressed', 'down', 'cry', 'crying', 'hopeless', 'empty', 'lonely', 'grief', 'loss', 'hurt'],
-                overwhelmed: ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted', 'burned out', 'swamped'],
-                stress: ['stress', 'stressed', 'pressure', 'tension', 'burden', 'weight', 'demanding'],
-                anger: ['angry', 'mad', 'furious', 'irritated', 'frustrated', 'annoyed', 'rage'],
-                general: []
-            };
-
-            const message_lower = message.toLowerCase();
-            
-            for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
-                if (emotion === 'general') continue;
-                if (keywords.some(keyword => message_lower.includes(keyword))) {
-                    return emotion;
-                }
-            }
-            return 'general';
-        }
-
-        function getConversationalResponse(userMessage, messageIndex) {
-            const detectedEmotion = analyzeEmotion(userMessage);
-            const responses = responseSystem[detectedEmotion];
-            
-            // Track conversation history
-            conversationHistory.push({
-                user: userMessage,
-                emotion: detectedEmotion,
-                timestamp: Date.now()
-            });
-
-            // Update current topic and user emotions
-            if (detectedEmotion !== 'general') {
-                currentTopic = detectedEmotion;
-                if (!userEmotions.includes(detectedEmotion)) {
-                    userEmotions.push(detectedEmotion);
-                }
-            }
-
-            let response;
-            
-            // Determine response type based on conversation flow
-            if (messageIndex === 0 || !currentTopic) {
-                // First interaction or no specific topic
-                response = responses.initial[Math.floor(Math.random() * responses.initial.length)];
-            } else if (messageIndex < 3) {
-                // Early conversation - follow up questions
-                response = responses.followUp[Math.floor(Math.random() * responses.followUp.length)];
-            } else {
-                // Deeper conversation
-                if (responses.deeper && Math.random() > 0.3) {
-                    response = responses.deeper[Math.floor(Math.random() * responses.deeper.length)];
-                } else {
-                    // Mix in thought exploration and conversation developers
-                    if (Math.random() > 0.5) {
-                        response = thoughtExploration[Math.floor(Math.random() * thoughtExploration.length)];
-                    } else {
-                        response = conversationDevelopers[Math.floor(Math.random() * conversationDevelopers.length)];
-                    }
-                }
-            }
-
-            // Personalize response based on conversation history
-            response = personalizeResponse(response, userMessage, detectedEmotion);
-            
-            return response;
-        }
-
-        function personalizeResponse(response, userMessage, emotion) {
-            // Replace placeholders with context from the conversation
-            if (response.includes('[topic]')) {
-                response = response.replace('[topic]', extractTopic(userMessage));
-            }
-            if (response.includes('[related theme]')) {
-                response = response.replace('[related theme]', getRelatedTheme(emotion));
-            }
-            if (response.includes('[identity/relationships/purpose]')) {
-                const themes = ['your sense of identity', 'your relationships', 'your sense of purpose'];
-                response = response.replace('[identity/relationships/purpose]', themes[Math.floor(Math.random() * themes.length)]);
-            }
-            if (response.includes('[control/perfectionism/others\' expectations]')) {
-                const themes = ['needing control', 'perfectionism', 'others\' expectations'];
-                response = response.replace('[control/perfectionism/others\' expectations]', themes[Math.floor(Math.random() * themes.length)]);
-            }
-            if (response.includes('[safety/worth/belonging]')) {
-                const themes = ['feeling safe', 'your sense of worth', 'belonging and connection'];
-                response = response.replace('[safety/worth/belonging]', themes[Math.floor(Math.random() * themes.length)]);
-            }
-            if (response.includes('[perfectionism/control/others\' approval]')) {
-                const themes = ['perfectionism', 'having control', 'getting others\' approval'];
-                response = response.replace('[perfectionism/control/others\' approval]', themes[Math.floor(Math.random() * themes.length)]);
-            }
-            
-            return response;
-        }
-
-        function extractTopic(message) {
-            // Simple topic extraction - could be enhanced
-            const words = message.toLowerCase().split(' ');
-            const topics = ['work', 'family', 'relationships', 'school', 'health', 'future', 'money', 'change'];
-            const foundTopic = topics.find(topic => words.includes(topic));
-            return foundTopic || 'this situation';
-        }
-
-        function getRelatedTheme(emotion) {
-            const themes = {
-                anxiety: 'uncertainty and control',
-                sad: 'loss and connection',
-                overwhelmed: 'expectations and boundaries',
-                stress: 'pressure and self-worth'
-            };
-            return themes[emotion] || 'your inner experience';
-        }
-
-        function getAIResponse(userMessage) {
-            return getConversationalResponse(userMessage, messageCount);
-        }
-
-        function addMessage(content, isUser = false) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
-            messageDiv.textContent = content;
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            typingIndicator.style.display = 'block';
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            typingIndicator.style.display = 'none';
-        }
 
         function sendMessage() {
-            const message = messageInput.value.trim();
-            if (!message) return;
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
             
-            // Add user message
-            addMessage(message, true);
-            messageInput.value = '';
+            if (message === '') return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
             
             // Show typing indicator
             showTypingIndicator();
             
-            // Simulate AI response delay - longer for more thoughtful responses
+            // Simulate AI response (in a real app, this would be an API call)
             setTimeout(() => {
                 hideTypingIndicator();
-                const aiResponse = getAIResponse(message);
-                addMessage(aiResponse, false);
-                messageCount++; // Increment message count for conversation tracking
-            }, 2000 + Math.random() * 1500); // Random delay between 2-3.5 seconds for more realistic thinking time
+                generateAIResponse(message);
+            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
         }
 
         function sendQuickMessage(message) {
-            messageInput.value = message;
+            document.getElementById('messageInput').value = message;
             sendMessage();
-            // Hide welcome message after first interaction
-            const welcome = document.querySelector('.welcome-message');
-            if (welcome) {
-                setTimeout(() => welcome.style.display = 'none', 3000);
+        }
+
+        function addMessage(content, sender) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.textContent = content;
+            
+            // Remove welcome section after first user message
+            if (sender === 'user') {
+                const welcomeSection = document.querySelector('.welcome-section');
+                if (welcomeSection) {
+                    welcomeSection.remove();
+                }
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            
+            // Store in conversation history
+            conversationHistory.push({
+                role: sender === 'user' ? 'user' : 'assistant',
+                content: content
+            });
+        }
+
+        function generateAIResponse(userMessage) {
+            // This is a simplified response system. In a real app, you would:
+            // 1. Send the conversation history + system prompt to OpenAI API
+            // 2. Get the response and display it
+            // 3. Handle error cases and crisis detection
+            
+            const responses = getContextualResponse(userMessage);
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            
+            addMessage(response, 'ai');
+        }
+
+        function getContextualResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Crisis keywords - in a real app, this would be more sophisticated
+            const crisisKeywords = ['suicide', 'kill myself', 'end it all', 'hurt myself', 'self harm'];
+            const isCrisis = crisisKeywords.some(keyword => lowerMessage.includes(keyword));
+            
+            if (isCrisis) {
+                return [
+                    "I'm really concerned about what you're sharing, and I want you to know that your feelings are valid and you're not alone. Please reach out to a crisis helpline right away - they have trained professionals who can provide immediate support. In the US, you can call 988 or text HOME to 741741. Your life has value, and there are people who want to help.",
+                    "What you're feeling right now sounds incredibly difficult, and I'm worried about your safety. Please contact emergency services or a crisis helpline immediately. You deserve professional support right now. In the UK, Samaritans (116 123) are available 24/7. Please don't go through this alone."
+                ];
+            }
+            
+            // Anxiety responses
+            if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried')) {
+                return [
+                    "I can hear that you're feeling anxious right now. That must feel really overwhelming. Sometimes when anxiety hits, it can help to focus on your breathing - try breathing in for 4 counts, holding for 4, and out for 6. What's been on your mind that's contributing to these anxious feelings?",
+                    "Anxiety can feel so intense and consuming. I want you to know that what you're experiencing is valid. One thing that sometimes helps is the 5-4-3-2-1 grounding technique - name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste. Would you like to talk about what's triggering these anxious feelings?",
+                    "It sounds like anxiety is really weighing on you right now. That's such a difficult feeling to carry. Your mind might be racing with 'what ifs' - that's what anxiety does. Remember that anxious thoughts aren't facts. What would feel most supportive for you right now?"
+                ];
+            }
+            
+            // Depression/sadness responses
+            if (lowerMessage.includes('depressed') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless')) {
+                return [
+                    "I can sense the heaviness in what you're sharing, and I want you to know that I'm here with you in this difficult moment. Depression can make everything feel so much harder. You're brave for reaching out and talking about this. What's been the most challenging part of what you're going through?",
+                    "It takes courage to share when you're feeling this low. Depression can make us feel so isolated and like nothing will ever get better, but you're not alone in this. These feelings, as painful as they are, can change. What's one small thing that used to bring you even a tiny bit of comfort?",
+                    "Thank you for trusting me with how you're feeling. When we're depressed, it's like looking at the world through dark-tinted glasses - everything seems harder and more hopeless. But you're still here, still reaching out, and that matters. How long have you been carrying these heavy feelings?"
+                ];
+            }
+            
+            // Sleep issues
+            if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired')) {
+                return [
+                    "Sleep troubles can affect everything - your mood, energy, and ability to cope with stress. It's frustrating when you need rest but can't seem to get it. What's your sleep routine like? Sometimes creating a calming pre-sleep ritual can help signal to your body that it's time to wind down.",
+                    "Not getting good sleep makes everything feel more difficult, doesn't it? Your mind and body need that rest to recharge. Are there things on your mind that keep you awake, or is it more physical restlessness? Sometimes talking through what's keeping us up can help.",
+                    "Sleep issues are so draining, both physically and emotionally. It's like being tired but wired at the same time. Have you noticed if there are particular thoughts or worries that surface when you're trying to sleep?"
+                ];
+            }
+            
+            // Overwhelmed responses
+            if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('stressed')) {
+                return [
+                    "Feeling overwhelmed is like being caught in a storm - everything feels too much at once. It's completely understandable that you're feeling this way. Sometimes when we're overwhelmed, it can help to pick just one small thing to focus on. What feels most pressing or urgent to you right now?",
+                    "When everything feels like too much, it's natural to feel overwhelmed. Your feelings make complete sense. Sometimes it helps to remember that you don't have to solve everything at once. What would it look like to take things one step at a time?",
+                    "That sense of being overwhelmed is so heavy to carry. It's like having too many browser tabs open in your mind. You're dealing with a lot, and it's okay to feel like it's too much sometimes. What's been the biggest source of stress for you lately?"
+                ];
+            }
+            
+            // Motivation responses
+            if (lowerMessage.includes('motivation') || lowerMessage.includes('motivated') || lowerMessage.includes('stuck')) {
+                return [
+                    "It sounds like you're looking for that spark to get moving again. Sometimes motivation feels elusive, especially when we're going through tough times. What's something small that you accomplished recently, even if it seemed minor? Sometimes acknowledging the little things can help us find momentum.",
+                    "Feeling unmotivated can be so frustrating, especially when you know there are things you want or need to do. Sometimes motivation follows action, rather than the other way around. What's one tiny step you could take today, even if you don't feel like it?",
+                    "I hear that you're struggling with motivation right now. That's actually really common, and it doesn't mean anything is wrong with you. What usually helps you feel more energized or purposeful? Even if those things don't feel appealing right now, they might give us clues about what could help."
+                ];
+            }
+            
+            // General supportive responses
+            return [
+                "Thank you for sharing that with me. I can hear that you're going through something difficult right now. Your feelings are completely valid, and I'm glad you felt comfortable opening up. What would feel most helpful for you in this moment?",
+                "I'm really glad you reached out to talk about this. It takes strength to share what's on your mind, especially when things feel heavy. I'm here to listen and support you through whatever you're experiencing. How are you taking care of yourself right now?",
+                "I can sense that there's a lot on your mind. Thank you for trusting me with your thoughts and feelings. You don't have to carry everything alone. What's been the most challenging part of your day or week?",
+                "It sounds like you're dealing with quite a bit right now. I want you to know that your feelings matter, and it's completely okay to not be okay sometimes. What kind of support feels most helpful to you?",
+                "I appreciate you sharing what's going on for you. Sometimes just putting our thoughts into words can provide a little relief. I'm here to listen without judgment and walk alongside you through whatever you're facing. What's weighing most heavily on your heart?"
+            ];
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'flex';
+            const chatArea = document.getElementById('chatArea');
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typingIndicator').style.display = 'none';
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
             }
         }
 
-        // Event listeners
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus on input field when page loads
+            document.getElementById('messageInput').focus();
+            
+            // Add some initial context to conversation history
+            conversationHistory.push({
+                role: 'system',
+                content: SYSTEM_PROMPT
+            });
         });
 
-        messageInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #2E8B57 0%, #764ba2 100%)';
-            } else {
-                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #ccc 0%, #999 100%)';
-            }
-        });
-
-        // Welcome interaction
-        setTimeout(() => {
-            addMessage("Hello! I'm your HeartoListen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?", false);
-        }, 1000);
+        // PWA Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
     </script>
 </body>
 </html>
