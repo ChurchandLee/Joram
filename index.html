@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Health Support</title>
-    <Link rel="manifest" href="manifest.json">
     <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
-    <meta name="theme-color" content="#2E8B57">
+    <meta name="theme-color" content="#4caf50">
     <style>
         * {
             margin: 0;
@@ -16,19 +15,12 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            
-        }
-           .logo {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 15px;
-    border-radius: 50%;
         }
 
         .container {
@@ -45,19 +37,34 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #B2AC880%, #00f2fe 100%);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             padding: 20px;
             text-align: center;
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
         }
 
-        .header h1 {
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .header-text h1 {
             font-size: 1.8em;
             margin-bottom: 5px;
             font-weight: 600;
         }
 
-        .header p {
+        .header-text p {
             opacity: 0.9;
             font-size: 0.9em;
         }
@@ -80,14 +87,14 @@
         }
 
         .ai-message {
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
             color: #333;
             align-self: flex-start;
-            border: 1px solid rgba(103, 126, 234, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.2);
         }
 
         .user-message {
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             color: white;
             align-self: flex-end;
         }
@@ -113,13 +120,13 @@
         }
 
         .input-field:focus {
-            border-color: #2E8B57;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
         }
 
         .send-button {
             padding: 15px 25px;
-            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             color: white;
             border: none;
             border-radius: 25px;
@@ -132,7 +139,7 @@
 
         .send-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
         }
 
         .send-button:active {
@@ -174,9 +181,9 @@
             color: #666;
             margin: 20px 0;
             padding: 20px;
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(76, 175, 80, 0.05);
             border-radius: 15px;
-            border: 1px dashed rgba(102, 126, 234, 0.2);
+            border: 1px dashed rgba(76, 175, 80, 0.2);
         }
 
         .quick-actions {
@@ -189,17 +196,17 @@
 
         .quick-action {
             padding: 8px 16px;
-            background: rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.3);
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
             border-radius: 20px;
             cursor: pointer;
             font-size: 14px;
-            color: #2E8B57;
+            color: #4caf50;
             transition: all 0.3s ease;
         }
 
         .quick-action:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(76, 175, 80, 0.2);
             transform: translateY(-2px);
         }
 
@@ -264,70 +271,34 @@
                 max-width: 90%;
             }
             
-            .header h1 {
+            .header-text h1 {
                 font-size: 1.5em;
             }
 
             body {
                 padding: 0;
             }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
         }
     </style>
-</head><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hear to Listen</title>
-    
-    <!-- Your existing CSS and meta tags stay here -->
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-
-    <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#4ade80">
-
-    <!-- Apple-specific meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Hear to Listen">
-
-    <!-- Apple touch icons -->
-    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
-
-    <!-- Microsoft tiles -->
-    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
-    <meta name="msapplication-TileColor" content="#4ade80">
 </head>
-<script src="pwa.js"></script><body>
-    <div class="header-section" style="text-align: center; padding: 20px; background: #f8f9fa; border-bottom: 2px solid #e9ecef;">
-    <img src="heartolisten-logo.png.png" alt="HeartoListen" class="logo">
-    <h1 style="margin: 10px 0; color: #2c3e50;">HeartoListen</h1>
-    <p style="margin: 0; color: #666;">AI Mental Health Support</p>
-</div>
-    <div class="app-header">
-    <h1>HeartoListen</h1>
-    <p>AI Mental Health Support</p>
-</div>
+<body>
     <div class="container">
         <div class="header">
-            <h1>Hear to Listen</h1>
-            <p>Your compassionate AI companion for mental wellness</p>
+            <div class="logo">🧠</div>
+            <div class="header-text">
+                <h1>HeartoListen</h1>
+                <p>AI Mental Health Support</p>
+            </div>
         </div>
-        <div class="header-logo" style="text-align: center; padding: 20px 0; border-bottom: 1px solid #e0e0e0;">
-    <img src="heartolisten-logo.png.png" alt="HeartoListen" style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 10px;">
-    <h2 style="margin: 10px 0 5px 0; color: #2c3e50;">HeartoListen</h2>
-    <p style="margin: 0; color: #666; font-size: 14px;">AI Mental Health Support</p>
-</div>
         
         <div class="chat-area" id="chatArea">
             <div class="welcome-message">
-                <h3>Welcome to Hear to Listen </h3>
+                <h3>Welcome to HeartoListen 🌱</h3>
                 <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgment-free space where you can share your thoughts and feelings.</p>
                 
                 <div class="disclaimer">
@@ -336,7 +307,7 @@
 
                 <div class="crisis-resources">
                     <h4>🆘 Crisis Resources</h4>
-                    <p><strong>US:</strong> 988 (Suicide & Crisis Lifeline) </p>
+                    <p><strong>US:</strong> 988 (Suicide & Crisis Lifeline) | Text HOME to 741741</p>
                     <p><strong>UK:</strong> 116 123 (Samaritans) | Text SHOUT to 85258</p>
                     <p><strong>Emergency:</strong> 911 (US) | 999 (UK)</p>
                 </div>
@@ -474,40 +445,4 @@
             // Simulate AI response delay
             setTimeout(() => {
                 hideTypingIndicator();
-                const aiResponse = getAIResponse(message);
-                addMessage(aiResponse, false);
-            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
-        }
-
-        function sendQuickMessage(message) {
-            messageInput.value = message;
-            sendMessage();
-            // Hide welcome message after first interaction
-            const welcome = document.querySelector('.welcome-message');
-            if (welcome) {
-                setTimeout(() => welcome.style.display = 'none', 3000);
-            }
-        }
-
-        // Event listeners
-        messageInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        messageInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #2E8B57 0%, #764ba2 100%)';
-            } else {
-                document.getElementById('sendButton').style.background = 'linear-gradient(135deg, #ccc 0%, #999 100%)';
-            }
-        });
-
-        // Welcome interaction
-        setTimeout(() => {
-            addMessage("Hello! I'm your Hear to Listen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?", false);
-        }, 1000);
-    </script>
-</body>
-</html>
+                const aiResponse = getAIResp
