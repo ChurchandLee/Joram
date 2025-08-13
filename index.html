@@ -4,9 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Health Support</title>
-    <Link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
     <meta name="theme-color" content="#2E8B57">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#4ade80">
+
+    <!-- Apple-specific meta tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Hear to Listen">
+
+    <!-- Apple touch icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+
+    <!-- Microsoft tiles -->
+    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#4ade80">
+    
     <style>
         * {
             margin: 0;
@@ -22,13 +47,13 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            
         }
-           .logo {
-    width: 150px;
-    height: 150px;
-    margin-bottom: 15px;
-    border-radius: 50%;
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 15px;
+            border-radius: 50%;
         }
 
         .container {
@@ -45,7 +70,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #B2AC880%, #00f2fe 100%);
+            background: linear-gradient(135deg, #2E8B57 0%, #764ba2 100%);
             padding: 20px;
             text-align: center;
             color: white;
@@ -273,61 +298,20 @@
             }
         }
     </style>
-</head><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hear to Listen</title>
-    
-    <!-- Your existing CSS and meta tags stay here -->
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-
-    <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#4ade80">
-
-    <!-- Apple-specific meta tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Hear to Listen">
-
-    <!-- Apple touch icons -->
-    <link rel="apple-touch-icon" href="/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
-
-    <!-- Microsoft tiles -->
-    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png">
-    <meta name="msapplication-TileColor" content="#4ade80">
 </head>
-<script src="pwa.js"></script><body>
-    <div class="header-section" style="text-align: center; padding: 20px; background: #f8f9fa; border-bottom: 2px solid #e9ecef;">
-    <img src="heartolisten-logo.png.png" alt="HeartoListen" class="logo">
-    <h1 style="margin: 10px 0; color: #2c3e50;">HeartoListen</h1>
-    <p style="margin: 0; color: #666;">AI Mental Health Support</p>
-</div>
-    <div class="app-header">
-    <h1>HeartoListen</h1>
-    <p>AI Mental Health Support</p>
-</div>
+<body>
+    <script src="pwa.js"></script>
+    
     <div class="container">
         <div class="header">
-            <h1>Hear to Listen</h1>
+            <img src="heartolisten-logo.png.png" alt="HeartoListen" class="logo">
+            <h1>HeartoListen</h1>
             <p>Your compassionate AI companion for mental wellness</p>
         </div>
-        <div class="header-logo" style="text-align: center; padding: 20px 0; border-bottom: 1px solid #e0e0e0;">
-    <img src="heartolisten-logo.png.png" alt="HeartoListen" class="logo"> style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 10px;">
-    <h2 style="margin: 10px 0 5px 0; color: #2c3e50;">HeartoListen</h2>
-    <p style="margin: 0; color: #666; font-size: 14px;">AI Mental Health Support</p>
-</div>
         
         <div class="chat-area" id="chatArea">
             <div class="welcome-message">
-                <h3>Welcome to Hear to Listen </h3>
+                <h3>Welcome to HeartoListen</h3>
                 <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgment-free space where you can share your thoughts and feelings.</p>
                 
                 <div class="disclaimer">
@@ -506,7 +490,7 @@
 
         // Welcome interaction
         setTimeout(() => {
-            addMessage("Hello! I'm your Hear to Listen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?", false);
+            addMessage("Hello! I'm your HeartoListen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?", false);
         }, 1000);
     </script>
 </body>
