@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Health Support</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="description"  content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
+    <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
     <meta name="theme-color" content="#2E8B57">
     
     <!-- PWA Manifest -->
@@ -315,50 +315,6 @@
             font-weight: 500;
         }
 
-        .api-key-setup {
-            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-            border: 2px solid #2196f3;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .api-key-setup h3 {
-            color: #1976d2;
-            margin-bottom: 15px;
-        }
-
-        .api-key-input {
-            width: 100%;
-            max-width: 400px;
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            margin: 10px 0;
-            font-size: 14px;
-        }
-
-        .api-key-input:focus {
-            border-color: #2196f3;
-            outline: none;
-        }
-
-        .save-key-btn {
-            background: #2196f3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            margin: 5px;
-        }
-
-        .save-key-btn:hover {
-            background: #1976d2;
-        }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -423,20 +379,6 @@
 
         <!-- Chat Area -->
         <div class="chat-area" id="chatArea">
-            <!-- API Key Setup Section -->
-            <div class="api-key-setup" id="apiKeySetup">
-                <h3>🔑 OpenAI API Setup</h3>
-                <p>To use ChatGPT 4.0, please enter your OpenAI API key:</p>
-                <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Enter your OpenAI API key (sk-...)">
-                <br>
-                <button class="save-key-btn" onclick="saveApiKey()">Save API Key</button>
-                <button class="save-key-btn" onclick="toggleApiKeySetup()">Skip for now</button>
-                <p style="font-size: 12px; margin-top: 10px; color: #666;">
-                    Your API key is stored locally and never sent anywhere except to OpenAI.
-                    <br>Get your API key at: <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
-                </p>
-            </div>
-
             <!-- Welcome Message -->
             <div class="welcome-section">
                 <h2>Welcome to Hear to Listen 🌿</h2>
@@ -494,7 +436,7 @@
 
     <script>
         // OpenAI API Configuration
-        let OPENAI_API_KEY = '';
+        let OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
         const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
         // Mental Health System Prompt for ChatGPT
@@ -535,50 +477,6 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
-        // Load API key from local storage
-        function loadApiKey() {
-            const savedKey = localStorage.getItem('openai_api_key');
-            if (savedKey) {
-                OPENAI_API_KEY = savedKey;
-                document.getElementById('apiKeySetup').style.display = 'none';
-                return true;
-            }
-            return false;
-        }
-
-        // Save API key to local storage
-        function saveApiKey() {
-            const keyInput = document.getElementById('apiKeyInput');
-            const key = keyInput.value.trim();
-            
-            if (!key) {
-                alert('Please enter a valid API key');
-                return;
-            }
-            
-            if (!key.startsWith('sk-')) {
-                alert('OpenAI API keys typically start with "sk-". Please check your key.');
-                return;
-            }
-            
-            OPENAI_API_KEY = key;
-            localStorage.setItem('openai_api_key', key);
-            document.getElementById('apiKeySetup').style.display = 'none';
-            keyInput.value = '';
-            
-            addMessage('API key saved successfully! You can now chat with ChatGPT 4.0.', 'ai');
-        }
-
-        // Toggle API key setup visibility
-        function toggleApiKeySetup() {
-            const setup = document.getElementById('apiKeySetup');
-            if (setup.style.display === 'none') {
-                setup.style.display = 'block';
-            } else {
-                setup.style.display = 'none';
-            }
-        }
-
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const sendButton = document.getElementById('sendButton');
@@ -598,17 +496,16 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             showTypingIndicator();
             
             try {
-                if (OPENAI_API_KEY) {
+                if (OPENAI_API_KEY && OPENAI_API_KEY !== 'YOUR_API_KEY_HERE') {
                     await generateChatGPTResponse(message);
                 } else {
                     hideTypingIndicator();
-                    addMessage("Please set up your OpenAI API key to use ChatGPT 4.0. Click the settings button above to enter your key.", 'ai');
-                    document.getElementById('apiKeySetup').style.display = 'block';
+                    addMessage("I'm ready to chat with you using ChatGPT 4.0! The connection will be established once the app is properly deployed.", 'ai');
                 }
             } catch (error) {
                 hideTypingIndicator();
                 console.error('Error:', error);
-                addMessage("I'm having trouble connecting right now. Please check your API key or try again in a moment.", 'error');
+                addMessage("I'm having trouble connecting right now. Please try again in a moment.", 'error');
             } finally {
                 // Re-enable send button and input
                 sendButton.disabled = false;
@@ -673,12 +570,11 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                 let errorMessage = "I'm having trouble connecting to ChatGPT right now. ";
                 
                 if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                    errorMessage += "Please check your API key - it may be invalid or expired.";
-                    document.getElementById('apiKeySetup').style.display = 'block';
+                    errorMessage += "Please check the API key configuration.";
                 } else if (error.message.includes('429')) {
                     errorMessage += "The API rate limit has been exceeded. Please wait a moment and try again.";
                 } else if (error.message.includes('insufficient_quota')) {
-                    errorMessage += "Your OpenAI account doesn't have enough credits. Please add funds to your OpenAI account.";
+                    errorMessage += "The OpenAI account doesn't have enough credits.";
                 } else {
                     errorMessage += "Please try again in a moment.";
                 }
@@ -729,9 +625,6 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            // Try to load existing API key
-            loadApiKey();
-            
             // Focus on input field when page loads
             document.getElementById('messageInput').focus();
         });
