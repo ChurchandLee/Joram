@@ -36,6 +36,7 @@
             height: 600px;
         }
 
+        /* Remove the header flex layout and unnecessary elements */
         .header {
             background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
             padding: 20px;
@@ -44,7 +45,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 0;
+            flex-direction: column;
         }
 
         .logo {
@@ -56,17 +58,12 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            margin: 0 auto;
         }
 
-        .header-text h1 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .header-text p {
-            opacity: 0.9;
-            font-size: 0.9em;
+        /* Remove header-text styling as it's not needed anymore */
+        .header-text {
+            display: none;
         }
 
         .chat-area {
@@ -270,10 +267,6 @@
             .message {
                 max-width: 90%;
             }
-            
-            .header-text h1 {
-                font-size: 1.5em;
-            }
 
             body {
                 padding: 0;
@@ -290,10 +283,6 @@
     <div class="container">
         <div class="header">
             <div class="logo">🧠</div>
-            <div class="header-text">
-                <h1>HeartoListen</h1>
-                <p>AI Mental Health Support</p>
-            </div>
         </div>
         
         <div class="chat-area" id="chatArea">
@@ -445,4 +434,15 @@
             // Simulate AI response delay
             setTimeout(() => {
                 hideTypingIndicator();
-                const aiResponse = getAIResp
+                const aiResponse = getAIResponse(message);
+                addMessage(aiResponse, false);
+            }, 800);
+        }
+
+        function sendQuickMessage(text) {
+            messageInput.value = text;
+            sendMessage();
+        }
+    </script>
+</body>
+</html>
