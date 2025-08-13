@@ -131,6 +131,14 @@
             box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
         }
 
+        .error-message {
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            color: #c62828;
+            align-self: flex-start;
+            border-left: 4px solid #f44336;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
         .input-area {
             padding: 20px;
             background: rgba(255, 255, 255, 0.95);
@@ -307,6 +315,50 @@
             font-weight: 500;
         }
 
+        .api-key-setup {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border: 2px solid #2196f3;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .api-key-setup h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        .api-key-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .api-key-input:focus {
+            border-color: #2196f3;
+            outline: none;
+        }
+
+        .save-key-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .save-key-btn:hover {
+            background: #1976d2;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -371,6 +423,20 @@
 
         <!-- Chat Area -->
         <div class="chat-area" id="chatArea">
+            <!-- API Key Setup Section -->
+            <div class="api-key-setup" id="apiKeySetup">
+                <h3>🔑 OpenAI API Setup</h3>
+                <p>To use ChatGPT 4.0, please enter your OpenAI API key:</p>
+                <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Enter your OpenAI API key (sk-...)">
+                <br>
+                <button class="save-key-btn" onclick="saveApiKey()">Save API Key</button>
+                <button class="save-key-btn" onclick="toggleApiKeySetup()">Skip for now</button>
+                <p style="font-size: 12px; margin-top: 10px; color: #666;">
+                    Your API key is stored locally and never sent anywhere except to OpenAI.
+                    <br>Get your API key at: <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
+                </p>
+            </div>
+
             <!-- Welcome Message -->
             <div class="welcome-section">
                 <h2>Welcome to Hear to Listen 🌿</h2>
@@ -402,7 +468,7 @@
 
             <!-- AI Initial Message -->
             <div class="message ai-message">
-                Hello! I'm your Hear to Listen companion. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?
+                Hello! I'm your Hear to Listen companion powered by ChatGPT 4.0. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?
             </div>
 
             <!-- Typing Indicator -->
@@ -428,42 +494,101 @@
 
     <script>
         // OpenAI API Configuration
-        let OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
+        let OPENAI_API_KEY = '';
         const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-        
-        // AI Mental Health Companion System Prompt
-        const SYSTEM_PROMPT = `You are an AI mental health companion...`;
-        // AI Mental Health Companion System Prompt
-        const SYSTEM_PROMPT = `You are an AI mental health companion whose primary role is to listen with empathy, patience, and genuine warmth. Your style is calm, validating, and encouraging, without judgment or criticism. You never give direct medical advice, diagnose conditions, or prescribe treatment. Instead, you:
-        - Reflect back what the user has said so they feel understood.
-        - Offer new perspectives gently, never forcefully.
-        - Suggest practical grounding techniques or coping strategies when appropriate.
-        - Recognise and acknowledge the user's emotions without dismissing or minimising them.
-        - Use plain, conversational language, avoiding clinical jargon.
-        - Where relevant, help the user reframe challenges in a hopeful, realistic way.
 
-        You watch for potential signs of crisis or harm to self/others, and in such cases, you:
-        - Respond with heightened compassion.
-        - Gently recommend the user seek immediate help from a trained mental health professional or helpline.
-        - Provide relevant helpline numbers for their region if possible.
+        // Mental Health System Prompt for ChatGPT
+        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "HeartoListen". Your primary role is to listen with empathy, patience, and genuine warmth. Your responses should be:
 
-        Tone guide:
-        - Always sound human and present.
-        - Use short paragraphs for readability.
-        - Ask gentle, open-ended questions to encourage reflection.
-        - Never overwhelm the user with too much information at once.
-        - Prioritise emotional safety over problem-solving.
+TONE & STYLE:
+- Warm, validating, and encouraging without judgment
+- Use conversational, accessible language (avoid clinical jargon)
+- Keep responses concise but meaningful (2-4 sentences typically)
+- Sound genuinely caring and present
 
-        Your goal: Make the user feel heard, valued, and a little more hopeful at the end of each exchange.`;
+KEY PRINCIPLES:
+- Always validate the user's feelings and experiences
+- Never diagnose, prescribe medication, or give direct medical advice
+- Focus on emotional support and gentle guidance
+- Offer practical coping strategies when appropriate
+- Help users reframe challenges in hopeful, realistic ways
+
+CRISIS RESPONSE:
+If you detect signs of immediate danger, self-harm, or suicidal ideation:
+- Respond with heightened compassion and urgency
+- Strongly encourage immediate professional help
+- Provide crisis helpline numbers: US (988, text HOME to 741741), UK (116 123, text SHOUT to 85258)
+- Emphasize that their life has value and help is available
+
+INTERACTION STYLE:
+- Ask gentle, open-ended questions to encourage reflection
+- Reflect back what you hear to show understanding
+- Prioritize emotional safety over problem-solving
+- Use brief paragraphs for readability
+- Make the user feel heard, valued, and hopeful
+
+Remember: Your goal is to provide a safe space for emotional expression and gentle support, not therapy or treatment.`;
 
         // Chat functionality
-        let conversationHistory = [];
+        let conversationHistory = [{
+            role: 'system',
+            content: SYSTEM_PROMPT
+        }];
 
-        function sendMessage() {
+        // Load API key from local storage
+        function loadApiKey() {
+            const savedKey = localStorage.getItem('openai_api_key');
+            if (savedKey) {
+                OPENAI_API_KEY = savedKey;
+                document.getElementById('apiKeySetup').style.display = 'none';
+                return true;
+            }
+            return false;
+        }
+
+        // Save API key to local storage
+        function saveApiKey() {
+            const keyInput = document.getElementById('apiKeyInput');
+            const key = keyInput.value.trim();
+            
+            if (!key) {
+                alert('Please enter a valid API key');
+                return;
+            }
+            
+            if (!key.startsWith('sk-')) {
+                alert('OpenAI API keys typically start with "sk-". Please check your key.');
+                return;
+            }
+            
+            OPENAI_API_KEY = key;
+            localStorage.setItem('openai_api_key', key);
+            document.getElementById('apiKeySetup').style.display = 'none';
+            keyInput.value = '';
+            
+            addMessage('API key saved successfully! You can now chat with ChatGPT 4.0.', 'ai');
+        }
+
+        // Toggle API key setup visibility
+        function toggleApiKeySetup() {
+            const setup = document.getElementById('apiKeySetup');
+            if (setup.style.display === 'none') {
+                setup.style.display = 'block';
+            } else {
+                setup.style.display = 'none';
+            }
+        }
+
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
             const message = input.value.trim();
             
             if (message === '') return;
+            
+            // Disable send button and input
+            sendButton.disabled = true;
+            input.disabled = true;
             
             // Add user message to chat
             addMessage(message, 'user');
@@ -472,11 +597,94 @@
             // Show typing indicator
             showTypingIndicator();
             
-            // Simulate AI response (in a real app, this would be an API call)
-            setTimeout(() => {
+            try {
+                if (OPENAI_API_KEY) {
+                    await generateChatGPTResponse(message);
+                } else {
+                    hideTypingIndicator();
+                    addMessage("Please set up your OpenAI API key to use ChatGPT 4.0. Click the settings button above to enter your key.", 'ai');
+                    document.getElementById('apiKeySetup').style.display = 'block';
+                }
+            } catch (error) {
                 hideTypingIndicator();
-                generateAIResponse(message);
-            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
+                console.error('Error:', error);
+                addMessage("I'm having trouble connecting right now. Please check your API key or try again in a moment.", 'error');
+            } finally {
+                // Re-enable send button and input
+                sendButton.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        async function generateChatGPTResponse(userMessage) {
+            // Add user message to conversation history
+            conversationHistory.push({
+                role: 'user',
+                content: userMessage
+            });
+
+            try {
+                const response = await fetch(OPENAI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4',  // Using GPT-4
+                        messages: conversationHistory,
+                        max_tokens: 500,
+                        temperature: 0.7,
+                        presence_penalty: 0.1,
+                        frequency_penalty: 0.1
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content.trim();
+                
+                // Add AI response to conversation history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: aiResponse
+                });
+
+                // Keep conversation history manageable (last 20 messages + system prompt)
+                if (conversationHistory.length > 21) {
+                    conversationHistory = [
+                        conversationHistory[0], // Keep system prompt
+                        ...conversationHistory.slice(-20) // Keep last 20 messages
+                    ];
+                }
+
+                hideTypingIndicator();
+                addMessage(aiResponse, 'ai');
+
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('ChatGPT API Error:', error);
+                
+                let errorMessage = "I'm having trouble connecting to ChatGPT right now. ";
+                
+                if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                    errorMessage += "Please check your API key - it may be invalid or expired.";
+                    document.getElementById('apiKeySetup').style.display = 'block';
+                } else if (error.message.includes('429')) {
+                    errorMessage += "The API rate limit has been exceeded. Please wait a moment and try again.";
+                } else if (error.message.includes('insufficient_quota')) {
+                    errorMessage += "Your OpenAI account doesn't have enough credits. Please add funds to your OpenAI account.";
+                } else {
+                    errorMessage += "Please try again in a moment.";
+                }
+                
+                addMessage(errorMessage, 'error');
+            }
         }
 
         function sendQuickMessage(message) {
@@ -500,93 +708,6 @@
             
             chatArea.appendChild(messageDiv);
             chatArea.scrollTop = chatArea.scrollHeight;
-            
-            // Store in conversation history
-            conversationHistory.push({
-                role: sender === 'user' ? 'user' : 'assistant',
-                content: content
-            });
-        }
-
-        function generateAIResponse(userMessage) {
-            // This is a simplified response system. In a real app, you would:
-            // 1. Send the conversation history + system prompt to OpenAI API
-            // 2. Get the response and display it
-            // 3. Handle error cases and crisis detection
-            
-            const responses = getContextualResponse(userMessage);
-            const response = responses[Math.floor(Math.random() * responses.length)];
-            
-            addMessage(response, 'ai');
-        }
-
-        function getContextualResponse(message) {
-            const lowerMessage = message.toLowerCase();
-            
-            // Crisis keywords - in a real app, this would be more sophisticated
-            const crisisKeywords = ['suicide', 'kill myself', 'end it all', 'hurt myself', 'self harm'];
-            const isCrisis = crisisKeywords.some(keyword => lowerMessage.includes(keyword));
-            
-            if (isCrisis) {
-                return [
-                    "I'm really concerned about what you're sharing, and I want you to know that your feelings are valid and you're not alone. Please reach out to a crisis helpline right away - they have trained professionals who can provide immediate support. In the US, you can call 988 or text HOME to 741741. Your life has value, and there are people who want to help.",
-                    "What you're feeling right now sounds incredibly difficult, and I'm worried about your safety. Please contact emergency services or a crisis helpline immediately. You deserve professional support right now. In the UK, Samaritans (116 123) are available 24/7. Please don't go through this alone."
-                ];
-            }
-            
-            // Anxiety responses
-            if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried')) {
-                return [
-                    "I can hear that you're feeling anxious right now. That must feel really overwhelming. Sometimes when anxiety hits, it can help to focus on your breathing - try breathing in for 4 counts, holding for 4, and out for 6. What's been on your mind that's contributing to these anxious feelings?",
-                    "Anxiety can feel so intense and consuming. I want you to know that what you're experiencing is valid. One thing that sometimes helps is the 5-4-3-2-1 grounding technique - name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, and 1 you can taste. Would you like to talk about what's triggering these anxious feelings?",
-                    "It sounds like anxiety is really weighing on you right now. That's such a difficult feeling to carry. Your mind might be racing with 'what ifs' - that's what anxiety does. Remember that anxious thoughts aren't facts. What would feel most supportive for you right now?"
-                ];
-            }
-            
-            // Depression/sadness responses
-            if (lowerMessage.includes('depressed') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless')) {
-                return [
-                    "I can sense the heaviness in what you're sharing, and I want you to know that I'm here with you in this difficult moment. Depression can make everything feel so much harder. You're brave for reaching out and talking about this. What's been the most challenging part of what you're going through?",
-                    "It takes courage to share when you're feeling this low. Depression can make us feel so isolated and like nothing will ever get better, but you're not alone in this. These feelings, as painful as they are, can change. What's one small thing that used to bring you even a tiny bit of comfort?",
-                    "Thank you for trusting me with how you're feeling. When we're depressed, it's like looking at the world through dark-tinted glasses - everything seems harder and more hopeless. But you're still here, still reaching out, and that matters. How long have you been carrying these heavy feelings?"
-                ];
-            }
-            
-            // Sleep issues
-            if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired')) {
-                return [
-                    "Sleep troubles can affect everything - your mood, energy, and ability to cope with stress. It's frustrating when you need rest but can't seem to get it. What's your sleep routine like? Sometimes creating a calming pre-sleep ritual can help signal to your body that it's time to wind down.",
-                    "Not getting good sleep makes everything feel more difficult, doesn't it? Your mind and body need that rest to recharge. Are there things on your mind that keep you awake, or is it more physical restlessness? Sometimes talking through what's keeping us up can help.",
-                    "Sleep issues are so draining, both physically and emotionally. It's like being tired but wired at the same time. Have you noticed if there are particular thoughts or worries that surface when you're trying to sleep?"
-                ];
-            }
-            
-            // Overwhelmed responses
-            if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('stressed')) {
-                return [
-                    "Feeling overwhelmed is like being caught in a storm - everything feels too much at once. It's completely understandable that you're feeling this way. Sometimes when we're overwhelmed, it can help to pick just one small thing to focus on. What feels most pressing or urgent to you right now?",
-                    "When everything feels like too much, it's natural to feel overwhelmed. Your feelings make complete sense. Sometimes it helps to remember that you don't have to solve everything at once. What would it look like to take things one step at a time?",
-                    "That sense of being overwhelmed is so heavy to carry. It's like having too many browser tabs open in your mind. You're dealing with a lot, and it's okay to feel like it's too much sometimes. What's been the biggest source of stress for you lately?"
-                ];
-            }
-            
-            // Motivation responses
-            if (lowerMessage.includes('motivation') || lowerMessage.includes('motivated') || lowerMessage.includes('stuck')) {
-                return [
-                    "It sounds like you're looking for that spark to get moving again. Sometimes motivation feels elusive, especially when we're going through tough times. What's something small that you accomplished recently, even if it seemed minor? Sometimes acknowledging the little things can help us find momentum.",
-                    "Feeling unmotivated can be so frustrating, especially when you know there are things you want or need to do. Sometimes motivation follows action, rather than the other way around. What's one tiny step you could take today, even if you don't feel like it?",
-                    "I hear that you're struggling with motivation right now. That's actually really common, and it doesn't mean anything is wrong with you. What usually helps you feel more energized or purposeful? Even if those things don't feel appealing right now, they might give us clues about what could help."
-                ];
-            }
-            
-            // General supportive responses
-            return [
-                "Thank you for sharing that with me. I can hear that you're going through something difficult right now. Your feelings are completely valid, and I'm glad you felt comfortable opening up. What would feel most helpful for you in this moment?",
-                "I'm really glad you reached out to talk about this. It takes strength to share what's on your mind, especially when things feel heavy. I'm here to listen and support you through whatever you're experiencing. How are you taking care of yourself right now?",
-                "I can sense that there's a lot on your mind. Thank you for trusting me with your thoughts and feelings. You don't have to carry everything alone. What's been the most challenging part of your day or week?",
-                "It sounds like you're dealing with quite a bit right now. I want you to know that your feelings matter, and it's completely okay to not be okay sometimes. What kind of support feels most helpful to you?",
-                "I appreciate you sharing what's going on for you. Sometimes just putting our thoughts into words can provide a little relief. I'm here to listen without judgment and walk alongside you through whatever you're facing. What's weighing most heavily on your heart?"
-            ];
         }
 
         function showTypingIndicator() {
@@ -608,14 +729,11 @@
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            // Try to load existing API key
+            loadApiKey();
+            
             // Focus on input field when page loads
             document.getElementById('messageInput').focus();
-            
-            // Add some initial context to conversation history
-            conversationHistory.push({
-                role: 'system',
-                content: SYSTEM_PROMPT
-            });
         });
 
         // PWA Service Worker Registration
