@@ -353,78 +353,240 @@
         const messageInput = document.getElementById('messageInput');
         const typingIndicator = document.getElementById('typingIndicator');
         
-        // Comprehensive AI responses for mental health support
-        const aiResponses = {
-            anxiety: [
-                "I hear that you're feeling anxious, and that takes courage to share. Anxiety can feel overwhelming, but you're not alone in this. Let's try a simple grounding technique: Can you name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste?",
-                "Anxiety is your mind's way of trying to protect you, even when there's no immediate danger. Take a deep breath with me - in for 4 counts, hold for 4, out for 6. Remember, this feeling is temporary and will pass.",
-                "Thank you for trusting me with how you're feeling. When anxiety hits, try to remember: you are safe right now, you have gotten through difficult times before, and you have the strength to handle this too.",
-                "I understand anxiety can feel consuming. Here's a quick technique: Focus on your breathing. Breathe in slowly through your nose for 4 counts, hold for 7, then exhale through your mouth for 8. This activates your body's relaxation response."
-            ],
-            sad: [
-                "I'm here with you in this difficult moment. Sadness is a natural human emotion, and it's okay to feel this way. Would you like to talk about what's contributing to these feelings, or would you prefer some gentle coping strategies?",
-                "Your feelings are valid, and it's important to honor them rather than push them away. Sometimes sadness needs to be felt fully before it can begin to lift. What would feel most supportive for you right now?",
-                "I can sense you're going through a tough time. Remember that it's okay not to be okay sometimes. Healing isn't linear, and you're being brave by reaching out and acknowledging your feelings.",
-                "Sadness can feel heavy, but you don't have to carry it alone. Sometimes it helps to do something small and kind for yourself - maybe make a cup of tea, listen to a favorite song, or step outside for a moment."
-            ],
-            overwhelmed: [
-                "When everything feels like too much, let's break it down together. You don't have to carry all of this at once. What feels like the most pressing thing on your mind right now? Sometimes addressing one thing at a time makes everything more manageable.",
-                "Feeling overwhelmed is a sign that you care deeply about many things. Let's create some breathing room. What's one small thing you could let go of or postpone today? Your well-being matters more than having everything perfect.",
-                "I understand that feeling of having too much on your plate. Remember: you don't have to solve everything today. Focus on just the next right step, not the entire staircase.",
-                "Being overwhelmed is your mind's way of saying you need a pause. Try this: Write down three things that are bothering you most. Then pick just one to focus on today. The others can wait."
-            ],
-            motivation: [
-                "Motivation often follows action, not the other way around. What's one tiny step you could take today toward something that matters to you? Even the smallest movement forward is progress worth celebrating.",
-                "It's completely normal to have days where motivation feels elusive. Be gentle with yourself. Sometimes the most productive thing we can do is rest and recharge. What would help you feel more energized?",
-                "You have overcome challenges before, and you have that same strength within you now. What's one thing you accomplished recently, no matter how small? Let's build on that momentum.",
-                "Low motivation doesn't mean you're lazy - it often means you need something different. Maybe a change of scenery, connecting with someone, or breaking a big task into tiny pieces. What feels possible right now?"
-            ],
-            sleep: [
-                "Sleep troubles can really affect how we feel during the day. Let's explore some gentle strategies. How would you describe your bedtime routine? Sometimes small changes can make a big difference.",
-                "Quality sleep is so important for mental health. Consider creating a wind-down routine: dim lights an hour before bed, avoid screens, try some gentle stretches or meditation. What sounds most appealing to you?",
-                "Racing thoughts at bedtime are common. Try the 4-7-8 breathing technique: breathe in for 4, hold for 7, out for 8. This can help calm your nervous system and prepare your body for rest.",
-                "Sleep challenges are frustrating. If your mind is racing, try writing down your thoughts in a journal before bed, or practice progressive muscle relaxation - tense and release each muscle group from your toes to your head."
-            ],
-            stress: [
-                "Stress affects us all, and recognizing it is the first step toward managing it better. What are the main sources of stress in your life right now? Sometimes just naming them can reduce their power over us.",
-                "Your body and mind are telling you something important when you feel stressed. Let's think about what boundaries you might need to set or what support you might need to ask for. You deserve care and peace.",
-                "Chronic stress can feel endless, but there are ways to find relief. Have you tried progressive muscle relaxation? Starting with your toes, tense each muscle group for 5 seconds, then release. It can help reset your nervous system.",
-                "Stress often comes from feeling like we have too much to handle. What's one thing you could delegate, postpone, or eliminate today? Sometimes the best self-care is saying no to things that drain us."
-            ],
-            general: [
-                "Thank you for sharing with me. I'm here to listen and support you. What's been on your mind lately? Remember, there's no judgment here - just compassion and understanding.",
-                "I appreciate you taking the time to reach out. That shows real strength and self-awareness. How are you taking care of yourself today? Even small acts of self-care matter.",
-                "Every person's journey is unique, and yours matters. What would feel most helpful for you right now - talking through something specific, exploring coping strategies, or something else entirely?",
-                "I'm glad you're here. Sometimes the hardest part is reaching out, and you've already done that. What's been the most challenging part of your day, or conversely, what's been going well?",
-                "Your mental health and well-being are important. I'm here to provide support and encouragement. What's one thing you're grateful for today, even if it's small?",
-                "I'm listening. Whether you're having a tough day or just need someone to talk to, this is a safe space. What would you like to share or explore together?",
-                "You've taken a positive step by being here. Mental health is just as important as physical health, and seeking support shows wisdom and courage. How can I best support you today?"
-            ]
+        // Conversation tracking
+        let conversationHistory = [];
+        let currentTopic = null;
+        let messageCount = 0;
+        let userEmotions = [];
+        
+        // CBT-based empathetic responses with conversation flow
+        const responseSystem = {
+            // Initial responses to emotions
+            anxiety: {
+                initial: [
+                    "I can hear the anxiety in what you're sharing, and I want you to know that what you're experiencing is real and valid. Anxiety often tells us stories about what might happen - what thoughts are going through your mind right now?",
+                    "It sounds like anxiety is really weighing on you today. That must feel exhausting. When you notice these anxious feelings, what do you typically tell yourself about them?",
+                    "Thank you for trusting me with how you're feeling. Anxiety can make everything feel urgent and overwhelming. I'm curious - when did you first start noticing these feelings today?"
+                ],
+                followUp: [
+                    "I'm hearing that this anxiety is persistent for you. Sometimes our minds try to protect us by imagining worst-case scenarios. What evidence do you have for and against the thoughts that are making you anxious?",
+                    "It sounds like you've been carrying this worry for a while. In CBT, we often explore whether our thoughts are helpful or just familiar. What would you tell a close friend if they shared this same concern with you?",
+                    "You mentioned feeling anxious about [topic]. Sometimes it can help to separate what we can control from what we can't. What aspects of this situation, if any, do you feel you have some influence over?"
+                ],
+                deeper: [
+                    "I notice you keep coming back to these anxious thoughts. That's really common - our brains sometimes get stuck in loops trying to solve problems. What do you think might happen if you allowed yourself to sit with the uncertainty for just a moment?",
+                    "It seems like this anxiety might be connected to some deeper concerns about [related theme]. Sometimes our current worries are our mind's way of processing bigger life questions. Does that resonate with you at all?"
+                ]
+            },
+            
+            sad: {
+                initial: [
+                    "I can feel the heaviness in your words, and I want you to know that it's okay to sit with these feelings. Sadness often carries important messages about what matters to us. What do you think your sadness might be trying to tell you?",
+                    "There's a real weight to what you're sharing, and I'm honored that you feel safe enough to express this here. When you think about this sadness, does it feel familiar, or is this something new you're experiencing?",
+                    "It takes courage to acknowledge feeling sad, especially when the world often tells us to 'just be positive.' What's it like for you to name these feelings out loud?"
+                ],
+                followUp: [
+                    "You've shared some really difficult experiences. I'm wondering - when you think about this sadness, what thoughts come up about yourself or your situation?",
+                    "I'm noticing that you seem to be really hard on yourself about feeling this way. What would it be like to treat yourself with the same compassion you'd show a good friend going through this?",
+                    "This sadness sounds connected to some significant losses or changes in your life. Sometimes our emotions are perfectly logical responses to difficult circumstances. What feels most important for you to be heard about right now?"
+                ],
+                deeper: [
+                    "You've been so open about this pain you're carrying. I'm curious about the story you tell yourself about why you're feeling this way. Are there any patterns or themes you notice?",
+                    "It seems like this sadness touches on some fundamental questions about [identity/relationships/purpose]. Sometimes our deepest emotions point us toward what we most need or value. What do you think this feeling might be highlighting for you?"
+                ]
+            },
+            
+            overwhelmed: {
+                initial: [
+                    "It sounds like you have so much on your plate right now. When everything feels like 'too much,' our minds can start racing to try to handle it all at once. What's the loudest voice in your head telling you right now?",
+                    "I can sense the weight of everything you're juggling. Feeling overwhelmed is often our system's way of saying we need to slow down and prioritize. What would it feel like to give yourself permission to not handle everything perfectly?",
+                    "There's a lot coming through in what you're sharing - it makes complete sense that you'd feel overwhelmed. When you imagine getting through this, what comes up for you?"
+                ],
+                followUp: [
+                    "You mentioned feeling like you 'should' be able to handle all of this. I'm curious about that word 'should' - where do you think that expectation comes from?",
+                    "It sounds like you're putting a lot of pressure on yourself to manage everything at once. What would it be like to approach this differently - maybe focusing on what truly needs your attention today?",
+                    "I hear you saying you feel like you're failing or not doing enough. What evidence do you have that challenges that thought? What would someone who cares about you say about how you're handling things?"
+                ],
+                deeper: [
+                    "We've talked about several areas where you feel overwhelmed. I'm noticing some themes around [control/perfectionism/others' expectations]. What do you think is really at the heart of this feeling?",
+                    "You've been so aware of all the external demands on you. I'm wondering about your internal experience - what do you most need emotionally to feel more grounded?"
+                ]
+            },
+            
+            stress: {
+                initial: [
+                    "I can hear the tension in what you're describing. Stress often builds up when we're facing demands that feel bigger than our current resources. What part of this stress feels most pressing to you right now?",
+                    "It sounds like stress has become a constant companion for you lately. Our bodies and minds are designed to handle short bursts of stress, but chronic stress is different. How is this showing up in your daily life?",
+                    "Thank you for sharing what's creating stress for you. Sometimes when we're in the middle of it, everything can feel equally urgent. What would it be like to imagine that not everything needs to be solved today?"
+                ],
+                followUp: [
+                    "You've described several stressful situations. I'm curious about your thoughts around these challenges - are you noticing any patterns in how you talk to yourself about them?",
+                    "It seems like this stress might be connected to feeling responsible for outcomes that may be partly outside your control. What parts of these situations do you feel you have genuine influence over?",
+                    "I hear you trying to anticipate and prepare for so many different scenarios. While planning can be helpful, sometimes our minds create stress by trying to solve problems that haven't happened yet. What's it like to consider focusing just on today?"
+                ],
+                deeper: [
+                    "We've explored several sources of stress in your life. There seems to be a theme around [perfectionism/control/others' approval]. How do you think you learned to carry stress this way?",
+                    "I'm noticing that beneath this stress, there might be some deeper concerns about [safety/worth/belonging]. Sometimes our stress is our mind's way of trying to protect something important to us. What do you think yours might be protecting?"
+                ]
+            },
+            
+            general: {
+                initial: [
+                    "I'm really glad you reached out today. There's something brave about taking the time to check in with yourself and seek support. What's been occupying your thoughts lately?",
+                    "Thank you for being here and sharing your time with me. I'm curious about what brought you here today - what's been on your mind or in your heart?",
+                    "I appreciate you taking this step to connect. Sometimes just having a space to think out loud can be really valuable. What would feel most helpful for you right now?"
+                ],
+                followUp: [
+                    "I'm hearing several different themes in what you're sharing. What feels most important to you to explore right now?",
+                    "It sounds like you've been doing a lot of thinking about this. I'm curious about your internal dialogue - what story are you telling yourself about your situation?",
+                    "You've shared some really meaningful reflections. What's it like for you to put these thoughts into words?"
+                ],
+                deeper: [
+                    "As we've been talking, I'm noticing some patterns in how you describe your experiences. What do you make of that?",
+                    "You've been so thoughtful in sharing your perspective. I'm wondering what insights you're having about yourself through our conversation?"
+                ]
+            }
         };
 
+        // CBT-based thought exploration prompts
+        const thoughtExploration = [
+            "What evidence supports this thought, and what evidence challenges it?",
+            "If a close friend had this same thought, what would you tell them?",
+            "What would it feel like to consider a different perspective on this situation?",
+            "How might you think about this differently on a day when you're feeling more balanced?",
+            "What's the most realistic way to look at this situation?",
+            "What would be most helpful for you to believe about yourself right now?"
+        ];
+
+        // Conversation development prompts
+        const conversationDevelopers = [
+            "Tell me more about that...",
+            "What was that experience like for you?",
+            "How did that affect you?",
+            "What thoughts went through your mind when that happened?",
+            "What feelings came up for you in that moment?",
+            "How are you making sense of all this?",
+            "What's the hardest part about this for you?",
+            "What would it mean to you if you could work through this?"
+        ];
+
+        function analyzeEmotion(message) {
+            const emotionKeywords = {
+                anxiety: ['anxious', 'anxiety', 'worried', 'panic', 'nervous', 'scared', 'fear', 'afraid', 'terrified', 'uneasy'],
+                sad: ['sad', 'depressed', 'down', 'cry', 'crying', 'hopeless', 'empty', 'lonely', 'grief', 'loss', 'hurt'],
+                overwhelmed: ['overwhelmed', 'too much', 'can\'t cope', 'drowning', 'exhausted', 'burned out', 'swamped'],
+                stress: ['stress', 'stressed', 'pressure', 'tension', 'burden', 'weight', 'demanding'],
+                anger: ['angry', 'mad', 'furious', 'irritated', 'frustrated', 'annoyed', 'rage'],
+                general: []
+            };
+
+            const message_lower = message.toLowerCase();
+            
+            for (const [emotion, keywords] of Object.entries(emotionKeywords)) {
+                if (emotion === 'general') continue;
+                if (keywords.some(keyword => message_lower.includes(keyword))) {
+                    return emotion;
+                }
+            }
+            return 'general';
+        }
+
+        function getConversationalResponse(userMessage, messageIndex) {
+            const detectedEmotion = analyzeEmotion(userMessage);
+            const responses = responseSystem[detectedEmotion];
+            
+            // Track conversation history
+            conversationHistory.push({
+                user: userMessage,
+                emotion: detectedEmotion,
+                timestamp: Date.now()
+            });
+
+            // Update current topic and user emotions
+            if (detectedEmotion !== 'general') {
+                currentTopic = detectedEmotion;
+                if (!userEmotions.includes(detectedEmotion)) {
+                    userEmotions.push(detectedEmotion);
+                }
+            }
+
+            let response;
+            
+            // Determine response type based on conversation flow
+            if (messageIndex === 0 || !currentTopic) {
+                // First interaction or no specific topic
+                response = responses.initial[Math.floor(Math.random() * responses.initial.length)];
+            } else if (messageIndex < 3) {
+                // Early conversation - follow up questions
+                response = responses.followUp[Math.floor(Math.random() * responses.followUp.length)];
+            } else {
+                // Deeper conversation
+                if (responses.deeper && Math.random() > 0.3) {
+                    response = responses.deeper[Math.floor(Math.random() * responses.deeper.length)];
+                } else {
+                    // Mix in thought exploration and conversation developers
+                    if (Math.random() > 0.5) {
+                        response = thoughtExploration[Math.floor(Math.random() * thoughtExploration.length)];
+                    } else {
+                        response = conversationDevelopers[Math.floor(Math.random() * conversationDevelopers.length)];
+                    }
+                }
+            }
+
+            // Personalize response based on conversation history
+            response = personalizeResponse(response, userMessage, detectedEmotion);
+            
+            return response;
+        }
+
+        function personalizeResponse(response, userMessage, emotion) {
+            // Replace placeholders with context from the conversation
+            if (response.includes('[topic]')) {
+                response = response.replace('[topic]', extractTopic(userMessage));
+            }
+            if (response.includes('[related theme]')) {
+                response = response.replace('[related theme]', getRelatedTheme(emotion));
+            }
+            if (response.includes('[identity/relationships/purpose]')) {
+                const themes = ['your sense of identity', 'your relationships', 'your sense of purpose'];
+                response = response.replace('[identity/relationships/purpose]', themes[Math.floor(Math.random() * themes.length)]);
+            }
+            if (response.includes('[control/perfectionism/others\' expectations]')) {
+                const themes = ['needing control', 'perfectionism', 'others\' expectations'];
+                response = response.replace('[control/perfectionism/others\' expectations]', themes[Math.floor(Math.random() * themes.length)]);
+            }
+            if (response.includes('[safety/worth/belonging]')) {
+                const themes = ['feeling safe', 'your sense of worth', 'belonging and connection'];
+                response = response.replace('[safety/worth/belonging]', themes[Math.floor(Math.random() * themes.length)]);
+            }
+            if (response.includes('[perfectionism/control/others\' approval]')) {
+                const themes = ['perfectionism', 'having control', 'getting others\' approval'];
+                response = response.replace('[perfectionism/control/others\' approval]', themes[Math.floor(Math.random() * themes.length)]);
+            }
+            
+            return response;
+        }
+
+        function extractTopic(message) {
+            // Simple topic extraction - could be enhanced
+            const words = message.toLowerCase().split(' ');
+            const topics = ['work', 'family', 'relationships', 'school', 'health', 'future', 'money', 'change'];
+            const foundTopic = topics.find(topic => words.includes(topic));
+            return foundTopic || 'this situation';
+        }
+
+        function getRelatedTheme(emotion) {
+            const themes = {
+                anxiety: 'uncertainty and control',
+                sad: 'loss and connection',
+                overwhelmed: 'expectations and boundaries',
+                stress: 'pressure and self-worth'
+            };
+            return themes[emotion] || 'your inner experience';
+        }
+
         function getAIResponse(userMessage) {
-            const message = userMessage.toLowerCase();
-            
-            if (message.includes('anxious') || message.includes('anxiety') || message.includes('worried') || message.includes('panic')) {
-                return aiResponses.anxiety[Math.floor(Math.random() * aiResponses.anxiety.length)];
-            }
-            if (message.includes('sad') || message.includes('depressed') || message.includes('down') || message.includes('cry')) {
-                return aiResponses.sad[Math.floor(Math.random() * aiResponses.sad.length)];
-            }
-            if (message.includes('overwhelmed') || message.includes('too much') || message.includes('can\'t cope')) {
-                return aiResponses.overwhelmed[Math.floor(Math.random() * aiResponses.overwhelmed.length)];
-            }
-            if (message.includes('motivation') || message.includes('unmotivated') || message.includes('lazy') || message.includes('procrastination')) {
-                return aiResponses.motivation[Math.floor(Math.random() * aiResponses.motivation.length)];
-            }
-            if (message.includes('sleep') || message.includes('insomnia') || message.includes('tired') || message.includes('exhausted')) {
-                return aiResponses.sleep[Math.floor(Math.random() * aiResponses.sleep.length)];
-            }
-            if (message.includes('stress') || message.includes('pressure') || message.includes('burden')) {
-                return aiResponses.stress[Math.floor(Math.random() * aiResponses.stress.length)];
-            }
-            
-            return aiResponses.general[Math.floor(Math.random() * aiResponses.general.length)];
+            return getConversationalResponse(userMessage, messageCount);
         }
 
         function addMessage(content, isUser = false) {
@@ -455,12 +617,13 @@
             // Show typing indicator
             showTypingIndicator();
             
-            // Simulate AI response delay
+            // Simulate AI response delay - longer for more thoughtful responses
             setTimeout(() => {
                 hideTypingIndicator();
                 const aiResponse = getAIResponse(message);
                 addMessage(aiResponse, false);
-            }, 1500 + Math.random() * 1000); // Random delay between 1.5-2.5 seconds
+                messageCount++; // Increment message count for conversation tracking
+            }, 2000 + Math.random() * 1500); // Random delay between 2-3.5 seconds for more realistic thinking time
         }
 
         function sendQuickMessage(message) {
