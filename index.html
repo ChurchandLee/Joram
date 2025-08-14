@@ -437,7 +437,7 @@
     <script>
         // OpenAI API Configuration
         let OPENAI_API_KEY = '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';
-        const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+        const OPENAI_API_URL = 'https://cors-anywhere.herokuapp.com/https://api.openai.com/v1/chat/completions';
 
         // Mental Health System Prompt for ChatGPT
         const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "HeartoListen". Your primary role is to listen with empathy, patience, and genuine warmth. Your responses should be:
@@ -519,9 +519,11 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             try {
                 const response = await fetch(OPENAI_API_URL, {
                     method: 'POST',
+                    mode: 'cors',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify({
                         model: 'gpt-4',  // Using GPT-4
@@ -564,12 +566,16 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                 
                 let errorMessage = "I'm having trouble connecting to ChatGPT right now. ";
                 
-                if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                    errorMessage += "Please check the API key configuration.";
+                if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
+                    errorMessage += "This might be due to network restrictions. Please try refreshing the page or check your internet connection.";
+                } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                    errorMessage += "There's an issue with the API key configuration.";
                 } else if (error.message.includes('429')) {
                     errorMessage += "The API rate limit has been exceeded. Please wait a moment and try again.";
                 } else if (error.message.includes('insufficient_quota')) {
                     errorMessage += "The OpenAI account doesn't have enough credits.";
+                } else if (error.message.includes('cors')) {
+                    errorMessage += "There's a cross-origin request issue. Please try again.";
                 } else {
                     errorMessage += "Please try again in a moment.";
                 }
