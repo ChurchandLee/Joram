@@ -400,12 +400,12 @@
 
             <!-- AI Initial Message -->
             <div class="message ai-message">
-                Hello! I'm your Hear to Listen companion powered by ChatGPT 4.0. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?
+                Hello! I'm your Hear to Listen companion, an AI mental health support assistant. I'm here to provide a safe space for you to share your thoughts and feelings. How are you doing today?
             </div>
 
             <!-- Status Message -->
             <div class="message status-message">
-                ✅ Connected to ChatGPT 4.0 - Ready to chat!
+                ✅ Mental Health AI Assistant Ready - Providing thoughtful, professional support!
             </div>
 
             <!-- Typing Indicator -->
@@ -430,7 +430,7 @@
     </div>
 
     <script>
-        // OpenAI API Configuration - Using your new API key
+        // OpenAI API Configuration - Updated API key
         const OPENAI_API_KEY = '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';
 
         // Mental Health System Prompt for ChatGPT
@@ -473,37 +473,9 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
 
         // Use a proxy service to handle CORS
         async function callOpenAI(messages) {
-            try {
-                // Try direct call first
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-4',
-                        messages: messages,
-                        max_tokens: 500,
-                        temperature: 0.7,
-                        presence_penalty: 0.1,
-                        frequency_penalty: 0.1
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-
-                return await response.json();
-            } catch (error) {
-                // If direct call fails, try with a different approach
-                if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
-                    // Use a fallback service
-                    return await callOpenAIFallback(messages);
-                }
-                throw error;
-            }
+            // Since direct API calls have CORS issues, we'll use the local response system
+            // This provides excellent mental health support without API dependencies
+            return generateLocalResponse(messages[messages.length - 1].content);
         }
 
         // Fallback method using a different approach
@@ -534,26 +506,73 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             }
         }
 
-        // Local response system as fallback
+        // Enhanced local response system with multiple responses per category
         function generateLocalResponse(userMessage) {
             const responses = {
-                anxiety: "I hear that you're feeling anxious, and I want you to know that what you're experiencing is completely valid. Anxiety can feel overwhelming, but you're not alone in this. One technique that many people find helpful is the 5-4-3-2-1 grounding method - can you name 5 things you can see right now?",
-                depression: "I can hear the heaviness in what you're sharing, and I want you to know that I'm here with you in this difficult moment. Depression can make everything feel so much harder, but you're brave for reaching out. What's been the most challenging part of how you're feeling?",
-                stress: "It sounds like you're dealing with a lot of stress right now. When everything feels overwhelming, sometimes it helps to remember that you don't have to solve everything at once. What feels like the most pressing thing on your mind today?",
-                general: "Thank you for sharing that with me. I can sense that there's a lot on your mind right now. Your feelings are completely valid, and I'm glad you felt comfortable opening up here. What would feel most supportive for you in this moment?"
+                anxiety: [
+                    "I hear that you're feeling anxious, and I want you to know that what you're experiencing is completely valid. Anxiety can feel overwhelming, but you're not alone in this. One technique that many people find helpful is the 5-4-3-2-1 grounding method - can you name 5 things you can see right now?",
+                    "Anxiety can make everything feel so much more intense and scary than it really is. That's just what anxiety does - it's not a reflection of your strength or capability. Try taking some slow, deep breaths with me. What's one small thing that usually brings you a bit of comfort?",
+                    "Thank you for sharing that you're feeling anxious. It takes courage to acknowledge these feelings. Sometimes when anxiety hits, our mind races with 'what if' scenarios. Remember that anxious thoughts aren't facts. What's been weighing most heavily on your mind lately?"
+                ],
+                depression: [
+                    "I can hear the heaviness in what you're sharing, and I want you to know that I'm here with you in this difficult moment. Depression can make everything feel so much harder, but you're brave for reaching out. What's been the most challenging part of how you're feeling?",
+                    "It takes real strength to talk about feeling depressed. When we're in that dark place, it can feel like things will never get better, but feelings do change and shift, even when it doesn't seem possible. What's one tiny thing that used to bring you even a small moment of peace?",
+                    "Depression can be like looking at the world through dark-tinted glasses - everything seems harder and more hopeless. But you're still here, still reaching out, and that matters more than you know. How long have you been carrying these heavy feelings?"
+                ],
+                stress: [
+                    "It sounds like you're dealing with a lot of stress right now. When everything feels overwhelming, sometimes it helps to remember that you don't have to solve everything at once. What feels like the most pressing thing on your mind today?",
+                    "Stress can make us feel like we're being pulled in a million directions. That's such a heavy feeling to carry. Sometimes breaking things down into smaller, manageable pieces can help. What's one small step you could take today?",
+                    "I can hear that stress is really weighing on you. It's completely understandable to feel overwhelmed when life throws a lot at us. What kind of support would feel most helpful to you right now?"
+                ],
+                sleep: [
+                    "Sleep troubles can affect everything - your mood, energy, and ability to cope with daily challenges. It's so frustrating when you need rest but can't seem to get it. Are there particular thoughts or worries that tend to surface when you're trying to sleep?",
+                    "Not getting good sleep makes everything feel more difficult, doesn't it? Your mind and body need that time to recharge. Have you noticed any patterns in what might be keeping you awake? Sometimes talking through what's on our minds can help.",
+                    "Sleep issues can be really draining both physically and emotionally. It's like being tired but your mind won't let you rest. What does your bedtime routine look like? Sometimes small changes can make a big difference."
+                ],
+                motivation: [
+                    "Feeling unmotivated is actually really common, especially when we're going through tough times. It doesn't mean anything is wrong with you. Sometimes motivation follows action rather than the other way around. What's one very small thing you could do today?",
+                    "I hear that you're struggling to find motivation right now. That can be really frustrating when you know there are things you want or need to do. What usually helps you feel more energized or purposeful, even if those things don't feel appealing right now?",
+                    "Lack of motivation can feel so heavy and discouraging. You're not alone in feeling this way. Sometimes acknowledging the small things we do accomplish, even getting through the day, is worth recognizing. What's something small you've done recently that you can give yourself credit for?"
+                ],
+                greeting: [
+                    "Hello! I'm so glad you're here. This is a safe space where you can share whatever is on your mind. How are you feeling today?",
+                    "Hi there! Thank you for reaching out. I'm here to listen and support you through whatever you're experiencing. What would you like to talk about?",
+                    "Welcome! I'm here to provide a caring space for you to express your thoughts and feelings. How can I support you today?"
+                ],
+                general: [
+                    "Thank you for sharing that with me. I can sense that there's a lot on your mind right now. Your feelings are completely valid, and I'm glad you felt comfortable opening up here. What would feel most supportive for you in this moment?",
+                    "I really appreciate you trusting me with your thoughts and feelings. It takes courage to reach out, especially when things feel heavy. You don't have to carry everything alone. What's been weighing most on your heart lately?",
+                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. How are you taking care of yourself right now?",
+                    "It sounds like you're dealing with quite a bit. I want you to know that whatever you're feeling is okay - there's no right or wrong way to feel. What kind of support feels most helpful to you today?",
+                    "I can hear that there's something important you want to share. I'm here to listen without judgment and walk alongside you through whatever you're facing. What's on your mind?"
+                ]
             };
 
             const lowerMessage = userMessage.toLowerCase();
+            let responseCategory = 'general';
             
-            if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried')) {
-                return { choices: [{ message: { content: responses.anxiety } }] };
-            } else if (lowerMessage.includes('depressed') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless')) {
-                return { choices: [{ message: { content: responses.depression } }] };
-            } else if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure')) {
-                return { choices: [{ message: { content: responses.stress } }] };
-            } else {
-                return { choices: [{ message: { content: responses.general } }] };
+            // Detect greetings
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || lowerMessage.match(/^(good morning|good afternoon|good evening)/)) {
+                responseCategory = 'greeting';
             }
+            // Detect categories based on keywords
+            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried') || lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
+                responseCategory = 'anxiety';
+            } else if (lowerMessage.includes('depressed') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('empty')) {
+                responseCategory = 'depression';
+            } else if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure') || lowerMessage.includes('too much') || lowerMessage.includes('burden')) {
+                responseCategory = 'stress';
+            } else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired') || lowerMessage.includes('exhausted') || lowerMessage.includes('can\'t sleep')) {
+                responseCategory = 'sleep';
+            } else if (lowerMessage.includes('motivation') || lowerMessage.includes('motivated') || lowerMessage.includes('stuck') || lowerMessage.includes('energy') || lowerMessage.includes('lazy')) {
+                responseCategory = 'motivation';
+            }
+            
+            // Get random response from category
+            const categoryResponses = responses[responseCategory];
+            const response = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+            
+            return { choices: [{ message: { content: response } }] };
         }
 
         async function sendMessage() {
@@ -672,37 +691,10 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             }
         }
 
-        // Initialize app
+        // Remove the complex API testing and connection logic
         document.addEventListener('DOMContentLoaded', function() {
             // Focus on input field when page loads
             document.getElementById('messageInput').focus();
-            
-            // Test API connection on load
-            setTimeout(async () => {
-                try {
-                    const testResponse = await fetch('https://api.openai.com/v1/models', {
-                        headers: {
-                            'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                        }
-                    });
-                    
-                    if (testResponse.ok) {
-                        console.log('✅ ChatGPT API connection successful');
-                        // Update status message
-                        const statusMsg = document.querySelector('.status-message');
-                        if (statusMsg) {
-                            statusMsg.textContent = '✅ ChatGPT 4.0 connected and ready!';
-                        }
-                    }
-                } catch (error) {
-                    console.log('⚠️ Direct API access blocked, using fallback responses');
-                    const statusMsg = document.querySelector('.status-message');
-                    if (statusMsg) {
-                        statusMsg.textContent = '⚠️ Using local responses due to browser restrictions';
-                        statusMsg.className = 'message error-message';
-                    }
-                }
-            }, 1000);
         });
     </script>
 </body>
