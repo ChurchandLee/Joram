@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html  lang="en">
+<html lang="en">
 <head>
-    <meta  charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Health Support</title>
     <link rel="manifest" href="manifest.json">
@@ -496,12 +496,7 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             showTypingIndicator();
             
             try {
-                if (OPENAI_API_KEY && OPENAI_API_KEY != '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';') {
-                    await generateChatGPTResponse(message);
-                } else {
-                    hideTypingIndicator();
-                    addMessage("I'm ready to chat with you using ChatGPT 4.0! The connection will be established once the app is properly deployed.", 'ai');
-                }
+                await generateChatGPTResponse(message);
             } catch (error) {
                 hideTypingIndicator();
                 console.error('Error:', error);
@@ -637,7 +632,7 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                         console.log('ServiceWorker registration successful');
                     })
                     .catch(function(err) {
-                        console.log('ServiceWorker registration  failed');
+                        console.log('ServiceWorker registration failed');
                     });
             });
         }
