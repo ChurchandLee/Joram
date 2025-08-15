@@ -18,6 +18,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     
+    - name: Replace API key in HTML
+      run: |
+        sed -i "s/YOUR_API_KEY_HERE/${{ secrets.OPENAI_API_KEY }}/g" index.html
+    
     - name: Setup Pages
       uses: actions/configure-pages@v4
     
@@ -29,6 +33,3 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
-      - name: Replace API key in HTML
-  run: |
-    sed -i "s/YOUR_API_KEY_HERE/${{ secrets.OPENAI_API_KEY }}/g" index.html
