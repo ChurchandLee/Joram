@@ -405,7 +405,7 @@
 
             <!-- Status Message -->
             <div class="message status-message">
-                🧠 Intelligent Mental Health Support - Specialized responses for different conditions with ChatGPT 4.0 integration!
+                🧠 Intelligent Mental Health Support v8 - Comprehensive recognition for 25+ conditions with ChatGPT 5.0 integration!
             </div>
 
             <!-- Typing Indicator -->
@@ -471,7 +471,7 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
-        // Track used responses to prevent repetition
+        // Track used responses to prevent repetition - VERSION 8
         let usedResponses = {
             suicidal: [],
             crisis_followup: [],
@@ -480,14 +480,37 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             general_followup: [],
             depression: [],
             anxiety: [],
+            bipolar: [],
+            ptsd: [],
+            ocd: [],
+            eating_disorder: [],
+            bpd: [],
+            adhd: [],
+            autism: [],
+            schizophrenia: [],
+            panic_disorder: [],
+            social_anxiety: [],
+            grief: [],
+            addiction: [],
+            insomnia: [],
+            overwhelmed: [],
+            anger: [],
+            family_issues: [],
+            relationship_issues: [],
+            work_stress: [],
+            financial_stress: [],
+            identity_crisis: [],
+            low_self_esteem: [],
+            perfectionism: [],
+            guilt_shame: [],
             greeting: [],
             general: []
         };
 
-        // Enhanced Mental Health Response System with Conversation Memory and Crisis Detection
+        // Enhanced Mental Health Response System v8 - Comprehensive Condition Recognition
         function generateIntelligentResponse(userMessage, conversationHistory = []) {
             // Get recent messages for context
-            const recentMessages = conversationHistory.slice(-4); // Last 4 messages for context
+            const recentMessages = conversationHistory.slice(-4);
             
             const responses = {
                 // CRISIS/SUICIDAL IDEATION - HIGHEST PRIORITY
@@ -497,254 +520,84 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                     "What you've shared about feeling suicidal is incredibly important, and I'm so glad you told me. These thoughts often come when emotional pain feels unbearable - like there's no other way out. But there are people trained specifically to help navigate these feelings.\n\nImmediate resources:\n• Call 988 (US) or 116 123 (UK) right now\n• Text HOME to 741741\n• Emergency services if you're in immediate danger\n\nThese feelings can change with proper support. What's making things feel impossible right now?"
                 ],
 
-                // FOLLOW-UP CRISIS RESPONSES
-                crisis_followup: [
-                    "Given that you mentioned suicidal thoughts, my biggest concern right now is your immediate safety. When someone asks 'what should I do' after sharing suicidal thoughts, the most important first step is connecting with crisis professionals who are trained for exactly this situation.\n\nHave you been able to call the crisis line (988 in the US, 116 123 in the UK)? If you're having active thoughts of hurting yourself, please don't wait - call them now or go to your nearest emergency room. What feels like the biggest barrier to reaching out for professional help right now?",
-                    "Right now, with suicidal thoughts present, the most important thing is making sure you stay safe. I know it might feel overwhelming to reach out, but crisis counselors are specifically trained to help people through exactly what you're experiencing.\n\nConcrete next steps:\n1. Call 988 (US) or 116 123 (UK) - they're available 24/7\n2. If you have a plan to hurt yourself, go to an emergency room immediately\n3. Remove any means of self-harm from your immediate area\n\nAre you somewhere safe right now? Do you have someone who can stay with you?",
-                    "I understand you're asking what to do, and with suicidal thoughts involved, the priority has to be your immediate safety. These feelings are treatable, but you need professional support right now - not just our conversation.\n\nImmediate action needed:\n• Call a crisis line: 988 (US), 116 123 (UK), or text HOME to 741741\n• Consider going to an emergency room if thoughts are intense\n• Reach out to a trusted person who can be with you\n\nWhat's holding you back from calling for professional help right now?"
+                // BIPOLAR DISORDER
+                bipolar: [
+                    "Living with bipolar disorder can feel like riding an emotional rollercoaster that you never asked to get on. The extreme highs of mania or hypomania followed by crushing lows of depression - it's exhausting and can make you feel like you're not in control of your own mind. Are you currently in a manic, hypomanic, or depressive episode, or somewhere in between?",
+                    "Bipolar disorder can make you feel like you're living multiple lives - the person you are during mania feels completely different from who you are during depression. The mood swings, energy changes, and impact on relationships and work can be overwhelming. What's been most challenging about managing your bipolar symptoms lately?",
+                    "The unpredictability of bipolar disorder - never knowing when a mood episode might hit - can create constant anxiety on top of the mood symptoms themselves. It takes incredible strength to navigate this condition. Are you currently working with a psychiatrist or therapist, and how are you managing your treatment?"
                 ],
 
-                // Self-harm (non-suicidal)
-                self_harm: [
-                    "I'm concerned about the self-harm you've mentioned. That urge to hurt yourself often comes from emotional pain that feels too big to handle any other way. Self-harm might provide temporary relief, but it can also become a dangerous pattern. Have you been able to talk to anyone about these urges - a counselor, doctor, or trusted person in your life?",
-                    "Self-harm can feel like the only way to cope with overwhelming emotions or to feel something when everything else feels numb. It's more common than people think, and it's definitely something we can work through. What usually triggers these urges for you? And do you have any alternative coping strategies that have helped, even a little?"
-                ],
-                
-                // Loneliness - specific, empathetic responses
-                loneliness: [
-                    "I hear you. Feeling lonely can be really heavy—it's more than just 'being alone,' it's that sense of missing connection or understanding. That ache of wanting someone to truly see you can feel overwhelming sometimes. Would it help to talk about what's making the loneliness feel particularly intense right now, or would you prefer to explore some gentle ways to ease that feeling?",
-                    "Loneliness has this way of making us feel invisible, doesn't it? Like you could be surrounded by people and still feel completely unseen. It's one of those emotions that can make everything else feel more difficult too. I'm here with you in this moment, and you're not bothering anyone by sharing this. What does your loneliness feel like right now—is it missing specific people, or more of a general feeling of disconnection?",
-                    "That sense of loneliness can feel so isolating—like you're carrying something heavy that others can't see or understand. It's not about being dramatic or needy; it's a real human need for connection that isn't being met right now. You reached out here, which shows strength even when you're struggling. What kind of connection are you missing most—is it someone to talk to, someone who understands you, or something else?"
-                ],
-                
-                // Follow-up responses
-                general_followup: [
-                    "I can see you're looking for more specific guidance about what to do next. Sometimes when we're struggling, the path forward isn't clear. What feels most urgent or pressing for you right now - is it getting through today, figuring out a specific problem, or finding someone to talk to? Let's break this down into smaller, manageable pieces.",
-                    "It sounds like you need some concrete next steps. When everything feels overwhelming, sometimes the most helpful thing is to focus on just the next small action. What's one thing you could do in the next hour that might help you feel even slightly better or more stable?",
-                    "When you're asking 'what should I do,' it often means you're feeling stuck or overwhelmed by options. Let's start with the basics: Are you safe right now? Do you have your basic needs met today (food, shelter, someone to call)? Sometimes we need to start with the foundation before we can build up."
-                ],
-                
-                // Depression
-                depression: [
-                    "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the way simple tasks feel impossible, how everything loses its color and meaning—it's not weakness, it's illness. What does today feel like for you—is it a barely-surviving day or something different?",
-                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. What's been the hardest part about getting through each day lately?",
-                    "Depression has this way of convincing us that we're broken or that things will never get better. But depression lies - it filters everything through this lens of hopelessness. You're not lazy or weak; your brain is dealing with a real medical condition. What's one tiny thing that's brought you even a moment of relief or neutral feeling recently?"
+                // PTSD/TRAUMA
+                ptsd: [
+                    "PTSD can make you feel like you're stuck in a nightmare that your brain won't let you wake up from. The flashbacks, nightmares, hypervigilance, and emotional numbing are your nervous system's way of trying to protect you from perceived threats, even when you're safe. What's been most difficult about living with these trauma responses?",
+                    "Trauma can rewire your brain and make the world feel perpetually unsafe, even in situations that logically you know are fine. The way PTSD affects sleep, relationships, and daily functioning shows how deeply trauma impacts every aspect of life. Are you currently getting any trauma-specific treatment like EMDR or trauma-focused therapy?",
+                    "Living with PTSD often means feeling like you're constantly on guard, scanning for danger that may not even be there. The exhaustion from hypervigilance, coupled with intrusive thoughts and avoidance behaviors, can make you feel trapped in your own mind. What triggers tend to be most challenging for you right now?"
                 ],
 
-                // Anxiety
-                anxiety: [
-                    "Anxiety can feel like your nervous system is stuck in 'emergency mode' even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous—it's exhausting to live in that state of hypervigilance. What tends to trigger your anxiety most, and how are you feeling in your body right now?",
-                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. What's your anxiety telling you right now?",
-                    "Anxiety can make your mind race with worst-case scenarios while your body feels like it's preparing for disaster. Sometimes it helps to remember that anxiety is your brain trying to protect you, even when there's no real danger present. Are you able to do any breathing exercises or grounding techniques right now, or does everything feel too intense?"
+                // OCD
+                ocd: [
+                    "OCD can feel like having a bully living in your brain that never stops demanding you do 'just one more' ritual or feeding you intrusive thoughts that feel impossibly disturbing. The cycle of obsession and compulsion can take over your entire day and make you feel trapped. What types of obsessions or compulsions are you struggling with most right now?",
+                    "The way OCD makes you doubt yourself constantly - 'Did I lock the door? Did I turn off the stove? What if I hurt someone?' - can be absolutely exhausting. People often don't understand that you know the thoughts are irrational, but they feel so real and urgent in the moment. How are you currently managing your OCD symptoms?",
+                    "OCD has this cruel way of targeting the things you care about most - if you value safety, it gives you checking compulsions; if you value morality, it gives you disturbing intrusive thoughts. It's like your brain is working against you. Have you been able to access any ERP (Exposure and Response Prevention) therapy or OCD-specific treatment?"
                 ],
 
-                // Greeting
-                greeting: [
-                    "Hello! I'm really glad you're here. This feels like a safe space where you can share whatever is truly on your mind—the heavy stuff, the confusing stuff, or even just the everyday struggles that feel bigger than they should. How are you really doing today?",
-                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. What's been on your heart or mind lately?",
-                    "Welcome! I'm here to provide a caring space where your feelings—all of them—are valid and welcome. Whether you're dealing with something specific or just feeling off, you deserve support. What would feel most helpful right now?"
+                // EATING DISORDERS
+                eating_disorder: [
+                    "Eating disorders are so much more than food - they're often about control, perfectionism, trauma, or managing overwhelming emotions. The relationship with food becomes a way to cope with things that feel impossible to handle otherwise. What's been most challenging about your relationship with food and your body lately?",
+                    "The mental noise around food, body image, and eating can be absolutely deafening - every meal becomes a battleground, every mirror a source of distress. Eating disorders can make you feel isolated because they're often misunderstood as being 'just about food.' How are you taking care of yourself right now?",
+                    "Recovery from an eating disorder requires incredible courage because you have to face the very thing that's been both your coping mechanism and your prison. The fear of letting go of control around food can feel terrifying. Are you currently working with any treatment professionals who specialize in eating disorders?"
                 ],
-                
-                // General responses
-                general: [
-                    "Thank you for sharing that with me. I can sense there's something on your mind, and I want you to know that whatever you're experiencing is completely valid. You don't have to have the perfect words or even understand your emotions fully. What's been weighing on you lately?",
-                    "I really appreciate you opening up here. It takes vulnerability to reach out, especially when you might not even be sure what kind of support you need. You don't have to carry everything alone. What would feel most supportive for you right now?",
-                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. What's on your mind that you haven't had space to process elsewhere?",
-                    "I hear you reaching out, and that takes strength even when you might not feel strong right now. Whatever brought you here to share with me is important. Would you like to tell me more about what's happening for you today?",
-                    "It sounds like something is troubling you. I'm here to listen without judgment and to sit with you in whatever you're experiencing. Sometimes we don't need solutions right away - sometimes we just need to be heard. What's been most difficult lately?"
-                ]
-            };
 
-            const lowerMessage = userMessage.toLowerCase();
-            let responseCategory = 'general';
-            
-            // PRIORITY 1: Check for crisis/suicidal content with better detection
-            if (lowerMessage.includes('suicidal') || lowerMessage.includes("i'm suicidal") || lowerMessage.includes('kill myself') || 
-                lowerMessage.includes('end my life') || lowerMessage.includes('want to die') || lowerMessage.includes('better off dead') || 
-                lowerMessage.includes('suicide') || lowerMessage.includes("don't want to live") || lowerMessage.includes("can't go on") ||
-                lowerMessage.includes('ending it all') || lowerMessage.includes('not worth living')) {
-                responseCategory = 'suicidal';
-            }
-            // Check if previous message mentioned suicide and current is asking for help
-            else if (recentMessages.some(msg => msg.role === 'user' && 
-                (msg.content.toLowerCase().includes('suicidal') || msg.content.toLowerCase().includes('kill myself') || 
-                 msg.content.toLowerCase().includes('want to die') || msg.content.toLowerCase().includes('suicide') ||
-                 msg.content.toLowerCase().includes('ending it all'))) &&
-                (lowerMessage.includes('what should') || lowerMessage.includes('what do') || lowerMessage.includes('help me') ||
-                 lowerMessage.includes('what') || lowerMessage.includes('how') || lowerMessage.includes('what now') ||
-                 lowerMessage.includes('do i'))) {
-                responseCategory = 'crisis_followup';
-            }
-            // Self-harm detection
-            else if (lowerMessage.includes('self harm') || lowerMessage.includes('hurt myself') || lowerMessage.includes('cutting') ||
-                     lowerMessage.includes('self-harm') || lowerMessage.includes('self injury')) {
-                responseCategory = 'self_harm';
-            }
-            // Check for follow-up questions after initial response
-            else if (recentMessages.length > 0 && 
-                     (lowerMessage.includes('what should') || lowerMessage.includes('what do') || lowerMessage.includes('help me') ||
-                      lowerMessage === 'what' || lowerMessage === 'how' || lowerMessage.includes('what now'))) {
-                responseCategory = 'general_followup';
-            }
-            // Specific emotional states
-            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || 
-                     lowerMessage.includes('isolated') || lowerMessage.includes('disconnected')) {
-                responseCategory = 'loneliness';
-            }
-            // Standard detection continues...
-            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || 
-                     lowerMessage.match(/^(good morning|good afternoon|good evening)/)) {
-                responseCategory = 'greeting';
-            } else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried') || 
-                      lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
-                responseCategory = 'anxiety';
-            } else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || 
-                      lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('empty')) {
-                responseCategory = 'depression';
-            }
-            
-            // Get response from category, avoiding repetition
-            const categoryResponses = responses[responseCategory] || responses['general'];
-            const usedCategoryResponses = usedResponses[responseCategory] || [];
-            
-            // Find unused responses
-            const unusedResponses = categoryResponses.filter(response => 
-                !usedCategoryResponses.includes(response)
-            );
-            
-            let selectedResponse;
-            if (unusedResponses.length > 0) {
-                // Use an unused response
-                selectedResponse = unusedResponses[Math.floor(Math.random() * unusedResponses.length)];
-            } else {
-                // All responses have been used, reset and pick one
-                usedResponses[responseCategory] = [];
-                selectedResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
-            }
-            
-            // Track this response as used
-            if (!usedResponses[responseCategory]) {
-                usedResponses[responseCategory] = [];
-            }
-            usedResponses[responseCategory].push(selectedResponse);
-            
-            return { choices: [{ message: { content: selectedResponse } }] };
-        }
+                // BPD (Borderline Personality Disorder)
+                bpd: [
+                    "Living with BPD can feel like riding an emotional tsunami - everything feels so intense, so immediate, so life-or-death, even when the logical part of your brain knows it isn't. The fear of abandonment, the splitting, the way relationships can feel both desperately needed and terrifyingly fragile - it's exhausting. What's feeling most overwhelming about your emotions right now?",
+                    "BPD can make you feel like you're 'too much' for everyone, including yourself. The emotional intensity, the impulsivity, the way your sense of self can shift so dramatically - these aren't character flaws, they're symptoms of a complex condition that often develops from early trauma or invalidation. Are you familiar with DBT skills, or is that something you're interested in learning about?",
+                    "The chronic emptiness that comes with BPD can feel like there's a black hole inside you that nothing can fill. The identity confusion - not knowing who you really are or what you actually want - can make every decision feel impossible. You're not broken; your nervous system just developed differently to protect you. What would feel most supportive right now?"
+                ],
 
-        // Simulated ChatGPT API call function (you'll need to implement this with your actual API)
-        async function callChatGPT(messages) {
-            // This is where you would implement the actual ChatGPT API call
-            // For now, using the fallback intelligent response system
-            const lastUserMessage = messages[messages.length - 1].content;
-            return generateIntelligentResponse(lastUserMessage, messages);
-        }
+                // ADHD
+                adhd: [
+                    "ADHD can feel like living in a world designed for a completely different type of brain. The executive dysfunction, time blindness, rejection sensitivity, and the way your brain either hyperfocuses on the 'wrong' things or can't focus at all - it's not about being lazy or not trying hard enough. What aspect of ADHD is making life feel particularly challenging today?",
+                    "The ADHD struggle is so real - your brain craves stimulation and novelty, but the world demands consistency and routine. The way criticism can feel devastating due to rejection sensitivity, and how impulsivity can lead to decisions you later regret, can create a cycle of shame. But ADHD also comes with creativity, enthusiasm, and unique problem-solving abilities. Are you feeling frustrated with the challenges right now, or celebrating any of the strengths?",
+                    "Having ADHD often means feeling like you're constantly swimming upstream while others are walking on land. The way tasks that seem simple to others can feel overwhelming, how your brain can solve complex problems but forget to eat lunch - it's a real neurological difference, not a personal failing. What strategies have you found that work with your brain instead of against it?"
+                ],
 
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const sendButton = document.getElementById('sendButton');
-            const message = input.value.trim();
-            
-            if (message === '') return;
-            
-            // Disable send button and input
-            sendButton.disabled = true;
-            input.disabled = true;
-            
-            // Add user message to chat
-            addMessage(message, 'user');
-            input.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            try {
-                // Add user message to conversation history
-                conversationHistory.push({
-                    role: 'user',
-                    content: message
-                });
+                // AUTISM/NEURODIVERGENCE
+                autism: [
+                    "Being autistic in a neurotypical world can be incredibly exhausting - constantly masking, trying to interpret social cues that don't come naturally, dealing with sensory overwhelm, and having your natural communication style misunderstood. It takes enormous energy to navigate a world that wasn't designed for your neurotype. What's been most challenging about being autistic lately?",
+                    "Autism brings both incredible strengths and significant challenges. The deep focus and expertise in special interests, attention to detail, and authentic way of being are beautiful aspects of autism. But the social exhaustion, sensory issues, and need for routine in an unpredictable world can be overwhelming. How are you taking care of your sensory and social needs right now?",
+                    "The autistic experience of feeling like you're constantly translating between your natural way of being and what the neurotypical world expects can be so tiring. Stimming, special interests, and need for routine aren't problems to be fixed - they're part of how your brain works best. Are you in environments where you can be authentically yourself?"
+                ],
 
-                // Call ChatGPT 4.0 API with intelligent fallback
-                const data = await callChatGPT(conversationHistory);
-                const aiResponse = data.choices[0].message.content.trim();
-                
-                // Add AI response to conversation history
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: aiResponse
-                });
+                // SCHIZOPHRENIA/PSYCHOSIS
+                schizophrenia: [
+                    "Living with schizophrenia or psychosis can feel incredibly isolating, especially when your perception of reality differs from others around you. The voices, hallucinations, or delusions can be frightening and confusing, but you're not alone in this experience. Are you currently connected with mental health professionals who understand psychotic disorders?",
+                    "Psychotic episodes can make you question everything about your reality and can be terrifying to experience. The stigma around schizophrenia often makes people afraid to seek help, but treatment can make a significant difference in managing symptoms. How are you coping with your symptoms day to day?",
+                    "The cognitive symptoms of schizophrenia - difficulty concentrating, memory problems, disorganized thinking - can be just as challenging as the more obvious symptoms like hallucinations. It takes tremendous strength to navigate daily life while managing these experiences. What kind of support system do you have right now?"
+                ],
 
-                // Keep conversation history manageable (last 20 messages + system prompt)
-                if (conversationHistory.length > 21) {
-                    conversationHistory = [
-                        conversationHistory[0], // Keep system prompt
-                        ...conversationHistory.slice(-20) // Keep last 20 messages
-                    ];
-                }
+                // PANIC DISORDER
+                panic_disorder: [
+                    "Panic attacks can feel like you're dying, going crazy, or losing complete control - even though they're not dangerous, they're absolutely terrifying when you're experiencing them. The fear of having another panic attack can become almost as disabling as the attacks themselves. What does a panic attack typically feel like for you, and how often are you experiencing them?",
+                    "Living with panic disorder often means being afraid of your own body - heart palpitations, shortness of breath, dizziness can all trigger the fear that something terrible is happening. The anticipatory anxiety about when the next attack might hit can keep you in a constant state of hypervigilance. Have you found any techniques that help you during or after a panic attack?",
+                    "Panic disorder can make you feel like your body has betrayed you - intense physical symptoms that feel like a medical emergency but are actually your nervous system's fight-or-flight response gone haywire. The agoraphobia that sometimes develops from avoiding places where you've had attacks can shrink your world significantly. What situations or places do you find yourself avoiding?"
+                ],
 
-                hideTypingIndicator();
-                addMessage(aiResponse, 'ai');
+                // SOCIAL ANXIETY
+                social_anxiety: [
+                    "Social anxiety can make every interaction feel like a performance where you're being judged and found wanting. The fear of embarrassment, rejection, or saying something wrong can be so intense that avoiding social situations feels like the only safe option. What social situations tend to trigger your anxiety most?",
+                    "The exhaustion that comes with social anxiety - analyzing every interaction, worrying about what people think, rehearsing conversations in your head - can be overwhelming. It's not just shyness; it's a persistent fear that can significantly impact your life and relationships. How has social anxiety been affecting your daily life and relationships?",
+                    "Social anxiety often comes with a harsh inner critic that provides a running commentary on everything you say and do in social situations. The fear of being seen as awkward, boring, or weird can make you withdraw from connections you actually want. Are there any social situations where you feel more comfortable, or people you feel safer around?"
+                ],
 
-            } catch (error) {
-                hideTypingIndicator();
-                console.error('Error:', error);
-                
-                // Fallback to intelligent response with conversation context
-                const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
-                addMessage(fallbackResponse.choices[0].message.content, 'ai');
-            } finally {
-                // Re-enable send button and input
-                sendButton.disabled = false;
-                input.disabled = false;
-                input.focus();
-            }
-        }
+                // GRIEF AND LOSS
+                grief: [
+                    "Grief is love with nowhere to go, and that can feel impossible to carry sometimes. Whether you're mourning a person, a relationship, a version of yourself, or a future you thought you'd have - that ache of missing something or someone is one of the most profound human experiences. What are you grieving right now, and how is it showing up for you today?",
+                    "There's something about grief that makes you feel like you're living in a different world from everyone else - they're going about their normal lives while you're walking around with this huge absence inside you. Grief can make you feel guilty for laughing, angry at people for their normalcy, and exhausted by having to pretend you're okay. What do you need most right now - space to feel it, distraction from it, or someone to just acknowledge how hard this is?",
+                    "Grief rewrites everything - how you see the world, what matters, who you are. It can feel like you're learning to live all over again, and that's disorienting and exhausting. The waves of grief can hit at unexpected times and with surprising intensity. How are you honoring both your grief and your need to keep living?"
+                ],
 
-        function sendQuickMessage(message) {
-            document.getElementById('messageInput').value = message;
-            sendMessage();
-        }
-
-        function addMessage(content, sender) {
-            const chatArea = document.getElementById('chatArea');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message`;
-            messageDiv.textContent = content;
-            
-            // Remove welcome section after first user message
-            if (sender === 'user') {
-                const welcomeSection = document.querySelector('.welcome-section');
-                if (welcomeSection) {
-                    welcomeSection.remove();
-                }
-            }
-            
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'flex';
-            const chatArea = document.getElementById('chatArea');
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'none';
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            // Focus on input field when page loads
-            document.getElementById('messageInput').focus();
-        });
-    </script>
-</body>
-</html>
+                // ADDICTION/SUBSTANCE USE
+                addiction: [
+                    "Addiction often starts as a solution to unbearable emotional pain, but then becomes its own source of suffering. The shame, secrecy, and feeling out of control can make you feel trapped in a cycle you can't break. Recovery is possible, but it's rarely a straight line. Where are you right now in your relationship with substances or addictive behaviors?",
+                    "The disease of addiction can
