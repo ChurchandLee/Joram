@@ -471,6 +471,19 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
+        // Track used responses to prevent repetition
+        let usedResponses = {
+            suicidal: [],
+            crisis_followup: [],
+            self_harm: [],
+            loneliness: [],
+            general_followup: [],
+            depression: [],
+            anxiety: [],
+            greeting: [],
+            general: []
+        };
+
         // Enhanced Mental Health Response System with Conversation Memory and Crisis Detection
         function generateIntelligentResponse(userMessage, conversationHistory = []) {
             // Get recent messages for context
@@ -479,17 +492,22 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             const responses = {
                 // CRISIS/SUICIDAL IDEATION - HIGHEST PRIORITY
                 suicidal: [
-                    "I'm really concerned about what you've shared with me, and I want you to know that I'm taking this seriously. What you're feeling right now is incredibly painful, but please know that you don't have to go through this alone. There are people trained specifically to help with these feelings who are available right now:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, 24/7\n• Crisis Text Line: Text HOME to 741741\n\nYour life has value, and these feelings can change with proper support. Are you in immediate danger right now, or can you stay safe while we talk about getting you connected with crisis support?"
+                    "I'm really concerned about what you've shared with me, and I want you to know that I'm taking this seriously. What you're feeling right now is incredibly painful, but please know that you don't have to go through this alone. There are people trained specifically to help with these feelings who are available right now:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, 24/7\n• Crisis Text Line: Text HOME to 741741\n\nYour life has value, and these feelings can change with proper support. Are you in immediate danger right now, or can you stay safe while we talk about getting you connected with crisis support?",
+                    "I hear you saying you're having suicidal thoughts, and that's really serious - thank you for trusting me with this. These feelings are a sign that you're in significant emotional pain right now. Please know that suicidal thoughts are symptoms of distress, not facts about your future.\n\nRight now, your safety is the most important thing:\n• If you're in immediate danger, please call emergency services (911/999)\n• US Crisis Line: 988\n• UK Crisis Line: 116 123\n\nCan you tell me - are you having thoughts about hurting yourself right now? Do you have a plan?",
+                    "What you've shared about feeling suicidal is incredibly important, and I'm so glad you told me. These thoughts often come when emotional pain feels unbearable - like there's no other way out. But there are people trained specifically to help navigate these feelings.\n\nImmediate resources:\n• Call 988 (US) or 116 123 (UK) right now\n• Text HOME to 741741\n• Emergency services if you're in immediate danger\n\nThese feelings can change with proper support. What's making things feel impossible right now?"
                 ],
 
                 // FOLLOW-UP CRISIS RESPONSES
                 crisis_followup: [
-                    "I'm still very concerned about the suicidal thoughts you mentioned. Right now, the most important thing is your immediate safety. Have you been able to contact the crisis line (988) or emergency services? If you're still having thoughts of hurting yourself, please don't wait - go to your nearest emergency room or call emergency services. You don't have to face this alone."
+                    "Given that you mentioned suicidal thoughts, my biggest concern right now is your immediate safety. When someone asks 'what should I do' after sharing suicidal thoughts, the most important first step is connecting with crisis professionals who are trained for exactly this situation.\n\nHave you been able to call the crisis line (988 in the US, 116 123 in the UK)? If you're having active thoughts of hurting yourself, please don't wait - call them now or go to your nearest emergency room. What feels like the biggest barrier to reaching out for professional help right now?",
+                    "Right now, with suicidal thoughts present, the most important thing is making sure you stay safe. I know it might feel overwhelming to reach out, but crisis counselors are specifically trained to help people through exactly what you're experiencing.\n\nConcrete next steps:\n1. Call 988 (US) or 116 123 (UK) - they're available 24/7\n2. If you have a plan to hurt yourself, go to an emergency room immediately\n3. Remove any means of self-harm from your immediate area\n\nAre you somewhere safe right now? Do you have someone who can stay with you?",
+                    "I understand you're asking what to do, and with suicidal thoughts involved, the priority has to be your immediate safety. These feelings are treatable, but you need professional support right now - not just our conversation.\n\nImmediate action needed:\n• Call a crisis line: 988 (US), 116 123 (UK), or text HOME to 741741\n• Consider going to an emergency room if thoughts are intense\n• Reach out to a trusted person who can be with you\n\nWhat's holding you back from calling for professional help right now?"
                 ],
 
                 // Self-harm (non-suicidal)
                 self_harm: [
-                    "I'm concerned about the self-harm you've mentioned. That urge to hurt yourself often comes from emotional pain that feels too big to handle any other way. Self-harm might provide temporary relief, but it can also become a dangerous pattern. Have you been able to talk to anyone about these urges - a counselor, doctor, or trusted person in your life?"
+                    "I'm concerned about the self-harm you've mentioned. That urge to hurt yourself often comes from emotional pain that feels too big to handle any other way. Self-harm might provide temporary relief, but it can also become a dangerous pattern. Have you been able to talk to anyone about these urges - a counselor, doctor, or trusted person in your life?",
+                    "Self-harm can feel like the only way to cope with overwhelming emotions or to feel something when everything else feels numb. It's more common than people think, and it's definitely something we can work through. What usually triggers these urges for you? And do you have any alternative coping strategies that have helped, even a little?"
                 ],
                 
                 // Loneliness - specific, empathetic responses
@@ -502,49 +520,59 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                 // Follow-up responses
                 general_followup: [
                     "I can see you're looking for more specific guidance about what to do next. Sometimes when we're struggling, the path forward isn't clear. What feels most urgent or pressing for you right now - is it getting through today, figuring out a specific problem, or finding someone to talk to? Let's break this down into smaller, manageable pieces.",
-                    "It sounds like you need some concrete next steps. When everything feels overwhelming, sometimes the most helpful thing is to focus on just the next small action. What's one thing you could do in the next hour that might help you feel even slightly better or more stable?"
+                    "It sounds like you need some concrete next steps. When everything feels overwhelming, sometimes the most helpful thing is to focus on just the next small action. What's one thing you could do in the next hour that might help you feel even slightly better or more stable?",
+                    "When you're asking 'what should I do,' it often means you're feeling stuck or overwhelmed by options. Let's start with the basics: Are you safe right now? Do you have your basic needs met today (food, shelter, someone to call)? Sometimes we need to start with the foundation before we can build up."
                 ],
                 
                 // Depression
                 depression: [
                     "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the way simple tasks feel impossible, how everything loses its color and meaning—it's not weakness, it's illness. What does today feel like for you—is it a barely-surviving day or something different?",
-                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. What's been the hardest part about getting through each day lately?"
+                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. What's been the hardest part about getting through each day lately?",
+                    "Depression has this way of convincing us that we're broken or that things will never get better. But depression lies - it filters everything through this lens of hopelessness. You're not lazy or weak; your brain is dealing with a real medical condition. What's one tiny thing that's brought you even a moment of relief or neutral feeling recently?"
                 ],
 
                 // Anxiety
                 anxiety: [
                     "Anxiety can feel like your nervous system is stuck in 'emergency mode' even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous—it's exhausting to live in that state of hypervigilance. What tends to trigger your anxiety most, and how are you feeling in your body right now?",
-                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. What's your anxiety telling you right now?"
+                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. What's your anxiety telling you right now?",
+                    "Anxiety can make your mind race with worst-case scenarios while your body feels like it's preparing for disaster. Sometimes it helps to remember that anxiety is your brain trying to protect you, even when there's no real danger present. Are you able to do any breathing exercises or grounding techniques right now, or does everything feel too intense?"
                 ],
 
                 // Greeting
                 greeting: [
                     "Hello! I'm really glad you're here. This feels like a safe space where you can share whatever is truly on your mind—the heavy stuff, the confusing stuff, or even just the everyday struggles that feel bigger than they should. How are you really doing today?",
-                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. What's been on your heart or mind lately?"
+                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. What's been on your heart or mind lately?",
+                    "Welcome! I'm here to provide a caring space where your feelings—all of them—are valid and welcome. Whether you're dealing with something specific or just feeling off, you deserve support. What would feel most helpful right now?"
                 ],
                 
                 // General responses
                 general: [
                     "Thank you for sharing that with me. I can sense there's something on your mind, and I want you to know that whatever you're experiencing is completely valid. You don't have to have the perfect words or even understand your emotions fully. What's been weighing on you lately?",
                     "I really appreciate you opening up here. It takes vulnerability to reach out, especially when you might not even be sure what kind of support you need. You don't have to carry everything alone. What would feel most supportive for you right now?",
-                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. What's on your mind that you haven't had space to process elsewhere?"
+                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. What's on your mind that you haven't had space to process elsewhere?",
+                    "I hear you reaching out, and that takes strength even when you might not feel strong right now. Whatever brought you here to share with me is important. Would you like to tell me more about what's happening for you today?",
+                    "It sounds like something is troubling you. I'm here to listen without judgment and to sit with you in whatever you're experiencing. Sometimes we don't need solutions right away - sometimes we just need to be heard. What's been most difficult lately?"
                 ]
             };
 
             const lowerMessage = userMessage.toLowerCase();
             let responseCategory = 'general';
             
-            // PRIORITY 1: Check for crisis/suicidal content
-            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('end my life') || 
-                lowerMessage.includes('want to die') || lowerMessage.includes('better off dead') || lowerMessage.includes('suicide') ||
-                lowerMessage.includes('don\'t want to live') || lowerMessage.includes('can\'t go on')) {
+            // PRIORITY 1: Check for crisis/suicidal content with better detection
+            if (lowerMessage.includes('suicidal') || lowerMessage.includes("i'm suicidal") || lowerMessage.includes('kill myself') || 
+                lowerMessage.includes('end my life') || lowerMessage.includes('want to die') || lowerMessage.includes('better off dead') || 
+                lowerMessage.includes('suicide') || lowerMessage.includes("don't want to live") || lowerMessage.includes("can't go on") ||
+                lowerMessage.includes('ending it all') || lowerMessage.includes('not worth living')) {
                 responseCategory = 'suicidal';
             }
             // Check if previous message mentioned suicide and current is asking for help
             else if (recentMessages.some(msg => msg.role === 'user' && 
                 (msg.content.toLowerCase().includes('suicidal') || msg.content.toLowerCase().includes('kill myself') || 
-                 msg.content.toLowerCase().includes('want to die') || msg.content.toLowerCase().includes('suicide'))) &&
-                (lowerMessage.includes('what') || lowerMessage.includes('help') || lowerMessage.includes('do'))) {
+                 msg.content.toLowerCase().includes('want to die') || msg.content.toLowerCase().includes('suicide') ||
+                 msg.content.toLowerCase().includes('ending it all'))) &&
+                (lowerMessage.includes('what should') || lowerMessage.includes('what do') || lowerMessage.includes('help me') ||
+                 lowerMessage.includes('what') || lowerMessage.includes('how') || lowerMessage.includes('what now') ||
+                 lowerMessage.includes('do i'))) {
                 responseCategory = 'crisis_followup';
             }
             // Self-harm detection
@@ -575,16 +603,32 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                 responseCategory = 'depression';
             }
             
-            // Get response from category
-            const categoryResponses = responses[responseCategory];
-            if (!categoryResponses || categoryResponses.length === 0) {
-                responseCategory = 'general';
+            // Get response from category, avoiding repetition
+            const categoryResponses = responses[responseCategory] || responses['general'];
+            const usedCategoryResponses = usedResponses[responseCategory] || [];
+            
+            // Find unused responses
+            const unusedResponses = categoryResponses.filter(response => 
+                !usedCategoryResponses.includes(response)
+            );
+            
+            let selectedResponse;
+            if (unusedResponses.length > 0) {
+                // Use an unused response
+                selectedResponse = unusedResponses[Math.floor(Math.random() * unusedResponses.length)];
+            } else {
+                // All responses have been used, reset and pick one
+                usedResponses[responseCategory] = [];
+                selectedResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
             }
             
-            const selectedResponses = responses[responseCategory];
-            const response = selectedResponses[Math.floor(Math.random() * selectedResponses.length)];
+            // Track this response as used
+            if (!usedResponses[responseCategory]) {
+                usedResponses[responseCategory] = [];
+            }
+            usedResponses[responseCategory].push(selectedResponse);
             
-            return { choices: [{ message: { content: response } }] };
+            return { choices: [{ message: { content: selectedResponse } }] };
         }
 
         // Simulated ChatGPT API call function (you'll need to implement this with your actual API)
