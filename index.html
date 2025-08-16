@@ -471,145 +471,95 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
-        // Enhanced Mental Health Response System with Condition-Specific Support
+        // Enhanced Mental Health Response System with Deep Empathy and Nuanced Understanding
         function generateIntelligentResponse(userMessage) {
             const responses = {
+                // Loneliness - specific, empathetic responses
+                loneliness: [
+                    "I hear you. Feeling lonely can be really heavy—it's more than just 'being alone,' it's that sense of missing connection or understanding. That ache of wanting someone to truly see you can feel overwhelming sometimes. Would it help to talk about what's making the loneliness feel particularly intense right now, or would you prefer to explore some gentle ways to ease that feeling?",
+                    "Loneliness has this way of making us feel invisible, doesn't it? Like you could be surrounded by people and still feel completely unseen. It's one of those emotions that can make everything else feel more difficult too. I'm here with you in this moment, and you're not bothering anyone by sharing this. What does your loneliness feel like right now—is it missing specific people, or more of a general feeling of disconnection?",
+                    "That sense of loneliness can feel so isolating—like you're carrying something heavy that others can't see or understand. It's not about being dramatic or needy; it's a real human need for connection that isn't being met right now. You reached out here, which shows strength even when you're struggling. What kind of connection are you missing most—is it someone to talk to, someone who understands you, or something else?"
+                ],
+                
                 // BPD (Borderline Personality Disorder) specific responses
                 bpd: [
-                    "Living with BPD can feel like being on an emotional rollercoaster that you can't control. The intense emotions and fear of abandonment are real parts of your experience, not character flaws. DBT skills like distress tolerance and emotion regulation can be really helpful. Are you currently working with a therapist who understands BPD?",
-                    "BPD can make relationships feel incredibly intense and frightening at the same time. The push-pull feelings and fear of being left can be exhausting. Remember that your emotions are valid, even when they feel overwhelming. What's been the most challenging part of managing your BPD symptoms lately?",
-                    "I understand that BPD can make every emotion feel amplified and every relationship feel precarious. The splitting and intense mood swings aren't your fault - they're symptoms of a condition that you're managing. Have you found any grounding techniques that help during particularly difficult moments?"
+                    "Living with BPD can feel like riding an emotional tsunami—everything feels so intense, so immediate, so life-or-death, even when the logical part of your brain knows it isn't. The fear of abandonment, the splitting, the way relationships can feel both desperately needed and terrifyingly fragile—it's exhausting. I want you to know that your emotions, even when they feel overwhelming, are valid responses to how your brain processes the world. What's feeling most intense for you right now?",
+                    "BPD can make you feel like you're too much for everyone, including yourself. The emotional storms, the identity confusion, the way you might love someone fiercely one moment and feel hurt by them the next—these aren't character flaws, they're symptoms of a condition that affects how you experience relationships and emotions. You're not broken; your nervous system just works differently. Are you able to use any DBT skills right now, or does everything feel too overwhelming?",
+                    "The emotional intensity of BPD can make you feel like you're living life at volume 11 when everyone else is at volume 5. The chronic emptiness, the impulsivity, the way abandonment can feel like actual death—these experiences are real and valid. You're not 'being dramatic' or 'attention-seeking.' Your brain is trying to protect you in the only way it knows how. What would feel most supportive right now—validation, distraction, or maybe just someone to sit with you in this feeling?"
                 ],
                 
                 // ADHD specific responses
                 adhd: [
-                    "ADHD can make daily life feel like you're constantly swimming upstream - your brain works differently, not defectively. The struggles with focus, organization, and impulse control are neurological, not personal failings. What aspects of ADHD are impacting you most right now?",
-                    "Living with ADHD often means dealing with a world that wasn't designed for how your brain works. The executive function challenges, time blindness, and emotional dysregulation are real parts of ADHD that many people don't understand. Are you finding strategies that work with your brain rather than against it?",
-                    "ADHD can feel like having a race car brain with bicycle brakes sometimes. The hyperfocus and scattered attention, the rejection sensitivity - these are all valid experiences. Remember that ADHD also comes with creativity, enthusiasm, and unique problem-solving abilities. How are you managing the more challenging symptoms?"
+                    "ADHD can feel like living in a world designed for a completely different type of brain—like everyone got the manual for life except you. The executive dysfunction, the time blindness, the way your brain either hyperfocuses on the 'wrong' things or can't focus at all—it's not about being lazy or not trying hard enough. Your brain just processes information and motivation differently. What aspect of ADHD is making life feel particularly challenging today?",
+                    "The ADHD struggle is so real—your brain craves stimulation and novelty, but the world demands consistency and routine. The rejection sensitivity can make criticism feel devastating, and the impulsivity can lead to decisions you later regret. But ADHD also comes with creativity, enthusiasm, and the ability to think outside the box in ways neurotypical people can't. Are you feeling frustrated with the challenges right now, or celebrating any of the strengths?",
+                    "Having ADHD often means feeling like you're constantly swimming upstream while others are walking on land. The way tasks that seem simple to others can feel overwhelming, how your brain can be brilliant at solving complex problems but forget to eat lunch—it's a real neurological difference, not a personal failing. What strategies have you found that work with your brain instead of against it, or are you still figuring that out?"
                 ],
                 
                 // Depression specific responses
                 depression: [
-                    "Depression can make everything feel impossibly heavy, like you're carrying a weight that no one else can see. The exhaustion, hopelessness, and loss of interest in things you used to enjoy - these are symptoms of an illness, not personal weaknesses. What's been the hardest part about getting through each day?",
-                    "I hear that you're struggling with depression, and I want you to acknowledge how much strength it takes just to keep going when your brain is telling you that nothing matters. Depression lies to us about our worth and our future. Are you getting any professional support for what you're experiencing?",
-                    "Depression can feel like being trapped underwater while everyone else is breathing normally. The cognitive symptoms - difficulty concentrating, making decisions, remembering things - are just as real as the emotional pain. What small things, if any, have given you even moments of relief?"
+                    "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the way simple tasks feel impossible, how everything loses its color and meaning—it's not weakness, it's illness. The guilt about 'not being productive' or 'being a burden' just adds more weight to something that's already crushing. You don't have to perform being okay for anyone, including me. What does today feel like for you—is it a barely-surviving day or something different?",
+                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. Depression is such a liar; it makes everything feel permanent when feelings are actually temporary, even when they don't feel that way. What's been the hardest part about getting through each day lately?",
+                    "Depression can make you feel like you're living in grayscale when everyone else sees in color. The cognitive fog, the way making decisions feels impossible, how you can logically know people care about you but not *feel* it—all of this is real and valid. You're not failing at life; you're dealing with a condition that affects every aspect of functioning. Are there any tiny sparks of anything—curiosity, comfort, even just neutral moments—that you've noticed lately?"
                 ],
                 
-                // Anxiety disorders
-                anxiety_disorders: [
-                    "Anxiety disorders can make your mind feel like it's constantly preparing for disasters that may never come. The physical symptoms - racing heart, sweating, difficulty breathing - are your nervous system's real response to perceived threats. What triggers tend to set off your anxiety most?",
-                    "Living with an anxiety disorder often means your brain's alarm system is stuck in the 'on' position. The constant worry, the what-if scenarios, the avoidance - these are protective mechanisms that have become overactive. Are you working with any specific anxiety management techniques?",
-                    "Anxiety disorders can make normal situations feel like life-or-death scenarios. The anticipatory anxiety, panic attacks, and safety behaviors are your mind's attempt to protect you, even when they're not helpful. What situations feel most overwhelming for you right now?"
-                ],
-                
-                // Bipolar disorder
-                bipolar: [
-                    "Bipolar disorder can feel like living with two different versions of yourself - the extremes of mania and depression can be disorienting and exhausting. The mood cycles, energy changes, and impact on relationships are significant challenges. Are you currently stable on medication, or are you still finding what works?",
-                    "Managing bipolar disorder often means becoming an expert on your own patterns and triggers. The hypomanic or manic episodes might feel good in the moment but can have consequences, while the depressive episodes can feel crushing. What's been most helpful for you in managing mood episodes?",
-                    "Bipolar disorder requires a lot of self-awareness and ongoing management. The unpredictability of mood episodes and their impact on work, relationships, and daily functioning is exhausting. How are you doing with recognizing early warning signs of mood changes?"
-                ],
-                
-                // PTSD/Trauma responses
-                ptsd_trauma: [
-                    "Trauma can rewire how your brain and body respond to the world, making you hypervigilant and reactive in ways that once helped you survive. Flashbacks, nightmares, and emotional numbing are normal responses to abnormal experiences. Are you in a safe place now to begin processing what you've been through?",
-                    "PTSD symptoms like intrusive thoughts, avoidance, and being easily startled are your nervous system's way of trying to protect you from further harm. Trauma therapy approaches like EMDR or trauma-focused CBT can be really effective. What feels most challenging about your trauma symptoms right now?",
-                    "Living with trauma means your body and mind remember danger even when you're safe now. The hypervigilance, sleep disturbances, and difficulty trusting others make sense given what you've experienced. Have you found any grounding techniques that help when you're triggered?"
-                ],
-                
-                // OCD specific responses
-                ocd: [
-                    "OCD can feel like being trapped in a cycle where your brain convinces you that something terrible will happen unless you perform certain actions or think certain thoughts. The intrusive thoughts and compulsions aren't reflections of who you are as a person. Are you working with exposure and response prevention therapy?",
-                    "Living with OCD means dealing with thoughts that feel incredibly real and urgent, even when the logical part of your brain knows they don't make sense. The time consumed by rituals and the distress when you can't complete them is exhausting. What themes do your obsessions typically focus on?",
-                    "OCD can make you feel like you're not in control of your own mind - the intrusive thoughts, the doubt, the need for certainty or symmetry. Remember that having these thoughts doesn't make you a bad person; they're symptoms of a condition that responds well to treatment. How are you managing the compulsive behaviors?"
-                ],
-                
-                // Eating disorders
-                eating_disorders: [
-                    "Eating disorders are complex mental health conditions that use food, weight, and body image as ways to cope with difficult emotions and situations. The behaviors around food often feel necessary for control or safety, even when they're harmful. Are you getting specialized eating disorder treatment?",
-                    "Recovery from an eating disorder means learning to trust your body again and finding new ways to cope with emotions that don't involve food restriction, binging, or purging. The process is challenging and non-linear. What feels most difficult about your relationship with food right now?",
-                    "Eating disorders can make you feel like food and your body are the enemy, when really they're symptoms of deeper emotional pain. The shame and secrecy that often accompany these disorders can be isolating. How are you taking care of your physical health while addressing the underlying issues?"
-                ],
-                
-                // General anxiety
+                // Anxiety disorders with more nuance
                 anxiety: [
-                    "I hear that you're feeling anxious, and I want you to know that what you're experiencing is completely valid. Anxiety can feel overwhelming, but you're not alone in this. One technique that many people find helpful is the 5-4-3-2-1 grounding method - can you name 5 things you can see right now?",
-                    "Anxiety can make everything feel so much more intense and scary than it really is. That's just what anxiety does - it's not a reflection of your strength or capability. Try taking some slow, deep breaths with me. What's one small thing that usually brings you a bit of comfort?",
-                    "Thank you for sharing that you're feeling anxious. It takes courage to acknowledge these feelings. Sometimes when anxiety hits, our mind races with 'what if' scenarios. Remember that anxious thoughts aren't facts. What's been weighing most heavily on your mind lately?"
+                    "Anxiety can feel like your nervous system is stuck in 'emergency mode' even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous—it's exhausting to live in that state of hypervigilance. Your anxiety developed to protect you, but now it might be protecting you from things that aren't actually threats. What tends to trigger your anxiety most, and how are you feeling in your body right now?",
+                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. But anxiety thoughts aren't facts, even when they feel convincing. What's your anxiety telling you right now, and how much do you believe it versus knowing it's the anxiety talking?",
+                    "Anxiety can make you feel like you're constantly bracing for impact, even when there's nothing coming at you. The physical symptoms—tight chest, racing thoughts, that sick feeling in your stomach—can be just as exhausting as the mental part. It takes so much energy to fight your own nervous system all day. Have you found anything that helps you feel more grounded when the anxiety gets overwhelming?"
                 ],
                 
-                // General depression
-                depression_general: [
-                    "I can hear the heaviness in what you're sharing, and I want you to know that I'm here with you in this difficult moment. Depression can make everything feel so much harder, but you're brave for reaching out. What's been the most challenging part of how you're feeling?",
-                    "It takes real strength to talk about feeling depressed. When we're in that dark place, it can feel like things will never get better, but feelings do change and shift, even when it doesn't seem possible. What's one tiny thing that used to bring you even a small moment of peace?",
-                    "Depression can be like looking at the world through dark-tinted glasses - everything seems harder and more hopeless. But you're still here, still reaching out, and that matters more than you know. How long have you been carrying these heavy feelings?"
+                // Enhanced general categories
+                overwhelmed: [
+                    "Feeling overwhelmed is like having too many browser tabs open in your mind—everything is running at once and it's slowing down your whole system. When everything feels urgent and important, it can be paralyzing because you don't know where to start. That sense of drowning in responsibilities or emotions is so valid. Sometimes the kindest thing we can do is acknowledge that we're in over our heads and that's okay. What's contributing most to feeling overwhelmed right now—is it tasks, emotions, or just everything at once?",
+                    "That overwhelmed feeling can be so suffocating—like the walls are closing in and there's not enough air. When your capacity is maxed out, even small things can feel like the last straw. It's not about being weak or unable to handle life; sometimes life just throws more at us than any person should reasonably be expected to manage alone. What would it look like to give yourself permission to not handle everything perfectly right now?",
+                    "Being overwhelmed often means you're carrying too much, caring too much, or trying to control too much—and all of those come from good places in your heart, even if they're exhausting you. The feeling of being scattered in a million directions while also feeling stuck is such a particular kind of suffering. You don't have to solve everything today. What's one small thing you could let go of, even temporarily?"
                 ],
                 
-                // Other categories remain the same...
-                stress: [
-                    "It sounds like you're dealing with a lot of stress right now. When everything feels overwhelming, sometimes it helps to remember that you don't have to solve everything at once. What feels like the most pressing thing on your mind today?",
-                    "Stress can make us feel like we're being pulled in a million directions. That's such a heavy feeling to carry. Sometimes breaking things down into smaller, manageable pieces can help. What's one small step you could take today?",
-                    "I can hear that stress is really weighing on you. It's completely understandable to feel overwhelmed when life throws a lot at us. What kind of support would feel most helpful to you right now?"
+                grief: [
+                    "Grief is love with nowhere to go, and that can feel impossible to carry sometimes. Whether you're mourning a person, a relationship, a version of yourself, or a future you thought you'd have—that ache of missing something or someone is one of the most profound human experiences. Grief doesn't follow a timeline or come in neat stages; it's messy and unpredictable and can ambush you when you least expect it. What are you grieving right now, and how is it showing up for you today?",
+                    "There's something about grief that makes you feel like you're living in a different world from everyone else—they're going about their normal lives while you're walking around with this huge absence inside you. Grief can make you feel guilty for laughing, angry at people for their normalcy, and exhausted by having to pretend you're okay. All of these feelings are normal parts of an abnormal situation. What do you need most right now—space to feel it, distraction from it, or someone to just acknowledge how hard this is?",
+                    "Grief rewrites everything—how you see the world, what matters, who you are. It can feel like you're learning to live all over again, and that's disorienting and exhausting. Sometimes people want to rush you through it or fix it, but grief isn't a problem to solve; it's love that needs to be expressed even when its object is gone. How are you honoring both your grief and your need to keep living?"
                 ],
                 
-                sleep: [
-                    "Sleep troubles can affect everything - your mood, energy, and ability to cope with daily challenges. It's so frustrating when you need rest but can't seem to get it. Are there particular thoughts or worries that tend to surface when you're trying to sleep?",
-                    "Not getting good sleep makes everything feel more difficult, doesn't it? Your mind and body need that time to recharge. Have you noticed any patterns in what might be keeping you awake? Sometimes talking through what's on our minds can help.",
-                    "Sleep issues can be really draining both physically and emotionally. It's like being tired but your mind won't let you rest. What does your bedtime routine look like? Sometimes small changes can make a big difference."
-                ],
-                
-                motivation: [
-                    "Feeling unmotivated is actually really common, especially when we're going through tough times. It doesn't mean anything is wrong with you. Sometimes motivation follows action rather than the other way around. What's one very small thing you could do today?",
-                    "I hear that you're struggling to find motivation right now. That can be really frustrating when you know there are things you want or need to do. What usually helps you feel more energized or purposeful, even if those things don't feel appealing right now?",
-                    "Lack of motivation can feel so heavy and discouraging. You're not alone in feeling this way. Sometimes acknowledging the small things we do accomplish, even getting through the day, is worth recognizing. What's something small you've done recently that you can give yourself credit for?"
-                ],
-                
+                // Enhanced greeting responses
                 greeting: [
-                    "Hello! I'm so glad you're here. This is a safe space where you can share whatever is on your mind. How are you feeling today?",
-                    "Hi there! Thank you for reaching out. I'm here to listen and support you through whatever you're experiencing. What would you like to talk about?",
-                    "Welcome! I'm here to provide a caring space for you to express your thoughts and feelings. How can I support you today?"
+                    "Hello! I'm really glad you're here. This feels like a safe space where you can share whatever is truly on your mind—the heavy stuff, the confusing stuff, or even just the everyday struggles that feel bigger than they should. There's no pressure to be 'fine' or to have it all figured out. How are you really doing today, underneath whatever face you've been wearing for the world?",
+                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. I'm here to listen without judgment and to sit with you in whatever you're experiencing. What's been on your heart or mind lately that you haven't had space to process?",
+                    "Welcome! I'm here to provide a caring space where your feelings—all of them—are valid and welcome. Whether you're struggling with something specific or just feeling off in a way you can't name, you deserve support and understanding. What would feel most helpful for you right now—talking through something specific, or just having someone listen?"
                 ],
                 
                 general: [
-                    "Thank you for sharing that with me. I can sense that there's a lot on your mind right now. Your feelings are completely valid, and I'm glad you felt comfortable opening up here. What would feel most supportive for you in this moment?",
-                    "I really appreciate you trusting me with your thoughts and feelings. It takes courage to reach out, especially when things feel heavy. You don't have to carry everything alone. What's been weighing most on your heart lately?",
-                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. How are you taking care of yourself right now?",
-                    "It sounds like you're dealing with quite a bit. I want you to know that whatever you're feeling is okay - there's no right or wrong way to feel. What kind of support feels most helpful to you today?",
-                    "I can hear that there's something important you want to share. I'm here to listen without judgment and walk alongside you through whatever you're facing. What's on your mind?"
+                    "Thank you for trusting me with whatever you're carrying right now. I can sense there's something weighing on you, and I want you to know that whatever it is—big or small, rational or not—your feelings about it are completely valid. You don't have to have the perfect words or even understand your emotions fully. Sometimes just being witnessed in your struggle can help. What's been sitting heavy on your heart lately?",
+                    "I really appreciate you opening up here. It takes vulnerability to reach out, especially when you might not even be sure what kind of support you need. Your willingness to share, even if it feels messy or unclear, matters. You don't have to carry everything alone, and you don't have to be strong all the time. What would feel most supportive for you in this moment?",
+                    "I'm here to listen to whatever you're going through—the things that feel too big, too small, too complicated, or too simple to matter. Sometimes we minimize our own struggles or think they're not worth talking about, but if it matters to you, it matters. This is your space to be real about what's actually happening in your inner world. What's on your mind that you haven't had space to process elsewhere?"
                 ]
             };
 
             const lowerMessage = userMessage.toLowerCase();
             let responseCategory = 'general';
             
-            // Detect specific mental health conditions first
-            if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline personality') || lowerMessage.includes('borderline disorder')) {
+            // Enhanced detection for more specific emotional states
+            if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || lowerMessage.includes('isolated') || lowerMessage.includes('disconnected')) {
+                responseCategory = 'loneliness';
+            } else if (lowerMessage.includes('grief') || lowerMessage.includes('grieving') || lowerMessage.includes('loss') || lowerMessage.includes('died') || lowerMessage.includes('death') || lowerMessage.includes('miss them') || lowerMessage.includes('passed away')) {
+                responseCategory = 'grief';
+            } else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('can\'t cope') || lowerMessage.includes('drowning') || lowerMessage.includes('suffocating')) {
+                responseCategory = 'overwhelmed';
+            }
+            // Existing condition detection
+            else if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline personality') || lowerMessage.includes('borderline disorder')) {
                 responseCategory = 'bpd';
             } else if (lowerMessage.includes('adhd') || lowerMessage.includes('attention deficit') || lowerMessage.includes('add ')) {
                 responseCategory = 'adhd';
-            } else if (lowerMessage.includes('bipolar') || lowerMessage.includes('manic') || lowerMessage.includes('hypomania')) {
-                responseCategory = 'bipolar';
-            } else if (lowerMessage.includes('ptsd') || lowerMessage.includes('trauma') || lowerMessage.includes('flashback') || lowerMessage.includes('triggered')) {
-                responseCategory = 'ptsd_trauma';
-            } else if (lowerMessage.includes('ocd') || lowerMessage.includes('obsessive') || lowerMessage.includes('compulsive') || lowerMessage.includes('intrusive thoughts')) {
-                responseCategory = 'ocd';
-            } else if (lowerMessage.includes('eating disorder') || lowerMessage.includes('anorexia') || lowerMessage.includes('bulimia') || lowerMessage.includes('binge eating')) {
-                responseCategory = 'eating_disorders';
-            } else if (lowerMessage.includes('panic disorder') || lowerMessage.includes('social anxiety') || lowerMessage.includes('generalized anxiety') || lowerMessage.includes('agoraphobia')) {
-                responseCategory = 'anxiety_disorders';
             }
-            // Then check for general symptoms and greetings
+            // Continue with existing categories but enhanced responses above
             else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || lowerMessage.match(/^(good morning|good afternoon|good evening)/)) {
                 responseCategory = 'greeting';
             } else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried') || lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
                 responseCategory = 'anxiety';
             } else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('empty')) {
-                responseCategory = 'depression_general';
-            } else if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed') || lowerMessage.includes('pressure') || lowerMessage.includes('too much') || lowerMessage.includes('burden')) {
-                responseCategory = 'stress';
-            } else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired') || lowerMessage.includes('exhausted') || lowerMessage.includes('can\'t sleep')) {
-                responseCategory = 'sleep';
-            } else if (lowerMessage.includes('motivation') || lowerMessage.includes('motivated') || lowerMessage.includes('stuck') || lowerMessage.includes('energy') || lowerMessage.includes('lazy')) {
-                responseCategory = 'motivation';
+                responseCategory = 'depression';
             }
             
             // Get random response from category
