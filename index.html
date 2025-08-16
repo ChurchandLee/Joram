@@ -471,8 +471,129 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
-        // Enhanced Mental Health Response System with Deep Empathy and Nuanced Understanding
-        function generateIntelligentResponse(userMessage) {
+        // Enhanced Mental Health Response System with Conversation Memory and Crisis Detection
+        function generateIntelligentResponse(userMessage, conversationHistory = []) {
+            // Get recent messages for context
+            const recentMessages = conversationHistory.slice(-4); // Last 4 messages for context
+            const lastUserMessage = recentMessages.find(msg => msg.role === 'user' && msg !== userMessage);
+            
+            const responses = {
+                // CRISIS/SUICIDAL IDEATION - HIGHEST PRIORITY
+                suicidal: [
+                    "I'm really concerned about what you've shared with me, and I want you to know that I'm taking this seriously. What you're feeling right now is incredibly painful, but please know that you don't have to go through this alone. There are people trained specifically to help with these feelings who are available right now:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, 24/7\n• Crisis Text Line: Text HOME to 741741\n\nYour life has value, and these feelings can change with proper support. Are you in immediate danger right now, or can you stay safe while we talk about getting you connected with crisis support?",
+                    "Thank you for telling me about these thoughts - that took incredible courage, and I'm glad you're not keeping this to yourself. Suicidal thoughts are a sign that you're in serious emotional pain, not that you actually want to die. Right now, the most important thing is your safety:\n\n• Call 988 (US) or 116 123 (UK) for immediate crisis support\n• Go to your nearest emergency room if you're in immediate danger\n• Call a trusted friend or family member to stay with you\n\nThese feelings can feel permanent, but they're not. With proper help, things can get better. Can you reach out to one of these resources right now?",
+                    "I hear you, and I'm worried about you. Having suicidal thoughts means you're experiencing unbearable emotional pain, and that pain is real and valid. But these thoughts are symptoms of distress, not solutions. Please reach out for immediate help:\n\n• National Suicide Prevention Lifeline: 988\n• Crisis Text Line: Text HELLO to 741741\n• Or go directly to your nearest emergency room\n\nYou deserve support and care. These crisis counselors are trained specifically for this and want to help you through this moment. Will you please contact one of them right now?"
+                ],
+
+                // FOLLOW-UP CRISIS RESPONSES (when someone has already mentioned suicidal thoughts)
+                crisis_followup: [
+                    "I'm still very concerned about the suicidal thoughts you mentioned. Right now, the most important thing is your immediate safety. Have you been able to contact the crisis line (988) or emergency services? If you're still having thoughts of hurting yourself, please don't wait - go to your nearest emergency room or call emergency services. You don't have to face this alone.",
+                    "Since you've shared that you're having suicidal thoughts, I want to make sure you're getting the right level of support. Crisis counselors are specifically trained for these situations in ways that I'm not. Please call 988 (US) or 116 123 (UK) right now - they're available 24/7 and want to help. Are you somewhere safe right now?",
+                    "I need to make sure you're getting proper crisis support for the suicidal thoughts you mentioned. While I care about you and want to help, trained crisis counselors are what you need right now. Please contact:\n• 988 (Suicide Prevention Lifeline)\n• 911 if you're in immediate danger\n• A trusted person who can stay with you\nCan you please reach out to one of these right now?"
+                ],
+
+                // Self-harm (non-suicidal)
+                self_harm: [
+                    "I'm concerned about the self-harm you've mentioned. That urge to hurt yourself often comes from emotional pain that feels too big to handle any other way. Self-harm might provide temporary relief, but it can also become a dangerous pattern. Have you been able to talk to anyone about these urges - a counselor, doctor, or trusted person in your life?",
+                    "Thank you for trusting me with this. Self-harm urges are a sign that you're dealing with intense emotional pain and need better coping strategies. Some alternatives that people find helpful: holding ice cubes, drawing on skin with a red marker, intense exercise, or calling a crisis text line (text HOME to 741741). What triggers these urges most for you?",
+                    "I hear that you're struggling with self-harm urges. These feelings make sense when emotional pain feels overwhelming and you need a way to cope. But there are safer ways to manage these intense emotions. Have you tried grounding techniques like the 5-4-3-2-1 method, or do you have a safety plan with alternative coping strategies?"
+                ],
+                
+                // Loneliness - specific, empathetic responses
+                loneliness: [
+                    "I hear you. Feeling lonely can be really heavy—it's more than just 'being alone,' it's that sense of missing connection or understanding. That ache of wanting someone to truly see you can feel overwhelming sometimes. Would it help to talk about what's making the loneliness feel particularly intense right now, or would you prefer to explore some gentle ways to ease that feeling?",
+                    "Loneliness has this way of making us feel invisible, doesn't it? Like you could be surrounded by people and still feel completely unseen. It's one of those emotions that can make everything else feel more difficult too. I'm here with you in this moment, and you're not bothering anyone by sharing this. What does your loneliness feel like right now—is it missing specific people, or more of a general feeling of disconnection?",
+                    "That sense of loneliness can feel so isolating—like you're carrying something heavy that others can't see or understand. It's not about being dramatic or needy; it's a real human need for connection that isn't being met right now. You reached out here, which shows strength even when you're struggling. What kind of connection are you missing most—is it someone to talk to, someone who understands you, or something else?"
+                ],
+                
+                // Enhanced general categories with variation
+                general_followup: [
+                    "I can see you're looking for more specific guidance about what to do next. Sometimes when we're struggling, the path forward isn't clear. What feels most urgent or pressing for you right now - is it getting through today, figuring out a specific problem, or finding someone to talk to? Let's break this down into smaller, manageable pieces.",
+                    "It sounds like you need some concrete next steps. When everything feels overwhelming, sometimes the most helpful thing is to focus on just the next small action. What's one thing you could do in the next hour that might help you feel even slightly better or more stable?",
+                    "I hear you asking what to do, and that question makes complete sense when you're in pain. The answer depends on what you need most right now - immediate comfort, practical problem-solving, or professional support. What feels most important to address first?"
+                ],
+                
+                // Continue with existing enhanced responses but add more variation...
+                depression: [
+                    "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the way simple tasks feel impossible, how everything loses its color and meaning—it's not weakness, it's illness. The guilt about 'not being productive' or 'being a burden' just adds more weight to something that's already crushing. You don't have to perform being okay for anyone, including me. What does today feel like for you—is it a barely-surviving day or something different?",
+                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. Depression is such a liar; it makes everything feel permanent when feelings are actually temporary, even when they don't feel that way. What's been the hardest part about getting through each day lately?",
+                    "Depression can make you feel like you're living in grayscale when everyone else sees in color. The cognitive fog, the way making decisions feels impossible, how you can logically know people care about you but not *feel* it—all of this is real and valid. You're not failing at life; you're dealing with a condition that affects every aspect of functioning. Are there any tiny sparks of anything—curiosity, comfort, even just neutral moments—that you've noticed lately?"
+                ],
+
+                // More categories with enhanced responses...
+                anxiety: [
+                    "Anxiety can feel like your nervous system is stuck in 'emergency mode' even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous—it's exhausting to live in that state of hypervigilance. Your anxiety developed to protect you, but now it might be protecting you from things that aren't actually threats. What tends to trigger your anxiety most, and how are you feeling in your body right now?",
+                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. But anxiety thoughts aren't facts, even when they feel convincing. What's your anxiety telling you right now, and how much do you believe it versus knowing it's the anxiety talking?",
+                    "Anxiety can make you feel like you're constantly bracing for impact, even when there's nothing coming at you. The physical symptoms—tight chest, racing thoughts, that sick feeling in your stomach—can be just as exhausting as the mental part. It takes so much energy to fight your own nervous system all day. Have you found anything that helps you feel more grounded when the anxiety gets overwhelming?"
+                ],
+
+                greeting: [
+                    "Hello! I'm really glad you're here. This feels like a safe space where you can share whatever is truly on your mind—the heavy stuff, the confusing stuff, or even just the everyday struggles that feel bigger than they should. There's no pressure to be 'fine' or to have it all figured out. How are you really doing today, underneath whatever face you've been wearing for the world?",
+                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. I'm here to listen without judgment and to sit with you in whatever you're experiencing. What's been on your heart or mind lately that you haven't had space to process?",
+                    "Welcome! I'm here to provide a caring space where your feelings—all of them—are valid and welcome. Whether you're struggling with something specific or just feeling off in a way you can't name, you deserve support and understanding. What would feel most helpful for you right now—talking through something specific, or just having someone listen?"
+                ],
+                
+                general: [
+                    "Thank you for trusting me with whatever you're carrying right now. I can sense there's something weighing on you, and I want you to know that whatever it is—big or small, rational or not—your feelings about it are completely valid. You don't have to have the perfect words or even understand your emotions fully. Sometimes just being witnessed in your struggle can help. What's been sitting heavy on your heart lately?",
+                    "I really appreciate you opening up here. It takes vulnerability to reach out, especially when you might not even be sure what kind of support you need. Your willingness to share, even if it feels messy or unclear, matters. You don't have to carry everything alone, and you don't have to be strong all the time. What would feel most supportive for you in this moment?",
+                    "I'm here to listen to whatever you're going through—the things that feel too big, too small, too complicated, or too simple to matter. Sometimes we minimize our own struggles or think they're not worth talking about, but if it matters to you, it matters. This is your space to be real about what's actually happening in your inner world. What's on your mind that you haven't had space to process elsewhere?"
+                ]
+            };
+
+            const lowerMessage = userMessage.toLowerCase();
+            let responseCategory = 'general';
+            
+            // PRIORITY 1: Check for crisis/suicidal content
+            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('end my life') || 
+                lowerMessage.includes('want to die') || lowerMessage.includes('better off dead') || lowerMessage.includes('suicide') ||
+                lowerMessage.includes('don\'t want to live') || lowerMessage.includes('can\'t go on')) {
+                responseCategory = 'suicidal';
+            }
+            // Check if previous message mentioned suicide and current is asking for help
+            else if (recentMessages.some(msg => msg.role === 'user' && 
+                (msg.content.toLowerCase().includes('suicidal') || msg.content.toLowerCase().includes('kill myself') || 
+                 msg.content.toLowerCase().includes('want to die') || msg.content.toLowerCase().includes('suicide'))) &&
+                (lowerMessage.includes('what') || lowerMessage.includes('help') || lowerMessage.includes('do'))) {
+                responseCategory = 'crisis_followup';
+            }
+            // Self-harm detection
+            else if (lowerMessage.includes('self harm') || lowerMessage.includes('hurt myself') || lowerMessage.includes('cutting') ||
+                     lowerMessage.includes('self-harm') || lowerMessage.includes('self injury')) {
+                responseCategory = 'self_harm';
+            }
+            // Check for follow-up questions after initial response
+            else if (recentMessages.length > 0 && 
+                     (lowerMessage.includes('what should') || lowerMessage.includes('what do') || lowerMessage.includes('help me') ||
+                      lowerMessage === 'what' || lowerMessage === 'how' || lowerMessage.includes('what now'))) {
+                responseCategory = 'general_followup';
+            }
+            // Specific emotional states
+            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || 
+                     lowerMessage.includes('isolated') || lowerMessage.includes('disconnected')) {
+                responseCategory = 'loneliness';
+            }
+            // Standard detection continues...
+            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') || 
+                     lowerMessage.match(/^(good morning|good afternoon|good evening)/)) {
+                responseCategory = 'greeting';
+            } else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried') || 
+                      lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
+                responseCategory = 'anxiety';
+            } else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || 
+                      lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('empty')) {
+                responseCategory = 'depression';
+            }
+            
+            // Get random response from category, but avoid repeating if possible
+            const categoryResponses = responses[responseCategory];
+            if (!categoryResponses) {
+                responseCategory = 'general';
+            }
+            
+            const response = responses[responseCategory][Math.floor(Math.random() * responses[responseCategory].length)];
+            
+            return { choices: [{ message: { content: response } }] };
+        }
             const responses = {
                 // Loneliness - specific, empathetic responses
                 loneliness: [
@@ -619,8 +740,8 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
                 hideTypingIndicator();
                 console.error('Error:', error);
                 
-                // Fallback to intelligent response if everything fails
-                const fallbackResponse = generateIntelligentResponse(message);
+                // Fallback to intelligent response with conversation context
+                const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
                 addMessage(fallbackResponse.choices[0].message.content, 'ai');
             } finally {
                 // Re-enable send button and input
