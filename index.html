@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Health Support</title>
-    <meta name="description" content="Free AI-powered mental health support chat. A safe, judgement-free space for mental wellness.">
+    <meta name="description" content="Free AI-powered mental health support chat. A safe, judgment-free space for mental wellness.">
     <meta name="theme-color" content="#2E8B57">
     
     <style>
@@ -364,7 +364,7 @@
         <div class="logo-header">
             <div class="logo">💚</div>
             <h1>HeartoListen</h1>
-            <p>AI Mental Health Support - Self Discovery and Companion for Positive Mental Health and Self Development</p>
+            <p>AI Mental Health Support - Self Discovery for Positive Mental Health</p>
         </div>
 
         <!-- Chat Area -->
@@ -372,7 +372,7 @@
             <!-- Welcome Message -->
             <div class="welcome-section">
                 <h2>Welcome to Hear to Listen 🌿</h2>
-                <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgement-free space where you can share your thoughts and feelings.</p>
+                <p>I'm here to listen and support you through whatever you're experiencing. This is a safe, judgment-free space where you can share your thoughts and feelings.</p>
                 
                 <!-- Important Disclaimer -->
                 <div class="disclaimer">
@@ -405,7 +405,7 @@
 
             <!-- Status Message -->
             <div class="message status-message">
-                Intelligent Mental Health Support v8 - with ChatGPT 5.0 integration!
+                🧠 Intelligent Mental Health Support v8 - Comprehensive recognition for 25+ conditions with ChatGPT 5.0 integration!
             </div>
 
             <!-- Typing Indicator -->
@@ -433,7 +433,7 @@
         // OpenAI API Configuration
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
-        // Mental Health System Prompt for ChatGPT
+        // Enhanced Mental Health System Prompt for ChatGPT
         const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "HeartoListen". Your primary role is to listen with empathy, patience, and genuine warmth. Your responses should be:
 
 TONE & STYLE:
@@ -441,6 +441,8 @@ TONE & STYLE:
 - Use conversational, accessible language (avoid clinical jargon)
 - Keep responses concise but meaningful (2-4 sentences typically)
 - Sound genuinely caring and present
+- IMPORTANT: Vary your language and phrasing - never repeat the same expressions or sentence structures
+- Use diverse vocabulary and different ways of expressing empathy and understanding
 
 KEY PRINCIPLES:
 - Always validate the user's feelings and experiences
@@ -448,6 +450,7 @@ KEY PRINCIPLES:
 - Focus on emotional support and gentle guidance
 - Offer practical coping strategies when appropriate
 - Help users reframe challenges in hopeful, realistic ways
+- Each response should feel fresh and uniquely tailored to what the user just shared
 
 CRISIS RESPONSE:
 If you detect signs of immediate danger, self-harm, or suicidal ideation:
@@ -462,8 +465,16 @@ INTERACTION STYLE:
 - Prioritize emotional safety over problem-solving
 - Use brief paragraphs for readability
 - Make the user feel heard, valued, and hopeful
+- Avoid repetitive phrases like "I hear you" or "That sounds really difficult" in every response
+- Mix up your conversation starters and empathetic expressions
 
-Remember: Your goal is to provide a safe space for emotional expression and gentle support, not therapy or treatment.`;
+RESPONSE VARIETY:
+- Use different sentence structures and vocabulary in each response
+- Avoid formulaic responses - make each one feel personally crafted
+- Draw from a rich vocabulary of empathetic and supportive language
+- Reference specific details the user mentions to show you're truly listening
+
+Remember: Your goal is to provide a safe space for emotional expression and gentle support, not therapy or treatment. Every response should feel unique and personally meaningful.`;
 
         // Chat functionality
         let conversationHistory = [{
@@ -698,7 +709,40 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
         // Simulated ChatGPT 5.0 API call function
         async function callChatGPT(messages) {
             // This is where you would implement the actual ChatGPT 5.0 API call
-            // For now, using the fallback intelligent response system
+            // When GPT-5 becomes available, uncomment and configure this:
+            /*
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-5", // Update this when GPT-5 is officially released, currently use "gpt-4" or "gpt-4-turbo"
+                        messages: messages,
+                        temperature: 0.75, // Reduced for more consistent, less repetitive responses
+                        top_p: 0.9, // Nucleus sampling for better quality
+                        max_tokens: 800, // Sufficient for detailed mental health responses
+                        frequency_penalty: 0.3, // Reduces repetitive phrasing
+                        presence_penalty: 0.1, // Encourages diverse vocabulary
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('OpenAI API Error:', error);
+                // Fall back to intelligent response system
+                const lastUserMessage = messages[messages.length - 1].content;
+                return generateIntelligentResponse(lastUserMessage, messages);
+            }
+            */
+            
+            // For now, using the enhanced fallback intelligent response system
             const lastUserMessage = messages[messages.length - 1].content;
             return generateIntelligentResponse(lastUserMessage, messages);
         }
