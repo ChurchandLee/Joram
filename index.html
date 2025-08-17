@@ -405,7 +405,7 @@
 
             <!-- Status Message -->
             <div class="message status-message">
-                🧠 Intelligent Mental Health Support v8 - Comprehensive recognition for 25+ conditions with ChatGPT API integration!
+                🧠 Intelligent Mental Health Support v9 - Comprehensive recognition for 30+ conditions with non-repetitive AI responses!
             </div>
 
             <!-- Typing Indicator -->
@@ -430,7 +430,7 @@
     </div>
 
     <script>
-        // OpenAI API Configuration
+        // OpenAI API Configuration - Will be replaced by GitHub Actions with secret
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
         // Enhanced Mental Health System Prompt for ChatGPT
@@ -482,286 +482,98 @@ Remember: Your goal is to provide a safe space for emotional expression and gent
             content: SYSTEM_PROMPT
         }];
 
-        // Track used responses to prevent repetition
+        // Track used responses to prevent repetition - COMPREHENSIVE VERSION
         let usedResponses = {
             suicidal: [], crisis_followup: [], self_harm: [], loneliness: [], general_followup: [],
             depression: [], anxiety: [], bipolar: [], ptsd: [], ocd: [], eating_disorder: [],
             bpd: [], adhd: [], autism: [], schizophrenia: [], panic_disorder: [], social_anxiety: [],
             grief: [], addiction: [], insomnia: [], overwhelmed: [], anger: [], family_issues: [],
             relationship_issues: [], work_stress: [], financial_stress: [], identity_crisis: [],
-            low_self_esteem: [], perfectionism: [], guilt_shame: [], greeting: [], general: []
+            low_self_esteem: [], perfectionism: [], guilt_shame: [], motivation: [], sleep_troubles: [],
+            greeting: [], general: []
         };
 
-        // Enhanced Mental Health Response System
+        // Enhanced Mental Health Response System with Comprehensive Condition Recognition
         function generateIntelligentResponse(userMessage, conversationHistory = []) {
             const recentMessages = conversationHistory.slice(-4);
             
             const responses = {
                 // CRISIS/SUICIDAL IDEATION - HIGHEST PRIORITY
                 suicidal: [
-                    "I'm really concerned about what you've shared with me, and I want you to know that I'm taking this seriously. What you're feeling right now is incredibly painful, but please know that you don't have to go through this alone. There are people trained specifically to help with these feelings who are available right now:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, 24/7\n• Crisis Text Line: Text HOME to 741741\n\nYour life has value, and these feelings can change with proper support. Are you in immediate danger right now, or can you stay safe while we talk about getting you connected with crisis support?"
+                    "I'm really concerned about what you've shared with me, and I want you to know that I'm taking this seriously. What you're feeling right now is incredibly painful, but please know that you don't have to go through this alone. There are people trained specifically to help with these feelings who are available right now:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, 24/7\n• Crisis Text Line: Text HOME to 741741\n\nYour life has value, and these feelings can change with proper support. Are you in immediate danger right now, or can you stay safe while we talk about getting you connected with crisis support?",
+                    "What you've shared about feeling suicidal is incredibly important, and I'm so glad you told me. These thoughts often come when emotional pain feels unbearable - like there's no other way out. But there are people trained specifically to help navigate these feelings.\n\nImmediate resources:\n• Call 988 (US) or 116 123 (UK) right now\n• Text HOME to 741741\n• Emergency services if you're in immediate danger\n\nThese feelings can change with proper support. What's making things feel impossible right now?"
                 ],
 
-                // BPD responses
+                // CRISIS FOLLOW-UP
+                crisis_followup: [
+                    "Given that you mentioned suicidal thoughts, my biggest concern right now is your immediate safety. When someone asks 'what should I do' after sharing suicidal thoughts, the most important first step is connecting with crisis professionals who are trained for exactly this situation.\n\nHave you been able to call the crisis line (988 in the US, 116 123 in the UK)? If you're having active thoughts of hurting yourself, please don't wait - call them now or go to your nearest emergency room. What feels like the biggest barrier to reaching out for professional help right now?"
+                ],
+
+                // BPD (Borderline Personality Disorder) - Enhanced responses
                 bpd: [
-                    "BPD and loneliness can be such a painful combination. BPD often makes relationships feel both desperately needed and terrifyingly risky - the fear of abandonment can make you push people away before they can leave you, which then creates the very loneliness you were trying to avoid. The emotional intensity of BPD can make loneliness feel absolutely crushing, like you're drowning in emptiness. What's been most difficult about managing both the BPD symptoms and the loneliness?",
-                    "Living with BPD can make you feel like you're 'too much' for people, which often leads to intense loneliness and isolation. The way BPD affects emotional regulation means that loneliness doesn't just feel sad - it can feel like emotional agony, like you're going to die from the emptiness. Are you currently using any DBT skills to help manage these intense feelings?"
+                    "BPD can create this intense emotional experience where everything feels magnified - love feels like ecstasy, rejection feels like death, and the fear of abandonment can be absolutely paralyzing. The way your emotions can shift so quickly and intensely isn't your fault; it's how your nervous system learned to protect you. What's feeling most overwhelming about your BPD symptoms right now?",
+                    "Living with BPD often means feeling like you're 'too much' for everyone, including yourself. The emotional storms, the identity shifts, the way relationships can feel both desperately needed and terrifyingly fragile - it's exhausting. You're not broken; your brain just developed different patterns to survive difficult early experiences. Are you currently using any DBT skills, or is that something you're interested in exploring?",
+                    "The chronic emptiness that comes with BPD can feel like there's a black hole inside you that nothing can fill. The splitting, the impulsivity, the way your sense of self can feel so unstable - these are symptoms of trauma responses, not character flaws. What would feel most supportive right now - validation, distraction, or maybe just someone to sit with you in this feeling?",
+                    "BPD and loneliness can be such a devastating combination. The fear of abandonment can make you push people away before they can leave you, which then creates the very isolation you were trying to avoid. The emotional intensity means loneliness doesn't just feel sad - it can feel like you're dying from the emptiness. How has BPD been affecting your relationships and sense of connection?"
                 ],
 
-                // Depression responses
+                // DEPRESSION - Multiple nuanced responses
                 depression: [
-                    "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the way simple tasks feel impossible, how everything loses its color and meaning—it's not weakness, it's illness. What does today feel like for you—is it a barely-surviving day or something different?",
-                    "I hear you struggling with depression, and I want you to know that what you're experiencing—the exhaustion that sleep doesn't fix, the numbness, the way your brain tells you nothing will ever get better—these are symptoms talking, not truth. What's been the hardest part about getting through each day lately?"
+                    "Depression can feel like you're trapped underwater while everyone else is breathing normally above the surface. That heaviness, the exhaustion that sleep doesn't fix, the way everything loses its color and meaning - it's not weakness, it's illness. What does today feel like for you - is it a barely-surviving day or something different?",
+                    "The way depression lies to you is so cruel - it tells you things will never get better, that you're a burden, that nothing matters. But depression thoughts aren't facts, even when they feel absolutely convincing. You're dealing with a medical condition that affects every aspect of functioning. What's been the hardest part about getting through each day lately?",
+                    "Depression can make you feel like you're living in grayscale when everyone else sees in color. The cognitive fog, the way making decisions feels impossible, how you can logically know people care about you but not feel it - all of this is real and valid. Are there any tiny sparks of anything - curiosity, comfort, even just neutral moments - that you've noticed lately?",
+                    "That depression fatigue is so real - when your brain is fighting a constant battle against itself, of course you're exhausted. Simple tasks feel like climbing mountains because your mind is working overtime just to function. You're not lazy or weak; you're dealing with an illness that saps energy in ways people can't see. How are you being gentle with yourself through this?"
                 ],
 
-                // Anxiety responses
+                // ANXIETY - Comprehensive responses
                 anxiety: [
-                    "Anxiety can feel like your nervous system is stuck in 'emergency mode' even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous—it's exhausting to live in that state of hypervigilance. What tends to trigger your anxiety most, and how are you feeling in your body right now?",
-                    "I hear that you're feeling anxious. It's like your brain's alarm system is so sensitive that it goes off for everything—real dangers and imagined ones alike. The 'what if' thoughts can spiral so quickly, creating entire catastrophic scenarios that feel completely real and urgent. What's your anxiety telling you right now?"
+                    "Anxiety can feel like your nervous system is stuck in emergency mode even when you're safe. That constant scanning for threats, the way your body reacts with racing heart and sweating to situations your logical brain knows aren't dangerous - it's exhausting to live in that state of hypervigilance. What tends to trigger your anxiety most?",
+                    "The 'what if' thoughts can spiral so quickly with anxiety, creating entire catastrophic scenarios that feel completely real and urgent. It's like your brain's alarm system is so sensitive that it goes off for everything - real dangers and imagined ones alike. What's your anxiety telling you right now, and how much do you believe it versus knowing it's the anxiety talking?",
+                    "Anxiety can make you feel like you're constantly bracing for impact, even when there's nothing coming at you. The physical symptoms - tight chest, racing thoughts, that sick feeling in your stomach - can be just as exhausting as the mental part. Have you found anything that helps you feel more grounded when the anxiety gets overwhelming?",
+                    "Living with anxiety often means your mind is always three steps ahead, imagining everything that could go wrong. It takes so much energy to fight your own nervous system all day. The irony is that anxiety developed to protect you, but now it might be protecting you from things that aren't actually threats. How are you feeling in your body right now?"
                 ],
 
-                // Loneliness responses
-                loneliness: [
-                    "I hear you. Feeling lonely can be really heavy—it's more than just 'being alone,' it's that sense of missing connection or understanding. That ache of wanting someone to truly see you can feel overwhelming sometimes. Would it help to talk about what's making the loneliness feel particularly intense right now, or would you prefer to explore some gentle ways to ease that feeling?",
-                    "Loneliness has this way of making us feel invisible, doesn't it? Like you could be surrounded by people and still feel completely unseen. It's one of those emotions that can make everything else feel more difficult too. I'm here with you in this moment, and you're not bothering anyone by sharing this. What does your loneliness feel like right now—is it missing specific people, or more of a general feeling of disconnection?"
-                ],
-
-                // Additional mental health conditions
+                // ADHD - Multiple perspectives
                 adhd: [
-                    "ADHD can feel like living in a world designed for a completely different type of brain. The executive dysfunction, time blindness, rejection sensitivity, and the way your brain either hyperfocuses on the 'wrong' things or can't focus at all - it's not about being lazy or not trying hard enough. What aspect of ADHD is making life feel particularly challenging today?"
+                    "ADHD can feel like living in a world designed for a completely different type of brain. The executive dysfunction, time blindness, rejection sensitivity - and the way your brain either hyperfocuses on the 'wrong' things or can't focus at all. It's not about being lazy or not trying hard enough; your brain just processes information and motivation differently. What aspect of ADHD is making life feel particularly challenging today?",
+                    "The ADHD struggle with consistency is so real - your brain craves stimulation and novelty, but the world demands routine and structure. The way criticism can feel devastating due to rejection sensitivity, and how impulsivity can lead to decisions you later regret, can create such a cycle of shame. Are you feeling frustrated with the challenges right now, or have you been celebrating any of the unique strengths ADHD brings?",
+                    "Having ADHD often means feeling like you're constantly swimming upstream while others are walking on land. The way tasks that seem simple to others can feel overwhelming, how your brain can solve complex problems but forget to eat lunch - it's a real neurological difference, not a personal failing. What strategies have you found that work with your brain instead of against it?",
+                    "ADHD can significantly impact relationships and work because the symptoms - like interrupting, forgetting commitments, being late, or struggling with organization - can be misinterpreted as not caring. The rejection sensitivity makes any criticism feel devastating. How has ADHD been affecting your relationships and work life lately?"
                 ],
 
+                // AUTISM - Understanding responses
                 autism: [
-                    "Being autistic in a neurotypical world can be incredibly exhausting - constantly masking, trying to interpret social cues that don't come naturally, dealing with sensory overwhelm, and having your natural communication style misunderstood. It takes enormous energy to navigate a world that wasn't designed for your neurotype. What's been most challenging about being autistic lately?"
+                    "Being autistic in a neurotypical world can be incredibly exhausting - constantly masking, trying to interpret social cues that don't come naturally, dealing with sensory overwhelm. It takes enormous energy to navigate a world that wasn't designed for your neurotype. What's been most challenging about being autistic lately?",
+                    "Autism brings both incredible strengths and significant challenges. The deep focus and expertise in special interests, attention to detail, and authentic way of being are beautiful aspects of autism. But the social exhaustion, sensory issues, and need for routine in an unpredictable world can be overwhelming. How are you taking care of your sensory and social needs right now?",
+                    "The autistic experience of feeling like you're constantly translating between your natural way of being and what the neurotypical world expects can be so tiring. Stimming, special interests, and need for routine aren't problems to be fixed - they're part of how your brain works best. Are you in environments where you can be authentically yourself?",
+                    "Autism can affect social relationships because neurotypical social rules often don't make intuitive sense, and the energy required for masking can be exhausting. The sensory overwhelm and need for routine can also impact work and daily life in ways others might not understand. How has being autistic been affecting your daily functioning and relationships?"
                 ],
 
+                // PTSD/TRAUMA
                 ptsd: [
-                    "PTSD can make you feel like you're stuck in a nightmare that your brain won't let you wake up from. The flashbacks, nightmares, hypervigilance, and emotional numbing are your nervous system's way of trying to protect you from perceived threats, even when you're safe. What's been most difficult about living with these trauma responses?"
+                    "PTSD can make you feel like you're stuck in a nightmare that your brain won't let you wake up from. The flashbacks, nightmares, hypervigilance, and emotional numbing are your nervous system's way of trying to protect you from perceived threats, even when you're safe. What's been most difficult about living with these trauma responses?",
+                    "Trauma can rewire your brain and make the world feel perpetually unsafe, even in situations that logically you know are fine. The way PTSD affects sleep, relationships, and daily functioning shows how deeply trauma impacts every aspect of life. Are you currently getting any trauma-specific treatment like EMDR or trauma-focused therapy?",
+                    "Living with PTSD often means feeling like you're constantly on guard, scanning for danger that may not even be there. The exhaustion from hypervigilance, coupled with intrusive thoughts and avoidance behaviors, can make you feel trapped in your own mind. What triggers tend to be most challenging for you right now?",
+                    "PTSD can make relationships feel dangerous because trauma often involves betrayal of trust. The hypervigilance, emotional numbing, and triggers can make it hard to connect with others, even when you desperately want to. How has PTSD been affecting your ability to trust and connect with others?"
                 ],
 
-                // Follow-up responses
-                general_followup: [
-                    "I can see you're looking for more specific guidance about what to do next. Sometimes when we're struggling, the path forward isn't clear. What feels most urgent or pressing for you right now - is it getting through today, figuring out a specific problem, or finding someone to talk to?",
-                    "It sounds like you need some concrete next steps. When everything feels overwhelming, sometimes the most helpful thing is to focus on just the next small action. What's one thing you could do in the next hour that might help you feel even slightly better?"
+                // LONELINESS - Enhanced understanding
+                loneliness: [
+                    "Loneliness can feel so much heavier than just 'being alone' - it's that deep ache of missing connection, understanding, or feeling truly seen by someone. That sense of being invisible even when surrounded by people can be incredibly isolating. What's making the loneliness feel particularly intense right now?",
+                    "There's something uniquely painful about loneliness - it can make you feel like you're the only person in the world experiencing life this way. The longing for someone who truly gets you, who you can be completely authentic with, is such a fundamental human need. What kind of connection are you missing most?",
+                    "Loneliness has this way of making everything else feel more difficult - like you're carrying this invisible weight that no one else can see or understand. It's not about being needy or dramatic; it's about a basic human need for connection that isn't being met right now. How long have you been feeling this way?",
+                    "The ache of loneliness can feel endless sometimes - like you're reaching out into the void and no one is reaching back. But you reaching out here, sharing this with me, shows incredible courage even when you're struggling. What would meaningful connection look like for you right now?"
                 ],
 
-                // Greeting responses
-                greeting: [
-                    "Hello! I'm really glad you're here. This feels like a safe space where you can share whatever is truly on your mind—the heavy stuff, the confusing stuff, or even just the everyday struggles that feel bigger than they should. How are you really doing today?",
-                    "Hi there! Thank you for reaching out. Sometimes it takes courage just to start a conversation, especially when you're not sure what you need or how to put your feelings into words. What's been on your heart or mind lately?"
+                // OVERWHELM/BURNOUT
+                overwhelmed: [
+                    "Feeling overwhelmed is like having too many browser tabs open in your mind - everything is running at once and it's slowing down your whole system. When everything feels urgent and important, it can be paralyzing because you don't know where to start. What's contributing most to feeling overwhelmed right now?",
+                    "That overwhelmed feeling can be suffocating - like the walls are closing in and there's not enough air. When your capacity is maxed out, even small things can feel like the last straw. It's not about being weak; sometimes life just throws more at us than anyone should handle alone. What would it look like to give yourself permission to not handle everything perfectly?",
+                    "Being overwhelmed often means you're carrying too much, caring too much, or trying to control too much - and all of those come from good places in your heart, even if they're exhausting you. The feeling of being scattered in a million directions while also feeling stuck is particularly tough. What's one small thing you could let go of, even temporarily?",
+                    "Burnout can make you feel like you're running on empty while still being expected to perform at full capacity. The emotional exhaustion, cynicism, and feeling like nothing you do makes a difference can be soul-crushing. What area of your life is causing the most overwhelm right now?"
                 ],
 
-                // General responses
-                general: [
-                    "Thank you for sharing that with me. I can sense there's something on your mind, and I want you to know that whatever you're experiencing is completely valid. You don't have to have the perfect words or even understand your emotions fully. What's been weighing on you lately?",
-                    "I really appreciate you opening up here. It takes vulnerability to reach out, especially when you might not even be sure what kind of support you need. You don't have to carry everything alone. What would feel most supportive for you right now?",
-                    "I'm here to listen to whatever you're going through. This is a safe space where your feelings matter and are valid. Sometimes just putting our thoughts into words can provide a little relief. What's on your mind that you haven't had space to process elsewhere?",
-                    "I hear you reaching out, and that takes strength even when you might not feel strong right now. Whatever brought you here to share with me is important. Would you like to tell me more about what's happening for you today?"
-                ]
-            };
-
-            const lowerMessage = userMessage.toLowerCase();
-            let responseCategory = 'general';
-            
-            // Detection logic
-            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('want to die')) {
-                responseCategory = 'suicidal';
-            }
-            else if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline')) {
-                responseCategory = 'bpd';
-            }
-            else if (lowerMessage.includes('bipolar') || lowerMessage.includes('manic') || lowerMessage.includes('hypomania')) {
-                responseCategory = 'bipolar';
-            }
-            else if (lowerMessage.includes('ptsd') || lowerMessage.includes('trauma') || lowerMessage.includes('flashback')) {
-                responseCategory = 'ptsd';
-            }
-            else if (lowerMessage.includes('adhd') || lowerMessage.includes('add') || lowerMessage.includes('attention deficit')) {
-                responseCategory = 'adhd';
-            }
-            else if (lowerMessage.includes('autism') || lowerMessage.includes('autistic') || lowerMessage.includes('neurodivergent')) {
-                responseCategory = 'autism';
-            }
-            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone')) {
-                responseCategory = 'loneliness';
-            }
-            else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad')) {
-                responseCategory = 'depression';
-            }
-            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('worried')) {
-                responseCategory = 'anxiety';
-            }
-            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-                responseCategory = 'greeting';
-            }
-            else if (recentMessages.length > 0 && (lowerMessage.includes('what should') || lowerMessage.includes('what do'))) {
-                responseCategory = 'general_followup';
-            }
-            
-            // Get response from category, avoiding repetition
-            const categoryResponses = responses[responseCategory] || responses['general'];
-            const usedCategoryResponses = usedResponses[responseCategory] || [];
-            
-            // Find unused responses
-            const unusedResponses = categoryResponses.filter(response => 
-                !usedCategoryResponses.includes(response)
-            );
-            
-            let selectedResponse;
-            if (unusedResponses.length > 0) {
-                selectedResponse = unusedResponses[Math.floor(Math.random() * unusedResponses.length)];
-            } else {
-                usedResponses[responseCategory] = [];
-                selectedResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
-            }
-            
-            // Track this response as used
-            if (!usedResponses[responseCategory]) {
-                usedResponses[responseCategory] = [];
-            }
-            usedResponses[responseCategory].push(selectedResponse);
-            
-            return { choices: [{ message: { content: selectedResponse } }] };
-        }
-
-        // ChatGPT API call function  
-        async function callChatGPT(messages) {
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-4",
-                        messages: messages,
-                        temperature: 0.75,
-                        top_p: 0.9,
-                        max_tokens: 800,
-                        frequency_penalty: 0.3,
-                        presence_penalty: 0.1,
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('OpenAI API Error:', error);
-                // Fall back to intelligent response system
-                const lastUserMessage = messages[messages.length - 1].content;
-                return generateIntelligentResponse(lastUserMessage, messages);
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const sendButton = document.getElementById('sendButton');
-            const message = input.value.trim();
-            
-            if (message === '') return;
-            
-            // Disable send button and input
-            sendButton.disabled = true;
-            input.disabled = true;
-            
-            // Add user message to chat
-            addMessage(message, 'user');
-            input.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            try {
-                // Add user message to conversation history
-                conversationHistory.push({
-                    role: 'user',
-                    content: message
-                });
-
-                // Call ChatGPT API with intelligent fallback
-                const data = await callChatGPT(conversationHistory);
-                const aiResponse = data.choices[0].message.content.trim();
-                
-                // Add AI response to conversation history
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: aiResponse
-                });
-
-                // Keep conversation history manageable
-                if (conversationHistory.length > 21) {
-                    conversationHistory = [
-                        conversationHistory[0], // Keep system prompt
-                        ...conversationHistory.slice(-20) // Keep last 20 messages
-                    ];
-                }
-
-                hideTypingIndicator();
-                addMessage(aiResponse, 'ai');
-
-            } catch (error) {
-                hideTypingIndicator();
-                console.error('Error:', error);
-                
-                // Fallback to intelligent response
-                const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
-                addMessage(fallbackResponse.choices[0].message.content, 'ai');
-            } finally {
-                // Re-enable send button and input
-                sendButton.disabled = false;
-                input.disabled = false;
-                input.focus();
-            }
-        }
-
-        function sendQuickMessage(message) {
-            document.getElementById('messageInput').value = message;
-            sendMessage();
-        }
-
-        function addMessage(content, sender) {
-            const chatArea = document.getElementById('chatArea');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message`;
-            messageDiv.textContent = content;
-            
-            // Remove welcome section after first user message
-            if (sender === 'user') {
-                const welcomeSection = document.querySelector('.welcome-section');
-                if (welcomeSection) {
-                    welcomeSection.remove();
-                }
-            }
-            
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'flex';
-            const chatArea = document.getElementById('chatArea');
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'none';
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('messageInput').focus();
-        });
-    </script>
-</body>
-</html>
+                // MOTIVATION - When someone needs encouragement
+                motivation: [
+                    "Sometimes motivation feels like this elusive thing that everyone else seems to have figured out, but you're sitting there waiting for it to show up. The truth is, motivation often comes after action, not before - even tiny steps can create momentum. What's one small thing you could do today that would feel like moving forward?",
+                    "When motivation is low, it can feel like you're stuck in quicksan
