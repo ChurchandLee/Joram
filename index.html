@@ -185,36 +185,23 @@
             transform: none;
         }
 
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 18px;
-            margin-top: 10px;
-            border-left: 4px solid #4CAF50;
-        }
+      .typing-indicator {
+    display: none;
+    align-self: flex-start;
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 18px;
+    margin-top: 10px;
+    border-left: 4px solid #4CAF50;
+}
 
-        .typing-dots {
-            display: flex;
-            gap: 5px;
-        }
-
-        .typing-dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4CAF50;
-            animation: typing 1.4s infinite;
-        }
-
-        .typing-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .typing-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+.thinking-heart {
+    font-size: 24px;
+    animation: heartPulse 1.5s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
         .welcome-section {
             text-align: center;
@@ -287,15 +274,17 @@
                 transform: translateY(0);
             }
         }
-
-        @keyframes typing {
-            0%, 60%, 100% {
-                transform: translateY(0);
-            }
-            30% {
-                transform: translateY(-10px);
-            }
-        }
+@keyframes heartPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+}
+       
 
         /* Responsive design */
         @media (max-width: 600px) {
