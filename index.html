@@ -98,32 +98,31 @@
             white-space: pre-wrap;
         }
 
-     .ai-message {
-    background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
-    color: #274e13;
-    align-self: flex-start;
-    border-left: 4px solid #4CAF50;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 15px 20px;
-}
+        .ai-message {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+            color: #274e13;
+            align-self: flex-start;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px 20px;
+        }
 
-.ai-message-content {
-    flex: 1;
-    line-height: 1.6;
-}
+        .ai-message-content {
+            flex: 1;
+            line-height: 1.6;
+        }
 
-.ai-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 2px solid rgba(76, 175, 80, 0.3);
-    object-fit: cover;
-    object-position: center;
-    flex-shrink: 0;
-}
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            object-fit: cover;
+            object-position: center;
+            flex-shrink: 0;
         }
 
         .user-message {
@@ -141,26 +140,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-   .typing-indicator {
-    display: none;
-    align-self: flex-start;
-    background: #f8f9fa;
-    padding: 15px 20px;
-    border-radius: 18px;
-    margin-top: 10px;
-    border-left: 4px solid #4CAF50;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-}
-
-.thinking-heart {
-    font-size: 24px;
-    animation: heartPulse 1.5s ease-in-out infinite;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .thinking-heart {
+            font-size: 24px;
+            animation: heartPulse 1.5s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
         .welcome-section {
             text-align: center;
@@ -318,11 +304,6 @@
                     <strong>Important:</strong> This is an AI tool for support and guidance. In case of CRISIS or EMERGENCY, please contact professional help IMMEDIATELY. UK: 999 USA: 911 (or your national Emergency phone number)
                 </div>
             </div>
-
- <div class="typing-indicator" id="typingIndicator">
-    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-    <div class="thinking-heart">💚</div>
-</div>
         </div>
 
         <!-- Input Area - MOVED TO BOTTOM -->
@@ -559,47 +540,60 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                 input.focus();
             }
         }
-function addMessage(content, sender) {
-    const chatArea = document.getElementById('chatArea');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    if (sender === 'ai') {
-        // Create AI message with avatar
-        messageDiv.innerHTML = `
-            <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-            <div class="ai-message-content">${content}</div>
-        `;
-    } else {
-        // Regular user message
-        messageDiv.textContent = content;
-    }
-    
-    // Remove welcome section after first user message
-    if (sender === 'user') {
-        const welcomeSection = document.querySelector('.welcome-section');
-        if (welcomeSection) {
-            welcomeSection.remove();
-        }
-    }
-    
-    chatArea.appendChild(messageDiv);
-    chatArea.scrollTop = chatArea.scrollHeight;
-       
+
+        function addMessage(content, sender) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            if (sender === 'ai') {
+                // Create AI message with avatar
+                messageDiv.innerHTML = `
+                    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+                    <div class="ai-message-content">${content}</div>
+                `;
+            } else {
+                // Regular user message
+                messageDiv.textContent = content;
+            }
+            
+            // Remove welcome section after first user message
+            if (sender === 'user') {
+                const welcomeSection = document.querySelector('.welcome-section');
+                if (welcomeSection) {
+                    welcomeSection.remove();
+                }
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
 
+        function showTypingIndicator() {
+            // Remove any existing typing indicator first
+            hideTypingIndicator();
+            
+            // Create a new typing indicator
+            const chatArea = document.getElementById('chatArea');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message';
+            typingDiv.id = 'currentTypingIndicator';
+            typingDiv.innerHTML = `
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+                <div class="thinking-heart">💚</div>
+            `;
+            
+            chatArea.appendChild(typingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
-function showTypingIndicator() {
-    const indicator = document.getElementById('typingIndicator');
-    indicator.style.display = 'flex'; // Make sure it's 'flex' not 'block'
-    const chatArea = document.getElementById('chatArea');
-    chatArea.scrollTop = chatArea.scrollHeight;
-}
 
-function hideTypingIndicator() {
-    const indicator = document.getElementById('typingIndicator');
-    indicator.style.display = 'none';
-}
+        function hideTypingIndicator() {
+            const existingIndicator = document.getElementById('currentTypingIndicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+        }
+
         function handleKeyPress(event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
