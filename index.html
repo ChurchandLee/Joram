@@ -225,33 +225,6 @@
             margin-bottom: 15px;
         }
 
-        
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 20px 0;
-            justify-content: center;
-        }
-
-        .quick-action {
-            padding: 10px 16px;
-            background: rgba(76, 175, 80, 0.1);
-            border: 2px solid rgba(76, 175, 80, 0.3);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #8eaf78;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .quick-action:hover {
-            background: rgba(76, 175, 80, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
-        }
-
         .disclaimer {
             background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
             border: 2px solid #f39c12;
@@ -341,17 +314,10 @@
                 
                 <!-- Important Disclaimer -->
                 <div class="disclaimer">
-                    <strong>Important:</strong> This is an AI tool for support and guidance. In case of crisis or emergency, please contact professional help immediately.
+                    <strong>Important:</strong> This is an AI tool for support and guidance. In case of CRISIS or EMERGENCY, please contact professional help IMMEDIATELY. UK: 999 USA: 911 (or your national Emergency phone number)
                 </div>
 
-            
-                <!-- Quick Action Buttons -->
-                <div class="quick-actions">
-                    <div class="quick-action" onclick="sendQuickMessage('I\'m feeling anxious')">I'm feeling anxious</div>
-                    <div class="quick-action" onclick="sendQuickMessage('Need motivation')">Need motivation</div>
-                    <div class="quick-action" onclick="sendQuickMessage('Sleep troubles')">Sleep troubles</div>
-                    <div class="quick-action" onclick="sendQuickMessage('Feeling overwhelmed')">Feeling overwhelmed</div>
-                </div>
+        
             </div>
 
 
@@ -694,11 +660,6 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                 input.disabled = false;
                 input.focus();
             }
-        }
-
-        function sendQuickMessage(message) {
-            document.getElementById('messageInput').value = message;
-            sendMessage();
         }
 
         function addMessage(content, sender) {
