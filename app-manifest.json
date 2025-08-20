@@ -2,7 +2,7 @@
     "name": "HeartoListen - AI Mental Health Support",
     "short_name": "HeartoListen",
     "description": "Free AI-powered mental health support chat. A safe, judgement-free space for mental wellness.",
-    "start_url": "/",
+    "start_url": "https://churchandlee.github.io/ubiquitous-guacamole/",
     "display": "standalone",
     "background_color": "#8eaf78",
     "theme_color": "#8eaf78",
