@@ -317,7 +317,15 @@
                     <strong>Important:</strong> This is an AI tool for support and guidance. In case of CRISIS or EMERGENCY, please contact professional help IMMEDIATELY. UK: 999 USA: 911 (or your national Emergency phone number)
                 </div>
 
-        
+    <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" 
+                   id="messageInput" 
+                   class="input-field" 
+                   placeholder="Share what's on your mind..." 
+                   onkeypress="handleKeyPress(event)">
+            <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
+        </div>      
             </div>
 
 
@@ -328,15 +336,6 @@
             </div>
         </div>
 
-        <!-- Input Area -->
-        <div class="input-area">
-            <input type="text" 
-                   id="messageInput" 
-                   class="input-field" 
-                   placeholder="Share what's on your mind..." 
-                   onkeypress="handleKeyPress(event)">
-            <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
-        </div>
     </div>
 
     <script>
