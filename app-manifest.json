@@ -9,13 +9,13 @@
     "orientation": "portrait",
     "icons": [
         {
-            "src": "https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png",
+            "src": "https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable any"
         },
         {
-            "src": "https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png",
+            "src": "https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable any"
