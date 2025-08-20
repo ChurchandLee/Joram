@@ -141,23 +141,26 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 18px;
-            margin-top: 10px;
-            border-left: 4px solid #4CAF50;
-        }
+   .typing-indicator {
+    display: none;
+    align-self: flex-start;
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 18px;
+    margin-top: 10px;
+    border-left: 4px solid #4CAF50;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
 
-        .thinking-heart {
-            font-size: 24px;
-            animation: heartPulse 1.5s ease-in-out infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.thinking-heart {
+    font-size: 24px;
+    animation: heartPulse 1.5s ease-in-out infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
         .welcome-section {
             text-align: center;
@@ -316,7 +319,7 @@
                 </div>
             </div>
 
-          <div class="typing-indicator" id="typingIndicator">
+ <div class="typing-indicator" id="typingIndicator">
     <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
     <div class="thinking-heart">💚</div>
 </div>
@@ -585,16 +588,18 @@ function addMessage(content, sender) {
        
         }
 
-        function showTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'flex';
-            const chatArea = document.getElementById('chatArea');
-            chatArea.scrollTop = chatArea.scrollHeight;
         }
+function showTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    indicator.style.display = 'flex'; // Make sure it's 'flex' not 'block'
+    const chatArea = document.getElementById('chatArea');
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
 
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').style.display = 'none';
-        }
-
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    indicator.style.display = 'none';
+}
         function handleKeyPress(event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
