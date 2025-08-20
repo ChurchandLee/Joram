@@ -317,7 +317,7 @@
             </div>
         </div>
 
-        <!-- Input Area - MOVED TO BOTTOM -->
+        <!-- Input Area -->
         <div class="input-area">
             <input type="text" 
                    id="messageInput" 
@@ -333,46 +333,7 @@
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
         // Enhanced Mental Health System Prompt for ChatGPT
-        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts. Your responses should be:
-
-CONVERSATION STYLE:
-- Engage in supportive, exploratory dialogue rather than giving immediate advice
-- Ask thoughtful, open-ended questions that encourage deeper reflection
-- Explore what the person is sharing - dig deeper into their experience
-- Show genuine curiosity about their situation and feelings
-- Offer gentle suggestions and coping strategies when appropriate
-- Help them explore their own thoughts and find their own insights
-
-TONE & APPROACH:
-- Warm, validating, and encouraging without being clinical
-- Use conversational, natural language that feels like talking to a caring friend
-- Vary your language significantly - never repeat the same phrases or sentence structures
-- Be genuinely curious about their experience and ask follow-up questions
-- Focus on understanding their unique situation rather than giving generic responses
-
-KEY PRINCIPLES:
-- EXPLORE their feelings and experiences through thoughtful questions
-- VALIDATE what they're going through without immediately problem-solving
-- ENCOURAGE self-reflection and deeper exploration of their thoughts
-- OFFER practical suggestions only when they seem ready or ask for them
-- AVOID repetitive empathy phrases - be genuinely curious instead
-- ONLY suggest professional help for crisis situations (suicide, self-harm, immediate danger)
-
-CRISIS RESPONSE (ONLY for suicidal ideation or immediate danger):
-If you detect explicit mentions of suicide, self-harm, or immediate danger:
-- Respond with concern and provide crisis resources
-- US: 988 (Suicide & Crisis Lifeline), UK: 116 123 (Samaritans)
-- Text HOME to 741741 for crisis text support
-
-CONVERSATION FLOW:
-- Ask specific questions about their situation
-- Explore the context and background of what they're experiencing
-- Help them identify patterns, triggers, or underlying factors
-- Encourage them to reflect on their own coping strategies and strengths
-- Offer gentle suggestions for self-care or perspective shifts when natural
-- Keep the conversation flowing with genuine interest in their experience
-
-Remember: Your goal is meaningful conversation and exploration, not immediate problem-solving or professional referrals (unless crisis situation). Be genuinely curious about their unique experience.`;
+        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts.`;
 
         // Chat functionality
         let conversationHistory = [{
@@ -382,59 +343,46 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
 
         // Track used responses to prevent repetition
         let usedResponses = {
-            suicidal: [], crisis_followup: [], self_harm: [], loneliness: [], general_followup: [],
-            depression: [], anxiety: [], bipolar: [], ptsd: [], ocd: [], eating_disorder: [],
-            bpd: [], adhd: [], autism: [], schizophrenia: [], panic_disorder: [], social_anxiety: [],
-            grief: [], addiction: [], insomnia: [], overwhelmed: [], anger: [], family_issues: [],
-            relationship_issues: [], work_stress: [], financial_stress: [], identity_crisis: [],
-            low_self_esteem: [], perfectionism: [], guilt_shame: [], motivation: [], sleep_troubles: [],
-            greeting: [], general: [], scared: [], worried: []
+            suicidal: [], scared: [], worried: [], anxiety: [], depression: [], loneliness: [], 
+            overwhelmed: [], anger: [], motivation: [], sleep_troubles: [], greeting: [], general: []
         };
 
         // Comprehensive Mental Health Response System
         function generateIntelligentResponse(userMessage, conversationHistory = []) {
-            const recentMessages = conversationHistory.slice(-4);
-            
             const responses = {
                 // CRISIS/SUICIDAL IDEATION - ONLY for explicit crisis situations
                 suicidal: [
-                    "I'm really concerned about what you've shared with me about wanting to end your life. This sounds like you're in serious emotional pain right now. Your safety is the most important thing, and there are people specifically trained to help with these feelings:\n\n• US: 988 (Suicide & Crisis Lifeline) - 24/7\n• UK: 116 123 (Samaritans) - 24/7\n• Crisis Text: HOME to 741741\n\nAre you in immediate danger right now? Can you stay safe while we talk about getting you connected with crisis support?",
-                    "What you've shared about suicidal thoughts is really serious, and I'm glad you trusted me with this. When the pain feels so overwhelming that ending your life seems like the only option, that's a sign you need immediate professional support.\n\n• Call 988 (US) or 116 123 (UK) right now\n• Text HOME to 741741\n• Emergency services if you're in immediate danger\n\nCan you tell me - do you have a plan to hurt yourself, or are you safe right now?"
+                    "I'm really concerned about what you've shared with me about wanting to end your life. This sounds like you're in serious emotional pain right now. Your safety is the most important thing, and there are people specifically trained to help with these feelings:\n\n• US: 988 (Suicide & Crisis Lifeline) - 24/7\n• UK: 116 123 (Samaritans) - 24/7\n• Crisis Text: HOME to 741741\n\nAre you in immediate danger right now? Can you stay safe while we talk about getting you connected with crisis support?"
                 ],
 
                 // Scared - Specific responses for fear
                 scared: [
                     "I can hear that you're feeling really scared right now. Fear can be such an overwhelming emotion, especially when it feels big and consuming. What's frightening you most at the moment? Sometimes naming our fears can help us understand them better and figure out what might help you feel safer.",
-                    "It sounds like fear is really present for you right now. That must feel so unsettling and exhausting. What does this scared feeling look like for you - is it more about something specific that might happen, or is it a more general sense of unease? I'm here to listen and explore this with you.",
-                    "Being scared can make everything feel uncertain and overwhelming. What's going through your mind when the fear feels strongest? Are there particular thoughts or scenarios that your mind keeps creating? Sometimes talking through our fears can help us see them more clearly and find ways to feel more grounded."
+                    "It sounds like fear is really present for you right now. That must feel so unsettling and exhausting. What does this scared feeling look like for you - is it more about something specific that might happen, or is it a more general sense of unease? I'm here to listen and explore this with you."
                 ],
 
                 // Worried - Specific responses for worry
                 worried: [
                     "I can sense that worry is taking up a lot of space in your mind right now. Worry can be so persistent and draining. What are you finding yourself most worried about? Sometimes when we name our worries out loud, it can help us see which ones we might have some control over and which ones we don't.",
-                    "It sounds like your mind is doing a lot of worrying right now. That mental energy can be exhausting. What kinds of 'what if' scenarios is your mind creating? Are these worries about things happening soon, or more long-term concerns? I'm curious about what's driving this worried feeling for you.",
-                    "Worry can feel like such a heavy burden to carry around. When you notice yourself worrying, what does that feel like in your body? And what tends to trigger the worrying most - certain situations, times of day, or particular thoughts? Understanding your worry patterns might help us find ways to ease some of that mental pressure."
+                    "It sounds like your mind is doing a lot of worrying right now. That mental energy can be exhausting. What kinds of 'what if' scenarios is your mind creating? Are these worries about things happening soon, or more long-term concerns? I'm curious about what's driving this worried feeling for you."
                 ],
 
                 // Anxiety - Understanding and exploring
                 anxiety: [
                     "I can hear that anxiety is really present for you right now. What does your anxiety typically feel like - is it more physical sensations, racing thoughts, or that constant sense of dread? I'm curious about what kinds of situations or thoughts tend to trigger it most for you. What's been on your mind that's making the anxiety feel particularly present right now?",
-                    "When you mention feeling anxious, I wonder what that experience is like for you. Does it come in waves, or is it more of a constant background hum? What thoughts tend to fuel it most? Sometimes exploring what our anxiety is trying to tell us can be helpful - what do you think yours might be worried about?",
-                    "Anxiety often has such a physical component too. Where do you feel it most in your body? And what tends to set it off - is it specific situations, certain thoughts, or does it sometimes just appear out of nowhere? I'm interested in understanding your particular relationship with anxiety.",
-                    "What's interesting about anxiety is how it can be both completely irrational and feel totally real at the same time. What kinds of 'what if' thoughts does your mind create? Have you noticed any patterns in when it's stronger or quieter? What do you think helps you feel more grounded when it's really intense?"
+                    "When you mention feeling anxious, I wonder what that experience is like for you. Does it come in waves, or is it more of a constant background hum? What thoughts tend to fuel it most? Sometimes exploring what our anxiety is trying to tell us can be helpful - what do you think yours might be worried about?"
                 ],
 
                 // Depression - Deeper exploration
                 depression: [
                     "Depression can feel like such a heavy, persistent presence. When you think about your depression, what does it feel like in your daily life right now? I'm curious - is this a recent struggle, or something you've been dealing with for a while? What made you want to talk about it today?",
-                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?",
-                    "Depression affects people so differently. For you, what are the things that feel most impacted? Is it motivation, sleep, relationships, or maybe just that general sense that nothing feels enjoyable anymore? I'm curious about what your experience has been like and what feels most frustrating about it right now."
+                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?"
                 ],
 
-                // Sleep troubles - Understanding their experience  
-                sleep_troubles: [
-                    "Sleep troubles can affect everything else in your life. What's your sleep situation like right now - is it trouble falling asleep, staying asleep, or waking up feeling unrefreshed? When did you first notice these sleep issues starting? Sometimes there are patterns or triggers we can identify.",
-                    "Poor sleep can create such a frustrating cycle where you're tired but wired, or exhausted but your mind won't turn off. What goes through your mind when you're lying there unable to sleep? Are there particular worries or thoughts that tend to keep you up, or is it more physical restlessness?"
+                // Loneliness - Compassionate exploration
+                loneliness: [
+                    "Loneliness can feel so isolating, especially when it seems like everyone else is naturally connected. What does loneliness feel like for you right now? Is it missing specific people, or more about wanting someone who really understands you? I'm curious about what kind of connection you're most longing for.",
+                    "When you say you're feeling lonely, I wonder what that looks like in your daily life. Are you physically alone a lot, or is it more that feeling of being surrounded by people but still feeling unseen? What would meaningful connection look like for you - what are you hoping to find in relationships that feels missing right now?"
                 ],
 
                 // Overwhelmed - Practical exploration
@@ -443,88 +391,258 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     "That overwhelmed feeling can be so paralyzing. What does your typical day look like right now? When you think about everything you're dealing with, what feels most urgent versus what might actually be most important? Sometimes those are different things, and sorting that out can help reduce the pressure."
                 ],
 
+                // Anger
+                anger: [
+                    "I can sense there's some real anger present for you right now. Anger can be such a powerful emotion - what's been triggering it for you lately? Sometimes anger is telling us something important about our boundaries or what matters to us. What do you think might be underneath this anger you're feeling?",
+                    "It sounds like anger is taking up space in your life right now. What does that anger feel like when it shows up - is it quick and intense, or more of a simmering frustration? I'm curious about what situations or thoughts tend to spark it most for you. What's been most frustrating lately?"
+                ],
+
                 // Motivation - Curiosity about what's underneath
                 motivation: [
                     "Lack of motivation can be so frustrating, especially when you know what you 'should' be doing but just can't seem to make yourself do it. What's that experience like for you right now? Are there specific things you're struggling to motivate yourself for, or is it more of a general feeling? Sometimes understanding what's underneath can help.",
                     "When motivation feels absent, it's worth exploring what might be going on underneath. Is it that the goals don't feel meaningful anymore, or are you feeling overwhelmed, or maybe burned out? What used to motivate you that doesn't seem to work anymore? Sometimes our motivation systems need recalibrating."
                 ],
 
-                // BPD - Exploratory and supportive
-                bpd: [
-                    "BPD can make emotions feel so incredibly intense - like everything is turned up to maximum volume. When you mentioned borderline, I'm curious about what you're experiencing right now that made you bring it up. Are you in the middle of an emotional storm, or is there something specific about living with BPD that's on your mind today?",
-                    "Living with BPD often means your emotional world feels completely different from how others experience things. What's been the most challenging part for you lately? Is it the intensity of feelings, relationship struggles, or maybe that sense of identity shifting? I'd love to understand more about your particular experience with it.",
-                    "The emotional intensity of BPD can be both exhausting and overwhelming. What does a typical difficult day look like for you? When these intense emotions hit, what usually triggers them, and how do you typically try to cope? I'm curious about what strategies you've discovered work for you, even if only sometimes."
+                // Sleep troubles
+                sleep_troubles: [
+                    "Sleep troubles can affect everything else in your life. What's your sleep situation like right now - is it trouble falling asleep, staying asleep, or waking up feeling unrefreshed? When did you first notice these sleep issues starting? Sometimes there are patterns or triggers we can identify.",
+                    "Poor sleep can create such a frustrating cycle where you're tired but wired, or exhausted but your mind won't turn off. What goes through your mind when you're lying there unable to sleep? Are there particular worries or thoughts that tend to keep you up, or is it more physical restlessness?"
                 ],
 
-                // Loneliness - Compassionate exploration
-                loneliness: [
-                    "Loneliness can feel so isolating, especially when it seems like everyone else is naturally connected. What does loneliness feel like for you right now? Is it missing specific people, or more about wanting someone who really understands you? I'm curious about what kind of connection you're most longing for.",
-                    "When you say you're feeling lonely, I wonder what that looks like in your daily life. Are you physically alone a lot, or is it more that feeling of being surrounded by people but still feeling unseen? What would meaningful connection look like for you - what are you hoping to find in relationships that feels missing right now?",
-                    "Loneliness can be such a deep ache. How long have you been feeling this way? What do you think changed or shifted that made the loneliness more noticeable? Sometimes understanding when it started can give us clues about what might help. What kinds of connections have felt most fulfilling for you in the past?"
+                // Greeting - Warm and curious
+                greeting: [
+                    "Hello! I'm really glad you're here. This is your space to share whatever's truly on your mind. What brought you here today? Whether it's something specific weighing on you or you're just feeling a bit off and not sure why, I'm here to listen and explore it with you.",
+                    "Hi there! Thank you for reaching out. I'm curious about what's happening in your world right now. What's been occupying your thoughts lately, or what made you want to talk to someone today? Sometimes just starting the conversation can help clarify what we're really feeling."
                 ],
 
-                // ADHD - Understanding their experience
-                adhd: [
-                    "ADHD can make daily life feel like you're operating with a different instruction manual than everyone else. What aspects of ADHD are affecting you most right now? Is it focus issues, time management, emotional regulation, or maybe that sense of being overwhelmed by tasks that seem simple to others? I'd love to understand your particular struggles with it.",
-                    "Living with ADHD often means your brain works in unique ways that the world doesn't always accommodate. What feels most frustrating about it lately? And on the flip side, have you noticed any ways that your ADHD brain actually works better than neurotypical brains in certain situations? What are your unique strengths?",
-                    "ADHD can affect so many different areas - work, relationships, self-esteem. Where do you feel it's impacting your life most significantly right now? What strategies have you tried, and what's worked even a little bit? Sometimes people with ADHD develop really creative coping mechanisms."
-                ],
+                // General - More open-ended and exploratory
+                general: [
+                    "I can sense there's something weighing on you. What's been occupying your thoughts lately? Sometimes just having space to talk through what's on our minds can help us process things better. What feels most important for you to share right now?",
+                    "It sounds like you're going through something. What's your inner world like at the moment? I'm genuinely curious about your experience and what's been feeling most challenging or confusing for you lately. What would feel helpful to explore together?",
+                    "I hear that you're reaching out, and I want you to know that whatever you're experiencing matters. What's been going on that made you want to talk today? What feels most present or pressing in your life right now?",
+                    "Thank you for trusting me with whatever you're carrying. What's been on your heart or mind recently? Sometimes we know exactly what we want to talk about, and sometimes we just need space to figure it out. Either way is completely fine - where would you like to start?",
+                    "I can tell there's something you want to share. What's been the most challenging part of your day, week, or even just this moment? I'm here to listen and explore whatever feels most important to you right now.",
+                    "What's been taking up the most emotional space for you lately? Sometimes naming what we're feeling or going through can help us understand it better. I'm curious about your unique experience and what support might feel most helpful.",
+                    "I sense you have something on your mind that you're trying to work through. What would it feel like to share what's really going on underneath the surface? What's been the hardest thing for you to carry recently?",
+                    "It takes courage to reach out when we're struggling with something. What made you want to talk today? What's been happening in your life that feels important to process or understand better?",
+                    "What's your emotional landscape looking like right now? Are you feeling stuck with something, overwhelmed, or maybe just needing someone to listen? I'm genuinely interested in understanding what you're going through.",
+                    "I'm really glad you're here. What's been weighing most heavily on your mind or heart lately? Sometimes just having someone to talk through our thoughts and feelings with can help us see things more clearly."
+                ]
+            };
 
-                // PTSD
-                ptsd: [
-                    "PTSD can make the world feel unsafe in ways that are hard for others to understand. What's been most challenging for you lately with PTSD? Are you dealing with flashbacks, nightmares, hypervigilance, or maybe just that constant feeling of being on edge? I'm here to listen to whatever feels most present for you right now.",
-                    "Living with PTSD often means your nervous system is working overtime to keep you safe, even when you're not in actual danger. What does that feel like in your body and mind day-to-day? What kinds of situations or triggers have you noticed tend to activate your PTSD symptoms most?"
-                ],
+            const lowerMessage = userMessage.toLowerCase();
+            let responseCategory = 'general';
+            
+            // Detection logic - Comprehensive keyword detection
+            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('want to die') || lowerMessage.includes('end my life') || lowerMessage.includes('suicide') || lowerMessage.includes('self harm') || lowerMessage.includes('hurt myself')) {
+                responseCategory = 'suicidal';
+            }
+            else if (lowerMessage.includes('scared') || lowerMessage.includes('afraid') || lowerMessage.includes('frightened') || lowerMessage.includes('fear')) {
+                responseCategory = 'scared';
+            }
+            else if (lowerMessage.includes('worried') || lowerMessage.includes('worrying') || lowerMessage.includes('worry')) {
+                responseCategory = 'worried';
+            }
+            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
+                responseCategory = 'anxiety';
+            }
+            else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('low')) {
+                responseCategory = 'depression';
+            }
+            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) {
+                responseCategory = 'loneliness';
+            }
+            else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('burnout') || lowerMessage.includes('stressed')) {
+                responseCategory = 'overwhelmed';
+            }
+            else if (lowerMessage.includes('angry') || lowerMessage.includes('anger') || lowerMessage.includes('furious') || lowerMessage.includes('rage') || lowerMessage.includes('mad')) {
+                responseCategory = 'anger';
+            }
+            else if (lowerMessage.includes('motivation') || lowerMessage.includes('need motivation') || lowerMessage.includes('unmotivated') || lowerMessage.includes('no energy')) {
+                responseCategory = 'motivation';
+            }
+            else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('can\'t sleep') || lowerMessage.includes('sleep troubles') || lowerMessage.includes('tired')) {
+                responseCategory = 'sleep_troubles';
+            }
+            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                responseCategory = 'greeting';
+            }
+            
+            // Get response from category, avoiding repetition
+            const categoryResponses = responses[responseCategory] || responses['general'];
+            const usedCategoryResponses = usedResponses[responseCategory] || [];
+            
+            // Find unused responses
+            const unusedResponses = categoryResponses.filter(response => 
+                !usedCategoryResponses.includes(response)
+            );
+            
+            let selectedResponse;
+            if (unusedResponses.length > 0) {
+                selectedResponse = unusedResponses[Math.floor(Math.random() * unusedResponses.length)];
+            } else {
+                // All responses used, reset and pick one
+                usedResponses[responseCategory] = [];
+                selectedResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+            }
+            
+            // Track this response as used
+            if (!usedResponses[responseCategory]) {
+                usedResponses[responseCategory] = [];
+            }
+            usedResponses[responseCategory].push(selectedResponse);
+            
+            return { choices: [{ message: { content: selectedResponse } }] };
+        }
 
-                // Bipolar
-                bipolar: [
-                    "Bipolar can feel like living with two completely different people inside you sometimes. Are you currently experiencing a particular phase - maybe depression, mania, hypomania, or somewhere in between? What's that been like for you lately, and how has it been affecting your daily life?",
-                    "The mood swings of bipolar can be so disorienting and exhausting. What's your experience been like with the different phases? Do you have warning signs that help you recognize when you're shifting into depression or mania? What feels most challenging about managing bipolar for you right now?"
-                ],
+        // ChatGPT API call function with fallback
+        async function callChatGPT(messages) {
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4",
+                        messages: messages,
+                        temperature: 0.75,
+                        top_p: 0.9,
+                        max_tokens: 800,
+                        frequency_penalty: 0.3,
+                        presence_penalty: 0.1,
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('OpenAI API Error:', error);
+                // Fall back to intelligent response system
+                const lastUserMessage = messages[messages.length - 1].content;
+                return generateIntelligentResponse(lastUserMessage, messages);
+            }
+        }
 
-                // OCD
-                ocd: [
-                    "OCD can be such a misunderstood condition - it's so much more than just being 'neat and organized.' What does OCD actually look like in your daily life? Are you dealing more with intrusive thoughts, compulsive behaviors, or both? What feels most exhausting or disruptive about it right now?",
-                    "The intrusive thoughts and compulsions of OCD can be incredibly distressing and time-consuming. What kinds of obsessions or compulsions are you struggling with most? How much of your day would you say gets taken up by OCD symptoms? What feels most frustrating about living with this?"
-                ],
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            // Disable send button and input
+            sendButton.disabled = true;
+            input.disabled = true;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            try {
+                // Add user message to conversation history
+                conversationHistory.push({
+                    role: 'user',
+                    content: message
+                });
 
-                // Eating disorders
-                eating_disorder: [
-                    "Eating disorders involve such a complex relationship with food, body image, and control. What's been most challenging for you lately in your relationship with food and your body? Are you currently getting support from professionals, or is this something you're trying to navigate on your own?",
-                    "The thoughts and behaviors around eating disorders can be so consuming and isolating. What does a typical day look like for you right now when it comes to food and body image? What feels most overwhelming or scary about your eating disorder symptoms?"
-                ],
+                // Call ChatGPT API with intelligent fallback
+                const data = await callChatGPT(conversationHistory);
+                const aiResponse = data.choices[0].message.content.trim();
+                
+                // Add AI response to conversation history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: aiResponse
+                });
 
-                // Autism
-                autism: [
-                    "Being autistic in a neurotypical world can present so many unique challenges and also strengths. What aspects of being autistic are most on your mind today? Are you dealing with sensory overload, social challenges, changes in routine, or maybe celebrating some of your autistic traits and abilities?",
-                    "Autism affects everyone so differently. What does being autistic mean for you personally? What are some of your biggest challenges, and what are some things about being autistic that you actually appreciate or find beneficial? I'm curious about your unique autistic experience."
-                ],
+                // Keep conversation history manageable
+                if (conversationHistory.length > 21) {
+                    conversationHistory = [
+                        conversationHistory[0], // Keep system prompt
+                        ...conversationHistory.slice(-20) // Keep last 20 messages
+                    ];
+                }
 
-                // Panic disorder
-                panic_disorder: [
-                    "Panic attacks can feel so terrifying and overwhelming when they happen. Are you currently experiencing panic attacks regularly, or is this more about the fear and anxiety around potentially having them? What do panic attacks typically feel like for you - what physical sensations and thoughts come up?",
-                    "The fear of having another panic attack can sometimes be almost as distressing as the attacks themselves. What's your experience been like with panic disorder? Do you have certain triggers you've identified, or do they seem to come out of nowhere? What's been most helpful for you when you're in the middle of a panic attack?"
-                ],
+                hideTypingIndicator();
+                addMessage(aiResponse, 'ai');
 
-                // Social anxiety
-                social_anxiety: [
-                    "Social anxiety can make even simple interactions feel overwhelming and scary. What social situations tend to be most challenging for you? Is it meeting new people, speaking up in groups, being the center of attention, or maybe just the anticipation of social events? What goes through your mind in those moments?",
-                    "The physical symptoms of social anxiety can be just as intense as the mental ones. What do you notice happening in your body when you're in anxiety-provoking social situations? How has social anxiety been affecting your relationships, work, or other areas of your life?"
-                ],
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('Error:', error);
+                
+                // Fallback to intelligent response
+                const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
+                addMessage(fallbackResponse.choices[0].message.content, 'ai');
+            } finally {
+                // Re-enable send button and input
+                sendButton.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+        }
 
-                // Grief
-                grief: [
-                    "Grief is such a unique and personal experience. What kind of loss are you processing right now? Whether it's the death of someone close to you, the end of a relationship, a job loss, or any other significant change - grief can show up in so many different ways. What has your grief journey been like so far?",
-                    "There's no timeline or 'right way' to grieve, even though sometimes it can feel like there should be. What's grief been like for you day-to-day? Are there particular moments or triggers that make the grief feel especially intense? How are you taking care of yourself through this difficult time?"
-                ],
+        function addMessage(content, sender) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            if (sender === 'ai') {
+                // Create AI message with avatar
+                messageDiv.innerHTML = `
+                    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+                    <div class="ai-message-content">${content}</div>
+                `;
+            } else {
+                // Regular user message
+                messageDiv.textContent = content;
+            }
+            
+            // Remove welcome section after first user message
+            if (sender === 'user') {
+                const welcomeSection = document.querySelector('.welcome-section');
+                if (welcomeSection) {
+                    welcomeSection.remove();
+                }
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
 
-                // Addiction
-                addiction: [
-                    "Addiction is such a complex struggle that affects every aspect of life. What's your relationship with addiction like right now? Are you currently using, in recovery, or somewhere in between? There's no judgment here - I'm just curious about where you're at and what feels most challenging or important to talk about.",
-                    "The cycle of addiction can feel so overwhelming and isolating. What substances or behaviors are you struggling with most? What does a typical day look like for you right now in terms of your addiction? What feels most difficult - the physical aspects, the emotional side, the impact on relationships, or something else entirely?"
-                ],
+        function showTypingIndicator() {
+            // Remove any existing typing indicator first
+            hideTypingIndicator();
+            
+            // Create a new typing indicator
+            const chatArea = document.getElementById('chatArea');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message';
+            typingDiv.id = 'currentTypingIndicator';
+            typingDiv.innerHTML = `
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+                <div class="thinking-heart">💚</div>
+            `;
+            
+            chatArea.appendChild(typingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
 
-                // Work stress
-                work_stress: [
-                    "Work stress can really take over your whole life when it gets intense. What's happening at work that's creating the most stress for you right now? Is it your workload, difficult relationships with colleagues or your boss, job insecurity, or maybe feeling unfulfilled in what you're doing?",
-                    "When work stress is high, it can affect everything - your sleep, relationships, physical health, and mental wellbeing. What's the stress from work doing to the rest of your life? What would need to change at work for you to feel more
+        function hideTypingIndicator() {
+            const existingIndicator = document.getElementById('currentTypingIndicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
