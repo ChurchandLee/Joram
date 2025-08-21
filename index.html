@@ -648,3 +648,50 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             if (sender === 'user') {
                 const welcomeSection = document.querySelector('.welcome-section');
                 if (welcomeSection) {
+                    welcomeSection.remove();
+                }
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            // Remove any existing typing indicator first
+            hideTypingIndicator();
+            
+            // Create a new typing indicator
+            const chatArea = document.getElementById('chatArea');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message';
+            typingDiv.id = 'currentTypingIndicator';
+            typingDiv.innerHTML = `
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+                <div class="thinking-heart">💚</div>
+            `;
+            
+            chatArea.appendChild(typingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const existingIndicator = document.getElementById('currentTypingIndicator');
+            if (existingIndicator) {
+                existingIndicator.remove();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('messageInput').focus();
+        });
+    </script>
+</body>
+</html>
