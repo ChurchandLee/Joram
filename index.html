@@ -8,10 +8,10 @@
     <meta name="theme-color" content="#8eaf78">
     
     <!-- PWA and App Icon Meta Tags -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png">
-    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png">
+    <link rel="manifest" href="app-manifest.json">
     
     <!-- iOS specific -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -68,6 +68,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
         .logo:hover {
@@ -294,7 +296,7 @@
         <!-- Logo Header Section -->
         <div class="logo-header">
             <div class="logo">
-                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/heartolisten-logo.png.png" alt="HeartoListen Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png" alt="HeartoListen Logo" style="width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 10;">
             </div>   
             <h1>HeartoListen</h1>
             <p>AI Mental Health Support - Self Discovery for Positive Mental Health</p>
@@ -333,7 +335,7 @@
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
         // Enhanced Mental Health System Prompt for ChatGPT
-        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts.`;
+        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen.`;
 
         // Chat functionality
         let conversationHistory = [{
@@ -495,39 +497,6 @@
             return { choices: [{ message: { content: selectedResponse } }] };
         }
 
-        // ChatGPT API call function with fallback
-        async function callChatGPT(messages) {
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-4",
-                        messages: messages,
-                        temperature: 0.75,
-                        top_p: 0.9,
-                        max_tokens: 800,
-                        frequency_penalty: 0.3,
-                        presence_penalty: 0.1,
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-                
-                return await response.json();
-            } catch (error) {
-                console.error('OpenAI API Error:', error);
-                // Fall back to intelligent response system
-                const lastUserMessage = messages[messages.length - 1].content;
-                return generateIntelligentResponse(lastUserMessage, messages);
-            }
-        }
-
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const sendButton = document.getElementById('sendButton');
@@ -553,7 +522,7 @@
                     content: message
                 });
 
-                // ALWAYS use intelligent response system as primary
+                // Use intelligent response system
                 const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
                 const aiResponse = fallbackResponse.choices[0].message.content.trim();
                 
