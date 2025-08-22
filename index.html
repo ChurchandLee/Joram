@@ -422,11 +422,13 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
 
                 // Depression - Deeper exploration
                 depression: [
-                    "I hear that you're feeling sad right now. That can be such a heavy feeling to carry. What's been going on that's bringing up this sadness for you? Sometimes sadness comes from specific situations, and sometimes it just feels like it's there without a clear reason. I'm curious about what your experience has been like.",
-                    "When you say you're feeling sad, I can sense there's real pain there. What does this sadness feel like for you - is it more of a deep ache, or does it feel overwhelming? I'm wondering what might be contributing to these feelings. What's been on your mind lately that feels particularly difficult?",
+                    "I hear that you're feeling sad right now. That takes courage to share. What's been happening in your life that's bringing up this sadness? Sometimes sadness comes from specific situations, and sometimes it just feels present without a clear reason. I'm genuinely curious about what your experience has been like.",
+                    "When you say 'I am sad,' I can sense there's real pain there. What does this sadness feel like for you day-to-day? Is it more of a deep ache, or something that comes and goes in waves? I'm wondering what might be weighing on your heart right now.",
+                    "Thank you for trusting me with how you're feeling. Sadness can be such a heavy emotion to carry. What's been going on that's making you feel this way? Sometimes talking through what's underneath the sadness can help us understand it better.",
+                    "I can hear the sadness in what you're sharing, and I want you to know that what you're feeling is completely valid. What's been the hardest part about feeling sad lately? Is there something specific that happened, or is it more of a general heaviness you've been carrying?",
+                    "When you tell me you feel sad, I'm curious about what that looks like in your daily life. How long have you been feeling this way? What thoughts tend to come up when the sadness feels strongest? I'm here to listen and explore this with you.",
                     "Depression can feel like such a heavy, persistent presence. When you think about your depression, what does it feel like in your daily life right now? I'm curious - is this a recent struggle, or something you've been dealing with for a while? What made you want to talk about it today?",
-                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?",
-                    "I can hear the sadness in what you're sharing. Sometimes when we feel down, it can help to talk through what's happening underneath. What do you think might be contributing to feeling this way? Are there specific things weighing on you, or is it more of a general heaviness that's hard to pinpoint?"
+                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?"
                 ],
 
                 // Anxiety - Understanding and exploring (includes scared, worried, afraid)
@@ -606,7 +608,23 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     throw new Error(`API Error: ${response.status}`);
                 }
                 
-                return await response.json();
+                const data = await response.json();
+                const apiResponse = data.choices[0].message.content.trim();
+                
+                // Check if API gave generic unhelpful response - if so, use our intelligent system instead
+                if (apiResponse.includes("I'm really sorry that you're feeling this way, but I'm unable to provide the help that you need") ||
+                    apiResponse.includes("It's really important to talk things over with someone who can") ||
+                    apiResponse.includes("mental health professional or a trusted person in your life") ||
+                    apiResponse.includes("I'm not able to provide") ||
+                    apiResponse.includes("I can't provide the support you need")) {
+                    
+                    // Use our intelligent response system instead
+                    const lastUserMessage = messages[messages.length - 1].content;
+                    return generateIntelligentResponse(lastUserMessage, messages);
+                }
+                
+                return data;
+                
             } catch (error) {
                 console.error('OpenAI API Error:', error);
                 // Fall back to intelligent response system
