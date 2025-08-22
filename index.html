@@ -413,20 +413,29 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
 
                 // Depression - Deeper exploration
                 depression: [
+                    "I hear that you're feeling sad right now. That can be such a heavy feeling to carry. What's been going on that's bringing up this sadness for you? Sometimes sadness comes from specific situations, and sometimes it just feels like it's there without a clear reason. I'm curious about what your experience has been like.",
+                    "When you say you're feeling sad, I can sense there's real pain there. What does this sadness feel like for you - is it more of a deep ache, or does it feel overwhelming? I'm wondering what might be contributing to these feelings. What's been on your mind lately that feels particularly difficult?",
                     "Depression can feel like such a heavy, persistent presence. When you think about your depression, what does it feel like in your daily life right now? I'm curious - is this a recent struggle, or something you've been dealing with for a while? What made you want to talk about it today?",
-                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?"
+                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?",
+                    "I can hear the sadness in what you're sharing. Sometimes when we feel down, it can help to talk through what's happening underneath. What do you think might be contributing to feeling this way? Are there specific things weighing on you, or is it more of a general heaviness that's hard to pinpoint?"
                 ],
 
-                // Anxiety - Understanding and exploring
+                // Anxiety - Understanding and exploring (includes scared, worried, afraid)
                 anxiety: [
+                    "I can hear that you're feeling scared right now. Fear can be such an overwhelming emotion, especially when it feels big and consuming. What's frightening you most at the moment? Sometimes naming our fears can help us understand them better and figure out what might help you feel safer.",
+                    "When you say you're feeling anxious or scared, I can sense there's real distress there. What does this fear feel like in your body and mind? Are there specific thoughts or situations that are triggering these feelings, or does the anxiety seem to come from nowhere? I'm here to listen and explore this with you.",
                     "Anxiety can show up in so many different ways. What does your anxiety typically feel like - is it more physical sensations, racing thoughts, or that constant sense of dread? I'm curious about what kinds of situations or thoughts tend to trigger it most for you. What's been on your mind that's making the anxiety feel particularly present right now?",
-                    "When you mention feeling anxious, I wonder what that experience is like for you. Does it come in waves, or is it more of a constant background hum? What thoughts tend to fuel it most? Sometimes exploring what our anxiety is trying to tell us can be helpful - what do you think yours might be worried about?"
+                    "When you mention feeling anxious, I wonder what that experience is like for you. Does it come in waves, or is it more of a constant background hum? What thoughts tend to fuel it most? Sometimes exploring what our anxiety is trying to tell us can be helpful - what do you think yours might be worried about?",
+                    "I can sense that worry or fear is taking up a lot of space in your mind right now. That can be so exhausting. What are you finding yourself most worried about? Sometimes when we name our fears out loud, it can help us see which ones we might have some control over and which ones we don't."
                 ],
 
                 // Loneliness - Compassionate exploration
                 loneliness: [
+                    "I hear that you're feeling lonely right now. Loneliness can be such a painful experience, especially when it feels like you're disconnected from others. What does this loneliness look like for you? Are you physically alone, or is it more that feeling of being around people but still feeling unseen or misunderstood?",
+                    "When you say you feel lonely, I can sense there's a real ache there. What kind of connection are you most missing right now? Is it wanting close friendships, family connection, or maybe just someone who really understands what you're going through? I'm curious about what would help you feel less alone.",
                     "Loneliness can feel so isolating, especially when it seems like everyone else is naturally connected. What does loneliness feel like for you right now? Is it missing specific people, or more about wanting someone who really understands you? I'm curious about what kind of connection you're most longing for.",
-                    "When you say you're feeling lonely, I wonder what that looks like in your daily life. Are you physically alone a lot, or is it more that feeling of being surrounded by people but still feeling unseen? What would meaningful connection look like for you - what are you hoping to find in relationships that feels missing right now?"
+                    "When you say you're feeling lonely, I wonder what that looks like in your daily life. Are you physically alone a lot, or is it more that feeling of being surrounded by people but still feeling unseen? What would meaningful connection look like for you - what are you hoping to find in relationships that feels missing right now?",
+                    "I can hear the loneliness in what you're sharing, and I want you to know that reaching out here shows real courage. What's been making the loneliness feel particularly strong lately? Sometimes understanding what triggered these feelings can help us think about what might provide some relief."
                 ],
 
                 // Overwhelmed - Practical exploration
@@ -472,38 +481,68 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             const lowerMessage = userMessage.toLowerCase();
             let responseCategory = 'general';
             
-            // Detection logic - Comprehensive keyword detection
-            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('want to die') || lowerMessage.includes('end my life') || lowerMessage.includes('suicide') || lowerMessage.includes('self harm') || lowerMessage.includes('hurt myself')) {
+            // Enhanced detection logic - Comprehensive keyword detection including "I feel" and "I am" patterns
+            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('want to die') || 
+                lowerMessage.includes('end my life') || lowerMessage.includes('suicide') || lowerMessage.includes('self harm') || 
+                lowerMessage.includes('hurt myself') || lowerMessage.includes('better off dead') || lowerMessage.includes('no point living')) {
                 responseCategory = 'crisis';
             }
             else if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline') || lowerMessage.includes('borderline personality')) {
                 responseCategory = 'bpd';
             }
-            else if (lowerMessage.includes('adhd') || lowerMessage.includes('add') || lowerMessage.includes('can\'t focus') || lowerMessage.includes('attention') || lowerMessage.includes('hyperactive')) {
+            else if (lowerMessage.includes('adhd') || lowerMessage.includes('add') || lowerMessage.includes('can\'t focus') || 
+                     lowerMessage.includes('attention') || lowerMessage.includes('hyperactive') || lowerMessage.includes('distracted')) {
                 responseCategory = 'adhd';
             }
-            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || lowerMessage.includes('nervous')) {
+            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || 
+                     lowerMessage.includes('nervous') || lowerMessage.includes('i feel anxious') || lowerMessage.includes('i am anxious') ||
+                     lowerMessage.includes('feel nervous') || lowerMessage.includes('am nervous') || lowerMessage.includes('worried') ||
+                     lowerMessage.includes('i feel worried') || lowerMessage.includes('i am worried') || lowerMessage.includes('feel scared') ||
+                     lowerMessage.includes('i feel scared') || lowerMessage.includes('i am scared') || lowerMessage.includes('am scared') ||
+                     lowerMessage.includes('afraid') || lowerMessage.includes('i feel afraid') || lowerMessage.includes('i am afraid')) {
                 responseCategory = 'anxiety';
             }
-            else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('low')) {
+            else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || 
+                     lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('low') ||
+                     lowerMessage.includes('i feel sad') || lowerMessage.includes('i am sad') || lowerMessage.includes('feel sad') ||
+                     lowerMessage.includes('i feel down') || lowerMessage.includes('i am down') || lowerMessage.includes('feel down') ||
+                     lowerMessage.includes('i feel depressed') || lowerMessage.includes('i am depressed') || lowerMessage.includes('feel depressed') ||
+                     lowerMessage.includes('i feel low') || lowerMessage.includes('i am low') || lowerMessage.includes('feel low') ||
+                     lowerMessage.includes('i feel hopeless') || lowerMessage.includes('i am hopeless') || lowerMessage.includes('feel hopeless')) {
                 responseCategory = 'depression';
             }
-            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) {
+            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || 
+                     lowerMessage.includes('isolated') || lowerMessage.includes('i feel lonely') || lowerMessage.includes('i am lonely') ||
+                     lowerMessage.includes('feel lonely') || lowerMessage.includes('i feel alone') || lowerMessage.includes('i am alone') ||
+                     lowerMessage.includes('feel alone') || lowerMessage.includes('i feel isolated') || lowerMessage.includes('i am isolated') ||
+                     lowerMessage.includes('feel isolated') || lowerMessage.includes('no friends') || lowerMessage.includes('nobody cares')) {
                 responseCategory = 'loneliness';
             }
-            else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('burnout') || lowerMessage.includes('stressed')) {
+            else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('burnout') || 
+                     lowerMessage.includes('stressed') || lowerMessage.includes('i feel overwhelmed') || lowerMessage.includes('i am overwhelmed') ||
+                     lowerMessage.includes('feel overwhelmed') || lowerMessage.includes('i feel stressed') || lowerMessage.includes('i am stressed') ||
+                     lowerMessage.includes('feel stressed') || lowerMessage.includes('can\'t cope') || lowerMessage.includes('too much pressure')) {
                 responseCategory = 'overwhelmed';
             }
-            else if (lowerMessage.includes('angry') || lowerMessage.includes('anger') || lowerMessage.includes('furious') || lowerMessage.includes('rage') || lowerMessage.includes('mad')) {
+            else if (lowerMessage.includes('angry') || lowerMessage.includes('anger') || lowerMessage.includes('furious') || 
+                     lowerMessage.includes('rage') || lowerMessage.includes('mad') || lowerMessage.includes('i feel angry') ||
+                     lowerMessage.includes('i am angry') || lowerMessage.includes('feel angry') || lowerMessage.includes('i feel mad') ||
+                     lowerMessage.includes('i am mad') || lowerMessage.includes('feel mad') || lowerMessage.includes('frustrated') ||
+                     lowerMessage.includes('i feel frustrated') || lowerMessage.includes('i am frustrated') || lowerMessage.includes('feel frustrated')) {
                 responseCategory = 'anger';
             }
-            else if (lowerMessage.includes('motivation') || lowerMessage.includes('need motivation') || lowerMessage.includes('unmotivated') || lowerMessage.includes('no energy')) {
+            else if (lowerMessage.includes('motivation') || lowerMessage.includes('need motivation') || lowerMessage.includes('unmotivated') || 
+                     lowerMessage.includes('no energy') || lowerMessage.includes('can\'t motivate') || lowerMessage.includes('no drive') ||
+                     lowerMessage.includes('feel unmotivated') || lowerMessage.includes('i feel unmotivated') || lowerMessage.includes('i am unmotivated')) {
                 responseCategory = 'motivation';
             }
-            else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('can\'t sleep') || lowerMessage.includes('sleep troubles') || lowerMessage.includes('tired')) {
+            else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('can\'t sleep') || 
+                     lowerMessage.includes('sleep troubles') || lowerMessage.includes('tired') || lowerMessage.includes('exhausted') ||
+                     lowerMessage.includes('can\'t fall asleep') || lowerMessage.includes('wake up tired') || lowerMessage.includes('no sleep')) {
                 responseCategory = 'sleep_troubles';
             }
-            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') ||
+                     lowerMessage.includes('good morning') || lowerMessage.includes('good evening') || lowerMessage.includes('good afternoon')) {
                 responseCategory = 'greeting';
             }
             
