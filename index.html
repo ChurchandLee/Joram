@@ -58,18 +58,31 @@
             text-align: center;
             color: white;
             border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        /* Compact header state */
+        .logo-header.compact {
+            padding: 15px;
         }
 
         .logo {
             width: 150px;
             height: 150px;
             margin: 0 auto 15px auto;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             position: relative;
+        }
+
+        /* Compact logo state */
+        .logo-header.compact .logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
         }
 
         .logo:hover {
@@ -81,12 +94,20 @@
             margin-bottom: 8px;
             font-weight: 700;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .logo-header p {
             opacity: 0.95;
             font-size: 1.1em;
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        /* Hide text in compact mode */
+        .logo-header.compact h1,
+        .logo-header.compact p {
+            display: none;
         }
 
         .chat-area {
@@ -279,6 +300,11 @@
             .logo {
                 width: 120px;
                 height: 120px;
+            }
+
+            .logo-header.compact .logo {
+                width: 50px;
+                height: 50px;
             }
             
             .logo-header h1 {
@@ -535,7 +561,7 @@
 
     <div class="container">
         <!-- Logo Header Section -->
-        <div class="logo-header">
+        <div class="logo-header" id="logoHeader">
             <div class="logo">
                 <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/listeningheart.png" alt="HeartoListen Logo" style="width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 10;">
             </div>   
@@ -903,12 +929,16 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                 messageDiv.textContent = content;
             }
             
-            // Remove welcome section after first user message
+            // Remove welcome section and make header compact after first user message
             if (sender === 'user') {
                 const welcomeSection = document.querySelector('.welcome-section');
                 if (welcomeSection) {
                     welcomeSection.remove();
                 }
+                
+                // Make header compact
+                const logoHeader = document.getElementById('logoHeader');
+                logoHeader.classList.add('compact');
             }
             
             chatArea.appendChild(messageDiv);
