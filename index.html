@@ -289,9 +289,295 @@
                 max-width: 95%;
             }
         }
+      <!-- Add this CSS to your existing <style> section (after the existing styles) -->
+
+.disclaimer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.disclaimer-modal {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    text-align: left;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: disclaimerSlideIn 0.4s ease-out;
+    border: 3px solid #5bd1e4;
+}
+
+.disclaimer-modal h2 {
+    color: #5bd1e4;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    font-weight: 700;
+}
+
+.disclaimer-modal .warning-icon {
+    text-align: center;
+    font-size: 3em;
+    margin-bottom: 15px;
+}
+
+.disclaimer-content {
+    color: #333;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.disclaimer-content p {
+    margin-bottom: 15px;
+}
+
+.disclaimer-content strong {
+    color: #2c5530;
+    font-weight: 600;
+}
+
+.emergency-section {
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    border: 2px solid #e91e63;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.emergency-section h3 {
+    color: #c2185b;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.emergency-contacts {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.emergency-contacts li {
+    margin-bottom: 8px;
+    color: #880e4f;
+    font-weight: 500;
+}
+
+.important-notes {
+    background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
+    border: 2px solid #f39c12;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.important-notes h3 {
+    color: #e67e22;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.important-notes ul {
+    padding-left: 20px;
+}
+
+.important-notes li {
+    margin-bottom: 8px;
+    color: #8b4513;
+}
+
+.disclaimer-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn-accept {
+    background: linear-gradient(135deg, #5bd1e4 0%, #45a049 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(91, 209, 228, 0.3);
+}
+
+.btn-help {
+    background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    min-width: 180px;
+}
+
+.btn-help:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+}
+
+@keyframes disclaimerSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .disclaimer-modal {
+        padding: 20px;
+        margin: 10px;
+        max-height: 90vh;
+    }
+    
+    .disclaimer-modal h2 {
+        font-size: 1.5em;
+    }
+    
+    .disclaimer-content {
+        font-size: 13px;
+    }
+    
+    .disclaimer-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-accept,
+    .btn-help {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+<!-- Add this HTML right after the opening <body> tag (before the container div) -->
+
+<div id="disclaimerOverlay" class="disclaimer-overlay" style="display: none;">
+    <div class="disclaimer-modal">
+        <div class="warning-icon">⚠️</div>
+        <h2>Important Disclaimer</h2>
+        
+        <div class="disclaimer-content">
+            <p><strong>This app is designed to provide emotional support, encouragement, and validation. It is not a substitute for professional medical, psychiatric, or psychological treatment.</strong></p>
+            
+            <p>The content and features within this app are for general well-being, personal growth, and self-reflection purposes only. We are not medical professionals, and this app does not offer medical, clinical, or therapeutic advice.</p>
+            
+            <p>If you are experiencing significant distress, a mental health crisis, or believe you may have a condition requiring diagnosis or treatment, please seek help from a qualified healthcare provider.</p>
+            
+            <div class="emergency-section">
+                <h3>🚨 Emergency Situations</h3>
+                <p><strong>If you are in immediate danger or experiencing thoughts of harming yourself or others, please call your local emergency number right away.</strong></p>
+                
+                <ul class="emergency-contacts">
+                    <li><strong>In the U.S.:</strong> Dial 988 for the Suicide & Crisis Lifeline</li>
+                    <li><strong>In the U.K. & Ireland:</strong> Call Samaritans at 116 123</li>
+                    <li><strong>In Australia:</strong> Call Lifeline at 13 11 14</li>
+                </ul>
+                
+                <p>If you are outside these regions, please look up local emergency and crisis services in your area.</p>
+            </div>
+            
+            <div class="important-notes">
+                <h3>📋 Important Notes</h3>
+                <ul>
+                    <li>The app does not provide diagnosis, treatment, prescriptions, or medical interventions.</li>
+                    <li>Use of this app is voluntary and should be considered a complementary tool to professional care, not a replacement.</li>
+                    <li>Any decisions you make based on the information, tools, or suggestions provided are your personal responsibility.</li>
+                </ul>
+            </div>
+            
+            <p><strong>By using this app, you acknowledge and agree that it is intended to provide support, validation, and helpful resources, but it cannot and does not replace the care of licensed professionals.</strong></p>
+        </div>
+        
+        <div class="disclaimer-buttons">
+            <button class="btn-accept" onclick="acceptDisclaimer()">I Understand & Agree</button>
+            <button class="btn-help" onclick="getNeedHelpNow()">I Need Help Now</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add this JavaScript to your existing <script> section (at the very beginning, before other functions) -->
+
+// Disclaimer Modal Functions
+function showDisclaimerModal() {
+    const hasAcceptedDisclaimer = sessionStorage.getItem('hearDisclaimerAccepted');
+    if (!hasAcceptedDisclaimer) {
+        document.getElementById('disclaimerOverlay').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function acceptDisclaimer() {
+    sessionStorage.setItem('hearDisclaimerAccepted', 'true');
+    document.getElementById('disclaimerOverlay').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Focus on the input field after accepting
+    setTimeout(() => {
+        document.getElementById('messageInput').focus();
+    }, 100);
+}
+
+function getNeedHelpNow() {
+    // Open emergency resources in new tabs
+    window.open('https://988lifeline.org/', '_blank');
+    window.open('https://www.samaritans.org/', '_blank');
+    window.open('https://www.lifeline.org.au/', '_blank');
+}
+
+// Update your existing DOMContentLoaded event listener to include the disclaimer
+document.addEventListener('DOMContentLoaded', function() {
+    showDisclaimerModal(); // Show disclaimer first
+    document.getElementById('messageInput').focus();
+});  
     </style>
 </head>
 <body>
+   <body>
+    <!-- ADD THE DISCLAIMER MODAL HTML HERE -->
+    <div id="disclaimerOverlay" class="disclaimer-overlay" style="display: none;">
+        <div class="disclaimer-modal">
+            <!-- ... all the modal content ... -->
+        </div>
+    </div>
+    
+    <div class="container"> 
     <div class="container">
         <!-- Logo Header Section -->
         <div class="logo-header">
@@ -335,9 +621,24 @@
                    onkeypress="handleKeyPress(event)">
             <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
         </div>
+        
     </div>
 
     <script>
+        <script>
+        // ADD DISCLAIMER JAVASCRIPT HERE - RIGHT AT THE TOP
+        // Disclaimer Modal Functions
+        function showDisclaimerModal() {
+            const hasAcceptedDisclaimer = sessionStorage.getItem('hearDisclaimerAccepted');
+            if (!hasAcceptedDisclaimer) {
+                document.getElementById('disclaimerOverlay').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        /* ... rest of disclaimer JavaScript ... */
+
+        // Enhanced Mental Health System Prompt for ChatGPT
+        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion...`;
         // OpenAI API Configuration
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
@@ -762,8 +1063,11 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
         }
 
         // Initialize app
+        // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            showDisclaimerModal(); // Show disclaimer first
             document.getElementById('messageInput').focus();
+        });
         });
     </script>
 </body>
