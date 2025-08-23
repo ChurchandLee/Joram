@@ -289,295 +289,250 @@
                 max-width: 95%;
             }
         }
-      <!-- Add this CSS to your existing <style> section (after the existing styles) -->
 
-.disclaimer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 3000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(5px);
-}
+        /* DISCLAIMER MODAL STYLES */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
 
-.disclaimer-modal {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    max-width: 600px;
-    width: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-    text-align: left;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: disclaimerSlideIn 0.4s ease-out;
-    border: 3px solid #5bd1e4;
-}
+        .disclaimer-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: disclaimerSlideIn 0.4s ease-out;
+            border: 3px solid #8eaf78;
+        }
 
-.disclaimer-modal h2 {
-    color: #5bd1e4;
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.8em;
-    font-weight: 700;
-}
+        .disclaimer-modal h2 {
+            color: #8eaf78;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
 
-.disclaimer-modal .warning-icon {
-    text-align: center;
-    font-size: 3em;
-    margin-bottom: 15px;
-}
+        .disclaimer-modal .warning-icon {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
 
-.disclaimer-content {
-    color: #333;
-    line-height: 1.6;
-    font-size: 14px;
-}
+        .disclaimer-content {
+            color: #333;
+            line-height: 1.6;
+            font-size: 14px;
+        }
 
-.disclaimer-content p {
-    margin-bottom: 15px;
-}
+        .disclaimer-content p {
+            margin-bottom: 15px;
+        }
 
-.disclaimer-content strong {
-    color: #2c5530;
-    font-weight: 600;
-}
+        .disclaimer-content strong {
+            color: #2c5530;
+            font-weight: 600;
+        }
 
-.emergency-section {
-    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
-    border: 2px solid #e91e63;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-}
+        .emergency-section {
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            border: 2px solid #e91e63;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
 
-.emergency-section h3 {
-    color: #c2185b;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .emergency-section h3 {
+            color: #c2185b;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.emergency-contacts {
-    margin: 15px 0;
-    padding-left: 20px;
-}
+        .emergency-contacts {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
 
-.emergency-contacts li {
-    margin-bottom: 8px;
-    color: #880e4f;
-    font-weight: 500;
-}
+        .emergency-contacts li {
+            margin-bottom: 8px;
+            color: #880e4f;
+            font-weight: 500;
+        }
 
-.important-notes {
-    background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
-    border: 2px solid #f39c12;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-}
+        .important-notes {
+            background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
 
-.important-notes h3 {
-    color: #e67e22;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .important-notes h3 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.important-notes ul {
-    padding-left: 20px;
-}
+        .important-notes ul {
+            padding-left: 20px;
+        }
 
-.important-notes li {
-    margin-bottom: 8px;
-    color: #8b4513;
-}
+        .important-notes li {
+            margin-bottom: 8px;
+            color: #8b4513;
+        }
 
-.disclaimer-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 30px;
-    flex-wrap: wrap;
-}
+        .disclaimer-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
 
-.btn-accept {
-    background: linear-gradient(135deg, #5bd1e4 0%, #45a049 100%);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    min-width: 180px;
-}
+        .btn-accept {
+            background: linear-gradient(135deg, #8eaf78 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
 
-.btn-accept:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(91, 209, 228, 0.3);
-}
+        .btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(142, 175, 120, 0.3);
+        }
 
-.btn-help {
-    background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    min-width: 180px;
-}
+        .btn-help {
+            background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
 
-.btn-help:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
-}
+        .btn-help:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+        }
 
-@keyframes disclaimerSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
+        @keyframes disclaimerSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-    .disclaimer-modal {
-        padding: 20px;
-        margin: 10px;
-        max-height: 90vh;
-    }
-    
-    .disclaimer-modal h2 {
-        font-size: 1.5em;
-    }
-    
-    .disclaimer-content {
-        font-size: 13px;
-    }
-    
-    .disclaimer-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn-accept,
-    .btn-help {
-        width: 100%;
-        max-width: 250px;
-    }
-}
-
-<!-- Add this HTML right after the opening <body> tag (before the container div) -->
-
-<div id="disclaimerOverlay" class="disclaimer-overlay" style="display: none;">
-    <div class="disclaimer-modal">
-        <div class="warning-icon">⚠️</div>
-        <h2>Important Disclaimer</h2>
-        
-        <div class="disclaimer-content">
-            <p><strong>This app is designed to provide emotional support, encouragement, and validation. It is not a substitute for professional medical, psychiatric, or psychological treatment.</strong></p>
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .disclaimer-modal {
+                padding: 20px;
+                margin: 10px;
+                max-height: 90vh;
+            }
             
-            <p>The content and features within this app are for general well-being, personal growth, and self-reflection purposes only. We are not medical professionals, and this app does not offer medical, clinical, or therapeutic advice.</p>
+            .disclaimer-modal h2 {
+                font-size: 1.5em;
+            }
             
-            <p>If you are experiencing significant distress, a mental health crisis, or believe you may have a condition requiring diagnosis or treatment, please seek help from a qualified healthcare provider.</p>
+            .disclaimer-content {
+                font-size: 13px;
+            }
             
-            <div class="emergency-section">
-                <h3>🚨 Emergency Situations</h3>
-                <p><strong>If you are in immediate danger or experiencing thoughts of harming yourself or others, please call your local emergency number right away.</strong></p>
-                
-                <ul class="emergency-contacts">
-                    <li><strong>In the U.S.:</strong> Dial 988 for the Suicide & Crisis Lifeline</li>
-                    <li><strong>In the U.K. & Ireland:</strong> Call Samaritans at 116 123</li>
-                    <li><strong>In Australia:</strong> Call Lifeline at 13 11 14</li>
-                </ul>
-                
-                <p>If you are outside these regions, please look up local emergency and crisis services in your area.</p>
-            </div>
+            .disclaimer-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
             
-            <div class="important-notes">
-                <h3>📋 Important Notes</h3>
-                <ul>
-                    <li>The app does not provide diagnosis, treatment, prescriptions, or medical interventions.</li>
-                    <li>Use of this app is voluntary and should be considered a complementary tool to professional care, not a replacement.</li>
-                    <li>Any decisions you make based on the information, tools, or suggestions provided are your personal responsibility.</li>
-                </ul>
-            </div>
-            
-            <p><strong>By using this app, you acknowledge and agree that it is intended to provide support, validation, and helpful resources, but it cannot and does not replace the care of licensed professionals.</strong></p>
-        </div>
-        
-        <div class="disclaimer-buttons">
-            <button class="btn-accept" onclick="acceptDisclaimer()">I Understand & Agree</button>
-            <button class="btn-help" onclick="getNeedHelpNow()">I Need Help Now</button>
-        </div>
-    </div>
-</div>
-
-<!-- Add this JavaScript to your existing <script> section (at the very beginning, before other functions) -->
-
-// Disclaimer Modal Functions
-function showDisclaimerModal() {
-    const hasAcceptedDisclaimer = sessionStorage.getItem('hearDisclaimerAccepted');
-    if (!hasAcceptedDisclaimer) {
-        document.getElementById('disclaimerOverlay').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-function acceptDisclaimer() {
-    sessionStorage.setItem('hearDisclaimerAccepted', 'true');
-    document.getElementById('disclaimerOverlay').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    
-    // Focus on the input field after accepting
-    setTimeout(() => {
-        document.getElementById('messageInput').focus();
-    }, 100);
-}
-
-function getNeedHelpNow() {
-    // Open emergency resources in new tabs
-    window.open('https://988lifeline.org/', '_blank');
-    window.open('https://www.samaritans.org/', '_blank');
-    window.open('https://www.lifeline.org.au/', '_blank');
-}
-
-// Update your existing DOMContentLoaded event listener to include the disclaimer
-document.addEventListener('DOMContentLoaded', function() {
-    showDisclaimerModal(); // Show disclaimer first
-    document.getElementById('messageInput').focus();
-});  
+            .btn-accept,
+            .btn-help {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
     </style>
 </head>
 <body>
-   <body>
-    <!-- ADD THE DISCLAIMER MODAL HTML HERE -->
+    <!-- DISCLAIMER MODAL -->
     <div id="disclaimerOverlay" class="disclaimer-overlay" style="display: none;">
         <div class="disclaimer-modal">
-            <!-- ... all the modal content ... -->
+            <div class="warning-icon">⚠️</div>
+            <h2>Important Disclaimer</h2>
+            
+            <div class="disclaimer-content">
+                <p><strong>This app is designed to provide emotional support, encouragement, and validation. It is not a substitute for professional medical, psychiatric, or psychological treatment.</strong></p>
+                
+                <p>The content and features within this app are for general well-being, personal growth, and self-reflection purposes only. We are not medical professionals, and this app does not offer medical, clinical, or therapeutic advice.</p>
+                
+                <p>If you are experiencing significant distress, a mental health crisis, or believe you may have a condition requiring diagnosis or treatment, please seek help from a qualified healthcare provider.</p>
+                
+                <div class="emergency-section">
+                    <h3>🚨 Emergency Situations</h3>
+                    <p><strong>If you are in immediate danger or experiencing thoughts of harming yourself or others, please call your local emergency number right away.</strong></p>
+                    
+                    <ul class="emergency-contacts">
+                        <li><strong>In the U.S.:</strong> Dial 988 for the Suicide & Crisis Lifeline</li>
+                        <li><strong>In the U.K. & Ireland:</strong> Call Samaritans at 116 123</li>
+                        <li><strong>In Australia:</strong> Call Lifeline at 13 11 14</li>
+                    </ul>
+                    
+                    <p>If you are outside these regions, please look up local emergency and crisis services in your area.</p>
+                </div>
+                
+                <div class="important-notes">
+                    <h3>📋 Important Notes</h3>
+                    <ul>
+                        <li>The app does not provide diagnosis, treatment, prescriptions, or medical interventions.</li>
+                        <li>Use of this app is voluntary and should be considered a complementary tool to professional care, not a replacement.</li>
+                        <li>Any decisions you make based on the information, tools, or suggestions provided are your personal responsibility.</li>
+                    </ul>
+                </div>
+                
+                <p><strong>By using this app, you acknowledge and agree that it is intended to provide support, validation, and helpful resources, but it cannot and does not replace the care of licensed professionals.</strong></p>
+            </div>
+            
+            <div class="disclaimer-buttons">
+                <button class="btn-accept" onclick="acceptDisclaimer()">I Understand & Agree</button>
+                <button class="btn-help" onclick="getNeedHelpNow()">I Need Help Now</button>
+            </div>
         </div>
     </div>
-    
-    <div class="container"> 
+
     <div class="container">
         <!-- Logo Header Section -->
         <div class="logo-header">
@@ -600,15 +555,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 <!-- Important Disclaimer -->
                 <div class="disclaimer">
-    <strong>⚠️ Important Safety Information:</strong>
-    <br><br>
-    <strong>Crisis Support:</strong> If you're having thoughts of suicide or self-harm, please reach out immediately:
-    <br>• <strong>UK:</strong> 999 (Emergency) | 116 123 (Samaritans - 24/7 free)
-    <br>• <strong>USA:</strong> 911 (Emergency) | 988 (Suicide & Crisis Lifeline)
-    <br>• <strong>Crisis Text:</strong> Text HOME to 741741
-    <br><br>
-    <strong>This app provides peer support and guidance, not professional medical advice.</strong> For ongoing mental health concerns, please seek professional mental health support
-</div>
+                    <strong>⚠️ Important Safety Information:</strong>
+                    <br><br>
+                    <strong>Crisis Support:</strong> If you're having thoughts of suicide or self-harm, please reach out immediately:
+                    <br>• <strong>UK:</strong> 999 (Emergency) | 116 123 (Samaritans - 24/7 free)
+                    <br>• <strong>USA:</strong> 911 (Emergency) | 988 (Suicide & Crisis Lifeline)
+                    <br>• <strong>Crisis Text:</strong> Text HOME to 741741
+                    <br><br>
+                    <strong>This app provides peer support and guidance, not professional medical advice.</strong> For ongoing mental health concerns, please seek professional mental health support
+                </div>
             </div>
         </div>
 
@@ -621,13 +576,10 @@ document.addEventListener('DOMContentLoaded', function() {
                    onkeypress="handleKeyPress(event)">
             <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
         </div>
-        
     </div>
 
     <script>
-        <script>
-        // ADD DISCLAIMER JAVASCRIPT HERE - RIGHT AT THE TOP
-        // Disclaimer Modal Functions
+        // DISCLAIMER MODAL FUNCTIONS
         function showDisclaimerModal() {
             const hasAcceptedDisclaimer = sessionStorage.getItem('hearDisclaimerAccepted');
             if (!hasAcceptedDisclaimer) {
@@ -635,10 +587,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.style.overflow = 'hidden';
             }
         }
-        /* ... rest of disclaimer JavaScript ... */
 
-        // Enhanced Mental Health System Prompt for ChatGPT
-        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion...`;
+        function acceptDisclaimer() {
+            sessionStorage.setItem('hearDisclaimerAccepted', 'true');
+            document.getElementById('disclaimerOverlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Focus on the input field after accepting
+            setTimeout(() => {
+                document.getElementById('messageInput').focus();
+            }, 100);
+        }
+
+        function getNeedHelpNow() {
+            // Open emergency resources in new tabs
+            window.open('https://988lifeline.org/', '_blank');
+            window.open('https://www.samaritans.org/', '_blank');
+            window.open('https://www.lifeline.org.au/', '_blank');
+        }
+
         // OpenAI API Configuration
         const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
 
@@ -716,69 +683,23 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     "I'm really concerned about what you've shared with me about wanting to end your life. This sounds like you're in serious emotional pain right now. Your safety is the most important thing, and there are people specifically trained to help with these feelings:\n\n• US: 988 (Suicide & Crisis Lifeline) - 24/7\n• UK: 116 123 (Samaritans) - 24/7\n• Crisis Text: HOME to 741741\n\nAre you in immediate danger right now? Can you stay safe while we talk about getting you connected with crisis support?"
                 ],
 
-                // BPD - Exploratory and supportive
-                bpd: [
-                    "BPD can make emotions feel so incredibly intense - like everything is turned up to maximum volume. When you mentioned borderline, I'm curious about what you're experiencing right now that made you bring it up. Are you in the middle of an emotional storm, or is there something specific about living with BPD that's on your mind today?",
-                    "Living with BPD often means your emotional world feels completely different from how others experience things. What's been the most challenging part for you lately? Is it the intensity of feelings, relationship struggles, or maybe that sense of identity shifting? I'd love to understand more about your particular experience with it."
-                ],
-
-                // ADHD - Understanding their experience
-                adhd: [
-                    "ADHD can make daily life feel like you're operating with a different instruction manual than everyone else. What aspects of ADHD are affecting you most right now? Is it focus issues, time management, emotional regulation, or maybe that sense of being overwhelmed by tasks that seem simple to others? I'd love to understand your particular struggles with it.",
-                    "Living with ADHD often means your brain works in unique ways that the world doesn't always accommodate. What feels most frustrating about it lately? And on the flip side, have you noticed any ways that your ADHD brain actually works better than neurotypical brains in certain situations? What are your unique strengths?"
-                ],
-
                 // Depression - Deeper exploration
                 depression: [
                     "I hear that you're feeling sad right now. That takes courage to share. What's been happening in your life that's bringing up this sadness? Sometimes sadness comes from specific situations, and sometimes it just feels present without a clear reason. I'm genuinely curious about what your experience has been like.",
                     "When you say 'I am sad,' I can sense there's real pain there. What does this sadness feel like for you day-to-day? Is it more of a deep ache, or something that comes and goes in waves? I'm wondering what might be weighing on your heart right now.",
-                    "Thank you for trusting me with how you're feeling. Sadness can be such a heavy emotion to carry. What's been going on that's making you feel this way? Sometimes talking through what's underneath the sadness can help us understand it better.",
-                    "I can hear the sadness in what you're sharing, and I want you to know that what you're feeling is completely valid. What's been the hardest part about feeling sad lately? Is there something specific that happened, or is it more of a general heaviness you've been carrying?",
-                    "When you tell me you feel sad, I'm curious about what that looks like in your daily life. How long have you been feeling this way? What thoughts tend to come up when the sadness feels strongest? I'm here to listen and explore this with you.",
-                    "Depression can feel like such a heavy, persistent presence. When you think about your depression, what does it feel like in your daily life right now? I'm curious - is this a recent struggle, or something you've been dealing with for a while? What made you want to talk about it today?",
-                    "You mentioned feeling depressed, and I wonder what that looks like for you specifically. Is it more of a numbness, a heavy sadness, or that exhausting fog that makes everything feel difficult? What time of day tends to be hardest, and have you noticed anything that makes it slightly better or worse?"
+                    "Thank you for trusting me with how you're feeling. Sadness can be such a heavy emotion to carry. What's been going on that's making you feel this way? Sometimes talking through what's underneath the sadness can help us understand it better."
                 ],
 
-                // Anxiety - Understanding and exploring (includes scared, worried, afraid)
+                // Anxiety - Understanding and exploring
                 anxiety: [
                     "I can hear that you're feeling scared right now. Fear can be such an overwhelming emotion, especially when it feels big and consuming. What's frightening you most at the moment? Sometimes naming our fears can help us understand them better and figure out what might help you feel safer.",
-                    "When you say you're feeling anxious or scared, I can sense there's real distress there. What does this fear feel like in your body and mind? Are there specific thoughts or situations that are triggering these feelings, or does the anxiety seem to come from nowhere? I'm here to listen and explore this with you.",
-                    "Anxiety can show up in so many different ways. What does your anxiety typically feel like - is it more physical sensations, racing thoughts, or that constant sense of dread? I'm curious about what kinds of situations or thoughts tend to trigger it most for you. What's been on your mind that's making the anxiety feel particularly present right now?",
-                    "When you mention feeling anxious, I wonder what that experience is like for you. Does it come in waves, or is it more of a constant background hum? What thoughts tend to fuel it most? Sometimes exploring what our anxiety is trying to tell us can be helpful - what do you think yours might be worried about?",
-                    "I can sense that worry or fear is taking up a lot of space in your mind right now. That can be so exhausting. What are you finding yourself most worried about? Sometimes when we name our fears out loud, it can help us see which ones we might have some control over and which ones we don't."
+                    "When you say you're feeling anxious or scared, I can sense there's real distress there. What does this fear feel like in your body and mind? Are there specific thoughts or situations that are triggering these feelings, or does the anxiety seem to come from nowhere? I'm here to listen and explore this with you."
                 ],
 
                 // Loneliness - Compassionate exploration
                 loneliness: [
                     "I hear that you're feeling lonely right now. Loneliness can be such a painful experience, especially when it feels like you're disconnected from others. What does this loneliness look like for you? Are you physically alone, or is it more that feeling of being around people but still feeling unseen or misunderstood?",
-                    "When you say you feel lonely, I can sense there's a real ache there. What kind of connection are you most missing right now? Is it wanting close friendships, family connection, or maybe just someone who really understands what you're going through? I'm curious about what would help you feel less alone.",
-                    "Loneliness can feel so isolating, especially when it seems like everyone else is naturally connected. What does loneliness feel like for you right now? Is it missing specific people, or more about wanting someone who really understands you? I'm curious about what kind of connection you're most longing for.",
-                    "When you say you're feeling lonely, I wonder what that looks like in your daily life. Are you physically alone a lot, or is it more that feeling of being surrounded by people but still feeling unseen? What would meaningful connection look like for you - what are you hoping to find in relationships that feels missing right now?",
-                    "I can hear the loneliness in what you're sharing, and I want you to know that reaching out here shows real courage. What's been making the loneliness feel particularly strong lately? Sometimes understanding what triggered these feelings can help us think about what might provide some relief."
-                ],
-
-                // Overwhelmed - Practical exploration
-                overwhelmed: [
-                    "When everything feels like too much, it can be hard to even know where to start. What's contributing most to feeling overwhelmed right now - is it work, relationships, life changes, or just an accumulation of daily stresses? Sometimes talking through what's on your plate can help us see patterns or priorities.",
-                    "That overwhelmed feeling can be so paralyzing. What does your typical day look like right now? When you think about everything you're dealing with, what feels most urgent versus what might actually be most important? Sometimes those are different things, and sorting that out can help reduce the pressure."
-                ],
-
-                // Anger
-                anger: [
-                    "I can sense there's some real anger present for you right now. Anger can be such a powerful emotion - what's been triggering it for you lately? Sometimes anger is telling us something important about our boundaries or what matters to us. What do you think might be underneath this anger you're feeling?",
-                    "It sounds like anger is taking up space in your life right now. What does that anger feel like when it shows up - is it quick and intense, or more of a simmering frustration? I'm curious about what situations or thoughts tend to spark it most for you. What's been most frustrating lately?"
-                ],
-
-                // Motivation - Curiosity about what's underneath
-                motivation: [
-                    "Lack of motivation can be so frustrating, especially when you know what you 'should' be doing but just can't seem to make yourself do it. What's that experience like for you right now? Are there specific things you're struggling to motivate yourself for, or is it more of a general feeling? Sometimes understanding what's underneath can help.",
-                    "When motivation feels absent, it's worth exploring what might be going on underneath. Is it that the goals don't feel meaningful anymore, or are you feeling overwhelmed, or maybe burned out? What used to motivate you that doesn't seem to work anymore? Sometimes our motivation systems need recalibrating."
-                ],
-
-                // Sleep troubles
-                sleep_troubles: [
-                    "Sleep troubles can affect everything else in your life. What's your sleep situation like right now - is it trouble falling asleep, staying asleep, or waking up feeling unrefreshed? When did you first notice these sleep issues starting? Sometimes there are patterns or triggers we can identify.",
-                    "Poor sleep can create such a frustrating cycle where you're tired but wired, or exhausted but your mind won't turn off. What goes through your mind when you're lying there unable to sleep? Are there particular worries or thoughts that tend to keep you up, or is it more physical restlessness?"
+                    "When you say you feel lonely, I can sense there's a real ache there. What kind of connection are you most missing right now? Is it wanting close friendships, family connection, or maybe just someone who really understands what you're going through? I'm curious about what would help you feel less alone."
                 ],
 
                 // Greeting - Warm and curious
@@ -791,284 +712,12 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                 general: [
                     "I can sense there's something weighing on you. What's been occupying your thoughts lately? Sometimes just having space to talk through what's on our minds can help us process things better. What feels most important for you to share right now?",
                     "It sounds like you're going through something. What's your inner world like at the moment? I'm genuinely curious about your experience and what's been feeling most challenging or confusing for you lately. What would feel helpful to explore together?",
-                    "I hear that you're reaching out, and I want you to know that whatever you're experiencing matters. What's been going on that made you want to talk today? What feels most present or pressing in your life right now?",
-                    "Thank you for trusting me with whatever you're carrying. What's been on your heart or mind recently? Sometimes we know exactly what we want to talk about, and sometimes we just need space to figure it out. Either way is completely fine - where would you like to start?",
-                    "I can tell there's something you want to share. What's been the most challenging part of your day, week, or even just this moment? I'm here to listen and explore whatever feels most important to you right now."
+                    "Thank you for trusting me with whatever you're carrying. What's been on your heart or mind recently? Sometimes we know exactly what we want to talk about, and sometimes we just need space to figure it out. Either way is completely fine - where would you like to start?"
                 ]
             };
 
             const lowerMessage = userMessage.toLowerCase();
             let responseCategory = 'general';
             
-            // Enhanced detection logic - Comprehensive keyword detection including "I feel" and "I am" patterns
-            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.includes('want to die') || 
-                lowerMessage.includes('end my life') || lowerMessage.includes('suicide') || lowerMessage.includes('self harm') || 
-                lowerMessage.includes('hurt myself') || lowerMessage.includes('better off dead') || lowerMessage.includes('no point living')) {
-                responseCategory = 'crisis';
-            }
-            else if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline') || lowerMessage.includes('borderline personality')) {
-                responseCategory = 'bpd';
-            }
-            else if (lowerMessage.includes('adhd') || lowerMessage.includes('add') || lowerMessage.includes('can\'t focus') || 
-                     lowerMessage.includes('attention') || lowerMessage.includes('hyperactive') || lowerMessage.includes('distracted')) {
-                responseCategory = 'adhd';
-            }
-            else if (lowerMessage.includes('anxious') || lowerMessage.includes('anxiety') || lowerMessage.includes('panic') || 
-                     lowerMessage.includes('nervous') || lowerMessage.includes('i feel anxious') || lowerMessage.includes('i am anxious') ||
-                     lowerMessage.includes('feel nervous') || lowerMessage.includes('am nervous') || lowerMessage.includes('worried') ||
-                     lowerMessage.includes('i feel worried') || lowerMessage.includes('i am worried') || lowerMessage.includes('feel scared') ||
-                     lowerMessage.includes('i feel scared') || lowerMessage.includes('i am scared') || lowerMessage.includes('am scared') ||
-                     lowerMessage.includes('afraid') || lowerMessage.includes('i feel afraid') || lowerMessage.includes('i am afraid')) {
-                responseCategory = 'anxiety';
-            }
-            else if (lowerMessage.includes('depressed') || lowerMessage.includes('depression') || lowerMessage.includes('sad') || 
-                     lowerMessage.includes('hopeless') || lowerMessage.includes('down') || lowerMessage.includes('low') ||
-                     lowerMessage.includes('i feel sad') || lowerMessage.includes('i am sad') || lowerMessage.includes('feel sad') ||
-                     lowerMessage.includes('i feel down') || lowerMessage.includes('i am down') || lowerMessage.includes('feel down') ||
-                     lowerMessage.includes('i feel depressed') || lowerMessage.includes('i am depressed') || lowerMessage.includes('feel depressed') ||
-                     lowerMessage.includes('i feel low') || lowerMessage.includes('i am low') || lowerMessage.includes('feel low') ||
-                     lowerMessage.includes('i feel hopeless') || lowerMessage.includes('i am hopeless') || lowerMessage.includes('feel hopeless')) {
-                responseCategory = 'depression';
-            }
-            else if (lowerMessage.includes('lonely') || lowerMessage.includes('loneliness') || lowerMessage.includes('alone') || 
-                     lowerMessage.includes('isolated') || lowerMessage.includes('i feel lonely') || lowerMessage.includes('i am lonely') ||
-                     lowerMessage.includes('feel lonely') || lowerMessage.includes('i feel alone') || lowerMessage.includes('i am alone') ||
-                     lowerMessage.includes('feel alone') || lowerMessage.includes('i feel isolated') || lowerMessage.includes('i am isolated') ||
-                     lowerMessage.includes('feel isolated') || lowerMessage.includes('no friends') || lowerMessage.includes('nobody cares')) {
-                responseCategory = 'loneliness';
-            }
-            else if (lowerMessage.includes('overwhelmed') || lowerMessage.includes('too much') || lowerMessage.includes('burnout') || 
-                     lowerMessage.includes('stressed') || lowerMessage.includes('i feel overwhelmed') || lowerMessage.includes('i am overwhelmed') ||
-                     lowerMessage.includes('feel overwhelmed') || lowerMessage.includes('i feel stressed') || lowerMessage.includes('i am stressed') ||
-                     lowerMessage.includes('feel stressed') || lowerMessage.includes('can\'t cope') || lowerMessage.includes('too much pressure')) {
-                responseCategory = 'overwhelmed';
-            }
-            else if (lowerMessage.includes('angry') || lowerMessage.includes('anger') || lowerMessage.includes('furious') || 
-                     lowerMessage.includes('rage') || lowerMessage.includes('mad') || lowerMessage.includes('i feel angry') ||
-                     lowerMessage.includes('i am angry') || lowerMessage.includes('feel angry') || lowerMessage.includes('i feel mad') ||
-                     lowerMessage.includes('i am mad') || lowerMessage.includes('feel mad') || lowerMessage.includes('frustrated') ||
-                     lowerMessage.includes('i feel frustrated') || lowerMessage.includes('i am frustrated') || lowerMessage.includes('feel frustrated')) {
-                responseCategory = 'anger';
-            }
-            else if (lowerMessage.includes('motivation') || lowerMessage.includes('need motivation') || lowerMessage.includes('unmotivated') || 
-                     lowerMessage.includes('no energy') || lowerMessage.includes('can\'t motivate') || lowerMessage.includes('no drive') ||
-                     lowerMessage.includes('feel unmotivated') || lowerMessage.includes('i feel unmotivated') || lowerMessage.includes('i am unmotivated')) {
-                responseCategory = 'motivation';
-            }
-            else if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('can\'t sleep') || 
-                     lowerMessage.includes('sleep troubles') || lowerMessage.includes('tired') || lowerMessage.includes('exhausted') ||
-                     lowerMessage.includes('can\'t fall asleep') || lowerMessage.includes('wake up tired') || lowerMessage.includes('no sleep')) {
-                responseCategory = 'sleep_troubles';
-            }
-            else if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey') ||
-                     lowerMessage.includes('good morning') || lowerMessage.includes('good evening') || lowerMessage.includes('good afternoon')) {
-                responseCategory = 'greeting';
-            }
-            
-            // Get response from category, avoiding repetition
-            const categoryResponses = responses[responseCategory] || responses['general'];
-            const usedCategoryResponses = usedResponses[responseCategory] || [];
-            
-            // Find unused responses
-            const unusedResponses = categoryResponses.filter(response => 
-                !usedCategoryResponses.includes(response)
-            );
-            
-            let selectedResponse;
-            if (unusedResponses.length > 0) {
-                selectedResponse = unusedResponses[Math.floor(Math.random() * unusedResponses.length)];
-            } else {
-                // All responses used, reset and pick one
-                usedResponses[responseCategory] = [];
-                selectedResponse = categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
-            }
-            
-            // Track this response as used
-            if (!usedResponses[responseCategory]) {
-                usedResponses[responseCategory] = [];
-            }
-            usedResponses[responseCategory].push(selectedResponse);
-            
-            return { choices: [{ message: { content: selectedResponse } }] };
-        }
-
-        // ChatGPT API call function with fallback
-        async function callChatGPT(messages) {
-            try {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        model: "gpt-4",
-                        messages: messages,
-                        temperature: 0.75,
-                        top_p: 0.9,
-                        max_tokens: 800,
-                        frequency_penalty: 0.3,
-                        presence_penalty: 0.1,
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                const apiResponse = data.choices[0].message.content.trim();
-                
-                // Check if API gave generic unhelpful response - if so, use our intelligent system instead
-                if (apiResponse.includes("I'm really sorry that you're feeling this way, but I'm unable to provide the help that you need") ||
-                    apiResponse.includes("It's really important to talk things over with someone who can") ||
-                    apiResponse.includes("mental health professional or a trusted person in your life") ||
-                    apiResponse.includes("I'm not able to provide") ||
-                    apiResponse.includes("I can't provide the support you need")) {
-                    
-                    // Use our intelligent response system instead
-                    const lastUserMessage = messages[messages.length - 1].content;
-                    return generateIntelligentResponse(lastUserMessage, messages);
-                }
-                
-                return data;
-                
-            } catch (error) {
-                console.error('OpenAI API Error:', error);
-                // Fall back to intelligent response system
-                const lastUserMessage = messages[messages.length - 1].content;
-                return generateIntelligentResponse(lastUserMessage, messages);
-            }
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const sendButton = document.getElementById('sendButton');
-            const message = input.value.trim();
-            
-            if (message === '') return;
-            
-            // Disable send button and input
-            sendButton.disabled = true;
-            input.disabled = true;
-            
-            // Add user message to chat
-            addMessage(message, 'user');
-            input.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            try {
-                // Add user message to conversation history
-                conversationHistory.push({
-                    role: 'user',
-                    content: message
-                });
-
-                // Call ChatGPT API with intelligent fallback
-                const data = await callChatGPT(conversationHistory);
-                const aiResponse = data.choices[0].message.content.trim();
-                
-                // Add AI response to conversation history
-                conversationHistory.push({
-                    role: 'assistant',
-                    content: aiResponse
-                });
-
-                // Keep conversation history manageable
-                if (conversationHistory.length > 21) {
-                    conversationHistory = [
-                        conversationHistory[0], // Keep system prompt
-                        ...conversationHistory.slice(-20) // Keep last 20 messages
-                    ];
-                }
-
-                hideTypingIndicator();
-                addMessage(aiResponse, 'ai');
-
-            } catch (error) {
-                hideTypingIndicator();
-                console.error('Error:', error);
-                
-                // Fallback to intelligent response
-                const fallbackResponse = generateIntelligentResponse(message, conversationHistory);
-                addMessage(fallbackResponse.choices[0].message.content, 'ai');
-            } finally {
-                // Re-enable send button and input
-                sendButton.disabled = false;
-                input.disabled = false;
-                input.focus();
-            }
-        }
-
-        function addMessage(content, sender) {
-            const chatArea = document.getElementById('chatArea');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message`;
-            
-            if (sender === 'ai') {
-                // Create AI message with avatar
-                messageDiv.innerHTML = `
-                    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-                    <div class="ai-message-content">${content}</div>
-                `;
-            } else {
-                // Regular user message
-                messageDiv.textContent = content;
-            }
-            
-            // Remove welcome section after first user message
-            if (sender === 'user') {
-                const welcomeSection = document.querySelector('.welcome-section');
-                if (welcomeSection) {
-                    welcomeSection.remove();
-                }
-            }
-            
-            chatArea.appendChild(messageDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function showTypingIndicator() {
-            // Remove any existing typing indicator first
-            hideTypingIndicator();
-            
-            // Create a new typing indicator
-            const chatArea = document.getElementById('chatArea');
-            const typingDiv = document.createElement('div');
-            typingDiv.className = 'message ai-message';
-            typingDiv.id = 'currentTypingIndicator';
-            typingDiv.innerHTML = `
-                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-                <div class="thinking-heart">💚</div>
-            `;
-            
-            chatArea.appendChild(typingDiv);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            const existingIndicator = document.getElementById('currentTypingIndicator');
-            if (existingIndicator) {
-                existingIndicator.remove();
-            }
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        }
-
-        // Initialize app
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            showDisclaimerModal(); // Show disclaimer first
-            document.getElementById('messageInput').focus();
-        });
-        });
-    </script>
-</body>
-</html>
+            // Enhanced detection logic
+            if (lowerMessage.includes('suicidal') || lowerMessage.includes('kill myself') || lowerMessage.
