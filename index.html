@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HeartoListen - AI Mental Wellbeing Support</title>
-    <meta name="description" content="Free AI-powered Mental Wellbeing Support chat. A safe, judgement-free space for mental wellness.">
+    <meta name="description" content="Free AI-powered Mental Wellbeing Support Companion. Your 24/7 safe, private and judgement-free space for mental wellness.">
     <meta name="theme-color" content="#8eaf78">
     
     <!-- PWA and App Icon Meta Tags -->
@@ -511,11 +511,15 @@
                 max-width: 250px;
             }
         }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
     <!-- DISCLAIMER MODAL -->
-    <div id="disclaimerOverlay" class="disclaimer-overlay" style="display: none;">
+    <div id="disclaimerOverlay" class="disclaimer-overlay hidden">
         <div class="disclaimer-modal">
             <div class="warning-icon">⚠️</div>
             <h2>Important Disclaimer</h2>
@@ -605,18 +609,22 @@
     </div>
 
     <script>
-        // DISCLAIMER MODAL FUNCTIONS
+        // DISCLAIMER MODAL FUNCTIONS - FIXED TO SHOW ONLY ONCE
         function showDisclaimerModal() {
-            const hasAcceptedDisclaimer = sessionStorage.getItem('hearDisclaimerAccepted');
-            if (!hasAcceptedDisclaimer) {
-                document.getElementById('disclaimerOverlay').style.display = 'flex';
+            // Check if user has already seen the disclaimer (localStorage persists across sessions)
+            const hasSeenDisclaimer = localStorage.getItem('heartoListenDisclaimerSeen');
+            
+            if (hasSeenDisclaimer !== 'true') {
+                // User has NOT seen disclaimer before, show it
+                document.getElementById('disclaimerOverlay').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             }
         }
 
         function acceptDisclaimer() {
-            sessionStorage.setItem('hearDisclaimerAccepted', 'true');
-            document.getElementById('disclaimerOverlay').style.display = 'none';
+            // Save that user has seen and accepted the disclaimer
+            localStorage.setItem('heartoListenDisclaimerSeen', 'true');
+            document.getElementById('disclaimerOverlay').classList.add('hidden');
             document.body.style.overflow = 'auto';
             
             // Focus on the input field after accepting
@@ -977,9 +985,9 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             }
         }
 
-        // Initialize app - THIS IS THE CRITICAL MISSING PIECE!
+        // Initialize app - Show disclaimer only on first visit
         document.addEventListener('DOMContentLoaded', function() {
-            showDisclaimerModal(); // Show disclaimer first
+            showDisclaimerModal(); // This now checks localStorage and only shows if not seen before
             document.getElementById('messageInput').focus();
         });
     </script>
