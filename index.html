@@ -582,7 +582,7 @@ display: none !important;
 </head>
 <body>
 <!-- DISCLAIMER MODAL -->
-<div id="disclaimerOverlay" class="disclaimer-overlay hidden">
+<div id="disclaimerOverlay" class="disclaimer-overlay">
 <div class="disclaimer-modal">
 <div class="warning-icon">⚠️</div>
 <h2>Important Disclaimer</h2>
@@ -646,12 +646,6 @@ display: none !important;
 <p style="margin: 0;">I'm Eden and I am here to listen and support you through whatever you're experiencing. This is a safe, judgement-free space where you can share your thoughts and feelings.</p>
 </div>
 
-<!-- Memory Recap Section (hidden initially) -->
-<div class="memory-recap" id="memoryRecap" style="display: none;">
-<h4>Previous conversations:</h4>
-<ul id="memoryList"></ul>
-</div>
-
 <!-- Important Disclaimer -->
 <div class="disclaimer">
 <strong>⚠️ Important Safety Information:</strong>
@@ -680,487 +674,236 @@ onkeypress="handleKeyPress(event)">
 <script>
 // ENHANCED MEMORY SYSTEM
 let sessionMemories = [];
-let responseHistory = [];
-const MAX_MEMORIES = 15;
-const MAX_RESPONSE_HISTORY = 50;
+let conversationHistory = [];
+let isFirstMessage = true;
 
-// Enhanced memory with emotional context
-function saveMemory(userMessage, aiResponse, detectedCondition = null, emotionalTone = null) {
-const newMemory = {
-id: Date.now(),
-date: new Date().toISOString(),
-userMessage: userMessage,
-aiResponse: aiResponse,
-detectedCondition: detectedCondition,
-emotionalTone: emotionalTone,
-timestamp: Date.now(),
-keyTopics: extractKeyTopics(userMessage)
+// Show disclaimer modal on load
+window.onload = function() {
+document.getElementById('disclaimerOverlay').classList.remove('hidden');
 };
 
-sessionMemories.unshift(newMemory);
-sessionMemories = sessionMemories.slice(0, MAX_MEMORIES);
-
-// Track response patterns to avoid repetition
-responseHistory.push(aiResponse);
-responseHistory = responseHistory.slice(-MAX_RESPONSE_HISTORY);
+function acceptDisclaimer() {
+document.getElementById('disclaimerOverlay').classList.add('hidden');
 }
 
-function extractKeyTopics(message) {
-const lowerMessage = message.toLowerCase();
-const topics = [];
-
-// Extract key themes and topics
-if (lowerMessage.includes('work') || lowerMessage.includes('job')) topics.push('work');
-if (lowerMessage.includes('relationship') || lowerMessage.includes('partner') || lowerMessage.includes('boyfriend') || lowerMessage.includes('girlfriend')) topics.push('relationships');
-if (lowerMessage.includes('family') || lowerMessage.includes('parents') || lowerMessage.includes('mother') || lowerMessage.includes('father')) topics.push('family');
-if (lowerMessage.includes('school') || lowerMessage.includes('university') || lowerMessage.includes('study')) topics.push('education');
-if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia') || lowerMessage.includes('tired')) topics.push('sleep');
-if (lowerMessage.includes('eating') || lowerMessage.includes('food') || lowerMessage.includes('appetite')) topics.push('eating');
-
-return topics;
+function getNeedHelpNow() {
+window.open('https://www.samaritans.org/', '_blank');
 }
 
-function getMemories() {
-return sessionMemories || [];
+// Handle key press
+function handleKeyPress(event) {
+if (event.key === 'Enter') {
+sendMessage();
+}
 }
 
-function hasRecentlySaidSimilar(newResponse) {
-if (responseHistory.length === 0) return false;
+// Main send message function
+async function sendMessage() {
+const messageInput = document.getElementById('messageInput');
+const sendButton = document.getElementById('sendButton');
+const message = messageInput.value.trim();
 
-const recent = responseHistory.slice(-5);
-return recent.some(prev => {
-const similarity = calculateSimilarity(newResponse, prev);
-return similarity > 0.7; // 70% similarity threshold
-});
+if (!message) return;
+
+// Hide welcome section after first message
+if (isFirstMessage) {
+document.getElementById('welcomeSection').style.display = 'none';
+document.getElementById('logoHeader').classList.add('compact');
+isFirstMessage = false;
 }
 
-function calculateSimilarity(str1, str2) {
-const words1 = str1.toLowerCase().split(' ');
-const words2 = str2.toLowerCase().split(' ');
-const commonWords = words1.filter(word => words2.includes(word));
-return commonWords.length / Math.max(words1.length, words2.length);
+// Disable input
+messageInput.value = '';
+sendButton.disabled = true;
+sendButton.textContent = 'Sending...';
+
+// Add user message
+addMessage(message, 'user');
+
+// Show typing indicator
+const typingIndicator = addTypingIndicator();
+
+try {
+// Generate AI response
+const response = await generateAIResponse(message);
+
+// Remove typing indicator
+typingIndicator.remove();
+
+// Add AI response
+addMessage(response, 'ai');
+
+// Save to memory
+conversationHistory.push({ user: message, ai: response });
+
+} catch (error) {
+typingIndicator.remove();
+addMessage('I apologize, but I\'m having trouble responding right now. Please try again in a moment. Remember, if you\'re in crisis, please contact emergency services immediately.', 'error');
 }
 
-// ENHANCED MENTAL HEALTH CONDITION DETECTION
-function detectMentalHealthCondition(message) {
-const lowerMessage = message.toLowerCase();
-const conditions = [];
-
-// 1. Depression
-if (lowerMessage.match(/\b(depressed|depression|hopeless|worthless|empty|numb|sad|down|low|can't feel|lost interest|nothing matters|pointless|exhausted|tired all the time)\b/)) {
-conditions.push('depression');
+// Re-enable input
+sendButton.disabled = false;
+sendButton.textContent = 'Send';
+messageInput.focus();
 }
 
-// 2. Anxiety Disorders
-if (lowerMessage.match(/\b(anxious|anxiety|panic|worried|nervous|scared|afraid|fear|racing heart|can't breathe|overwhelming|catastrophic thinking|what if)\b/)) {
-conditions.push('anxiety');
+// Add message to chat
+function addMessage(content, type) {
+const chatArea = document.getElementById('chatArea');
+const messageDiv = document.createElement('div');
+
+if (type === 'user') {
+messageDiv.className = 'message user-message';
+messageDiv.textContent = content;
+} else if (type === 'ai') {
+messageDiv.className = 'message ai-message';
+messageDiv.innerHTML = `
+<img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+<div class="ai-message-content">${content}</div>
+`;
+} else if (type === 'error') {
+messageDiv.className = 'message error-message';
+messageDiv.textContent = content;
 }
 
-// 3. PTSD/Trauma
-if (lowerMessage.match(/\b(trauma|ptsd|flashbacks|nightmares|triggered|hypervigilant|dissociate|reliving|avoidance|jumpiness)\b/)) {
-conditions.push('ptsd');
+chatArea.appendChild(messageDiv);
+chatArea.scrollTop = chatArea.scrollHeight;
+return messageDiv;
 }
 
-// 4. ADHD
-if (lowerMessage.match(/\b(adhd|add|can't focus|distracted|hyperactive|impulsive|scattered|procrastinate|forgetful|restless)\b/)) {
-conditions.push('adhd');
+// Add typing indicator
+function addTypingIndicator() {
+const chatArea = document.getElementById('chatArea');
+const typingDiv = document.createElement('div');
+typingDiv.className = 'message ai-message';
+typingDiv.innerHTML = `
+<img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
+<div class="ai-message-content">
+<div class="thinking-heart">💚</div>
+</div>
+`;
+
+chatArea.appendChild(typingDiv);
+chatArea.scrollTop = chatArea.scrollHeight;
+return typingDiv;
 }
 
-// 5. Bipolar Disorder
-if (lowerMessage.match(/\b(bipolar|manic|mania|mood swings|euphoric|grandiose|racing thoughts|hypomanic|cycling|extreme mood)\b/)) {
-conditions.push('bipolar');
-}
+// Enhanced AI response generation
+async function generateAIResponse(userMessage) {
+// Simulate processing delay for more natural feel
+await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 2000));
 
-// 6. Eating Disorders
-if (lowerMessage.match(/\b(anorexia|bulimia|binge|purge|eating disorder|body image|fat|ugly|restrict|calories|weight|food anxiety)\b/)) {
-conditions.push('eating_disorder');
-}
+// Detect mental health conditions and emotional tone
+const conditions = detectMentalHealthConditions(userMessage);
+const emotionalTone = analyzeEmotionalTone(userMessage);
+const context = analyzeContext(userMessage, conversationHistory);
 
-// 7. OCD
-if (lowerMessage.match(/\b(ocd|obsessive|compulsive|intrusive thoughts|checking|washing|rituals|contamination|symmetry|perfectionism)\b/)) {
-conditions.push('ocd');
-}
-
-// 8. Social Anxiety
-if (lowerMessage.match(/\b(social anxiety|shy|embarrassed|judged|public speaking|awkward|self-conscious|blushing|avoiding people)\b/)) {
-conditions.push('social_anxiety');
-}
-
-// 9. Borderline Personality Disorder
-if (lowerMessage.match(/\b(bpd|borderline|abandonment|unstable|identity crisis|emotional roller coaster|splitting|self-harm|unstable relationships)\b/)) {
-conditions.push('bpd');
-}
-
-// 10. Autism Spectrum
-if (lowerMessage.match(/\b(autism|autistic|aspergers|sensory|overwhelmed by noise|social cues|stimming|routine|change is hard|masking)\b/)) {
-conditions.push('autism');
-}
-
-// 11. Substance Use Issues
-if (lowerMessage.match(/\b(addiction|alcoholic|drinking too much|drugs|substance|rehab|sober|withdrawal|cravings|relapse)\b/)) {
-conditions.push('substance_use');
-}
-
-// 12. Grief/Loss
-if (lowerMessage.match(/\b(grief|grieving|loss|died|death|funeral|miss them|gone|mourning|bereavement)\b/)) {
-conditions.push('grief');
-}
-
-// 13. Loneliness
-if (lowerMessage.match(/\b(lonely|alone|isolated|disconnected|no friends|nobody understands)\b/)) {
-conditions.push('loneliness');
-}
-
-// 14. Stress/Overwhelm
-if (lowerMessage.match(/\b(stressed|overwhelmed|too much|can't cope|burned out|pressure|deadline)\b/)) {
-conditions.push('stress');
-}
-
-return conditions;
-}
-
-// ENHANCED RESPONSE GENERATION SYSTEM WITH SUGGESTIONS
-function generateEnhancedResponse(userMessage, conversationHistory = []) {
-const memories = getMemories();
-const hasMemories = memories.length > 0;
-const detectedConditions = detectMentalHealthCondition(userMessage);
-const primaryCondition = detectedConditions[0] || 'general';
-
-// Generate contextual understanding
-const context = analyzeContext(userMessage, memories);
-
-let selectedResponse;
-let attempts = 0;
-const maxAttempts = 5;
-
-do {
-selectedResponse = selectResponse(primaryCondition, context, hasMemories);
-attempts++;
-} while (hasRecentlySaidSimilar(selectedResponse) && attempts < maxAttempts);
-
-// Add suggestions based on the condition and context
-const suggestions = generateSuggestions(primaryCondition, context, userMessage);
-if (suggestions.length > 0) {
-selectedResponse += "\n\n" + formatSuggestions(suggestions);
-}
-
-return {
-choices: [{
-message: {
-content: selectedResponse
-}
-}]
-};
-}
-
-function generateSuggestions(condition, context, userMessage) {
-const suggestions = getSuggestionBank()[condition] || getSuggestionBank()['general'];
-const contextualSuggestions = [];
-
-// Select 2-3 relevant suggestions based on context and randomness
-const shuffled = [...suggestions].sort(() => 0.5 - Math.random());
-contextualSuggestions.push(...shuffled.slice(0, 3));
-
-return contextualSuggestions;
-}
-
-function formatSuggestions(suggestions) {
-if (suggestions.length === 0) return "";
-
-let formatted = "Here are some strategies that might help:\n\n";
-suggestions.forEach((suggestion, index) => {
-formatted += `• ${suggestion}\n`;
-});
-
-return formatted;
-}
-
-function getSuggestionBank() {
-return {
-depression: [
-"Try the 5-4-3-2-1 grounding technique: Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste",
-"Set a small, achievable goal for today - even just making your bed or having a shower can create momentum",
-"Consider reaching out to one person who cares about you, even if it's just a simple 'hello' text",
-"Try a 10-minute walk outside if possible - sunlight and movement can naturally boost mood",
-"Practice self-compassion: speak to yourself as you would a good friend going through this",
-"Create a simple routine with one thing you look forward to each day, however small",
-"Consider keeping a mood journal to identify patterns and triggers",
-"Try deep breathing: 4 counts in, hold for 4, out for 6 - this activates your calm response"
-],
-
-anxiety: [
-"Practice the 4-7-8 breathing technique: Breathe in for 4, hold for 7, exhale for 8",
-"Try progressive muscle relaxation: tense and release each muscle group from toes to head",
-"Use the 'worry time' technique: set aside 15 minutes daily to worry, then redirect anxious thoughts to this time",
-"Ground yourself with the 5-4-3-2-1 technique when anxiety peaks",
-"Challenge anxious thoughts by asking: 'Is this thought helpful? Is it realistic? What would I tell a friend?'",
-"Create a 'worry toolkit' with calming activities: tea, music, a comfort object, or breathing exercises",
-"Limit caffeine and try herbal teas like chamomile which can naturally reduce anxiety",
-"Practice mindfulness: focus on the present moment rather than future 'what-ifs'"
-],
-
-ptsd: [
-"Create a safety plan with grounding techniques you can use during flashbacks",
-"Practice safe-place visualization: imagine a detailed, peaceful place you can 'visit' mentally",
-"Use bilateral stimulation: cross your arms and pat your shoulders alternately, or walk while focusing on left-right steps",
-"Develop a daily routine that includes predictable, comforting activities",
-"Try container visualization: imagine putting distressing memories in a strong container you can open when ready",
-"Focus on your five senses to stay present during dissociation or flashbacks",
-"Consider trauma-informed yoga or gentle movement that helps you reconnect with your body",
-"Build a support network of people who understand trauma responses"
-],
-
-adhd: [
-"Use the Pomodoro Technique: 25 minutes focused work, 5 minute break, repeat",
-"Create external structure: alarms, calendars, and visual reminders for important tasks",
-"Break large tasks into smaller, specific steps you can check off",
-"Find your optimal focus time (morning vs evening) and schedule important work then",
-"Use body doubling: work alongside someone else, even virtually, to maintain focus",
-"Try fidget tools or background music to help maintain attention during tasks",
-"Set up your environment to minimize distractions before starting focused work",
-"Practice self-compassion: ADHD brains work differently, not defectively"
-],
-
-bipolar: [
-"Track your mood daily to identify patterns and early warning signs",
-"Maintain consistent sleep schedule - sleep disruption can trigger episodes",
-"Create a crisis plan for when you notice mood episode warning signs",
-"Build a support network who can recognize your early episode signs",
-"Practice stress management techniques as stress can trigger mood episodes",
-"Consider light therapy and maintain regular exposure to natural sunlight",
-"Keep a routine during stable periods to provide structure and predictability",
-"Learn to distinguish between normal emotions and mood episode symptoms"
-],
-
-eating_disorder: [
-"Practice intuitive eating: check in with hunger and fullness cues without judgment",
-"Challenge food rules by questioning where they came from and if they're serving you",
-"Try mindful eating: focus on taste, texture, and satisfaction rather than restriction",
-"Develop non-food coping strategies for emotions: art, music, movement, or calling a friend",
-"Practice body neutrality: focus on what your body does rather than how it looks",
-"Create a support network of people who understand eating disorder recovery",
-"Use distraction techniques during urges: 20-minute rule before acting on ED behaviors",
-"Work on self-compassion and challenging perfectionist thinking patterns"
-],
-
-ocd: [
-"Practice exposure and response prevention: gradually face fears without doing compulsions",
-"Label intrusive thoughts as 'just OCD' rather than meaningful or dangerous thoughts",
-"Try mindfulness: observe thoughts without engaging or fighting them",
-"Delay compulsions: start with waiting 5 minutes, gradually increase the delay",
-"Create uncertainty training: practice being okay with not knowing for sure",
-"Use grounding techniques when anxiety from resisting compulsions peaks",
-"Build a hierarchy of triggers from easiest to hardest to practice exposure gradually",
-"Remember that thoughts are not actions and don't require responses"
-],
-
-social_anxiety: [
-"Start with small social exposures: make eye contact with cashiers or say 'thank you'",
-"Practice self-compassionate self-talk before and after social situations",
-"Use breathing techniques before social interactions to calm your nervous system",
-"Challenge catastrophic thinking: what's the realistic worst-case scenario?",
-"Prepare conversation starters or questions to reduce social uncertainty",
-"Focus outward during conversations rather than on your internal anxiety",
-"Set small, achievable social goals rather than avoiding all social situations",
-"Remember that most people are focused on themselves, not judging you"
-],
-
-bpd: [
-"Practice the STOP skill: Stop, Take a breath, Observe, Proceed mindfully",
-"Use distress tolerance techniques: ice cubes, intense exercise, or cold water on face",
-"Try emotional regulation: name the emotion, rate its intensity, use opposite action",
-"Practice radical acceptance for situations you cannot change",
-"Use interpersonal effectiveness skills: be clear about your needs and boundaries",
-"Create a crisis survival kit with comfort items and coping strategies",
-"Practice mindfulness to stay present rather than being overwhelmed by emotions",
-"Work on building mastery: engage in activities that create a sense of accomplishment"
-],
-
-autism: [
-"Create sensory regulation strategies: identify what sensory input helps vs overwhelms you",
-"Build in transition time between activities to reduce overwhelm",
-"Practice unmasking in safe spaces: allow yourself to stim and be authentically you",
-"Develop scripts for common social situations to reduce social anxiety",
-"Create predictable routines that provide structure and reduce uncertainty",
-"Use visual schedules or lists to manage daily tasks and expectations",
-"Find your community: connect with other autistic people who understand your experience",
-"Advocate for accommodations you need rather than forcing yourself to appear neurotypical"
-],
-
-substance_use: [
-"Identify your triggers: people, places, emotions, or situations that increase cravings",
-"Develop healthy coping strategies for the emotions that lead to substance use",
-"Build a sober support network: people who support your recovery goals",
-"Create structure in your day: idle time can be challenging in early recovery",
-"Practice urge surfing: notice cravings without acting, knowing they will pass",
-"Remove substances and paraphernalia from your environment",
-"Celebrate small wins in recovery: each day sober is an achievement",
-"Consider professional support: therapy, support groups, or medical assistance"
-],
-
-grief: [
-"Allow yourself to feel the full range of grief emotions without judgment",
-"Create rituals to honor your loved one: photos, special foods, or visiting meaningful places",
-"Connect with others who understand loss: grief support groups or counseling",
-"Take care of your physical needs: grief is exhausting and requires extra self-care",
-"Keep some routines but allow flexibility for difficult days",
-"Express your feelings through writing, art, music, or talking",
-"Remember that grief has no timeline - healing isn't linear",
-"Consider how your loved one would want you to care for yourself"
-],
-
-loneliness: [
-"Start small with social connection: smile at neighbors or chat briefly with cashiers",
-"Join activities based on your interests where you'll meet like-minded people",
-"Volunteer for causes you care about - helping others can create meaningful connections",
-"Practice self-compassion: treat yourself as kindly as you would a good friend",
-"Consider online communities focused on your hobbies or interests",
-"Reach out to old friends or family members you've lost touch with",
-"Focus on quality over quantity: one meaningful connection matters more than many surface ones",
-"Develop your relationship with yourself: learn to enjoy your own company"
-],
-
-stress: [
-"Practice time management: prioritize tasks and break overwhelming projects into steps",
-"Use the 4-7-8 breathing technique when stress peaks",
-"Set boundaries: practice saying no to additional commitments when overwhelmed",
-"Try progressive muscle relaxation to release physical tension from stress",
-"Engage in regular physical activity - even 10 minutes of movement helps",
-"Create a wind-down routine to separate work stress from personal time",
-"Practice the 'good enough' mindset rather than perfectionism",
-"Schedule regular self-care activities, treating them as non-negotiable appointments"
-],
-
-general: [
-"Practice daily self-check-ins: How am I feeling emotionally and physically?",
-"Try journaling to process thoughts and emotions without judgment",
-"Engage in activities that bring you joy or a sense of accomplishment",
-"Maintain connections with supportive people in your life",
-"Create healthy boundaries between work, relationships, and personal time",
-"Practice gratitude: notice three things you're thankful for each day",
-"Prioritize sleep hygiene: consistent bedtime, limited screens before sleep",
-"Remember that seeking help is a sign of strength, not weakness"
-]
-};
-}
-
-function analyzeContext(message, memories) {
-const context = {
-isFirstTime: memories.length === 0,
-recentConditions: memories.slice(0, 3).map(m => m.detectedCondition).filter(Boolean),
-keyTopics: extractKeyTopics(message),
-emotionalProgression: memories.slice(0, 5).map(m => m.emotionalTone).filter(Boolean),
-timeOfDay: new Date().getHours(),
-messageLength: message.length,
-urgencyLevel: assessUrgency(message)
-};
-
-return context;
-}
-
-function assessUrgency(message) {
-const urgentWords = ['crisis', 'emergency', 'help', 'can\'t cope', 'breaking down', 'desperate', 'urgent'];
-const urgentCount = urgentWords.filter(word => message.toLowerCase().includes(word)).length;
-return urgentCount > 0 ? 'high' : 'normal';
-}
-
-function selectResponse(condition, context, hasMemories) {
-const responses = getResponseBank();
-const conditionResponses = responses[condition] || responses['general'];
-
-// Filter by memory status
-const appropriateResponses = hasMemories ? 
-(conditionResponses.returning || conditionResponses.first_time) : 
-conditionResponses.first_time;
-
-// Add contextual personalization
-let selectedResponse = appropriateResponses[Math.floor(Math.random() * appropriateResponses.length)];
-
-// Add contextual elements based on time, topics, etc.
-selectedResponse = personalizeResponse(selectedResponse, context);
-
-return selectedResponse;
-}
-
-function personalizeResponse(response, context) {
-// Add time-sensitive elements
-if (context.timeOfDay < 12) {
-response = response.replace(/today/g, 'this morning');
-} else if (context.timeOfDay > 18) {
-response = response.replace(/today/g, 'this evening');
-}
-
-// Add topic-specific elements
-if (context.keyTopics.includes('work')) {
-response += " Work-related stress can really impact our overall wellbeing.";
-}
+// Generate contextual response
+const response = selectResponse(conditions, emotionalTone, context);
 
 return response;
 }
 
-// COMPREHENSIVE RESPONSE BANK FOR MENTAL HEALTH CONDITIONS WITH BALANCED EXPLORATION + SUPPORT
+// Mental health condition detection
+function detectMentalHealthConditions(message) {
+const lowerMessage = message.toLowerCase();
+const conditions = [];
+
+// Depression indicators
+if (lowerMessage.match(/\b(depressed|depression|hopeless|worthless|empty|numb|sad|down|low|can't feel|lost interest|nothing matters|pointless|exhausted|tired all the time)\b/)) {
+conditions.push('depression');
+}
+
+// Anxiety indicators
+if (lowerMessage.match(/\b(anxious|anxiety|panic|worried|nervous|scared|afraid|fear|racing heart|can't breathe|overwhelming|catastrophic thinking|what if)\b/)) {
+conditions.push('anxiety');
+}
+
+// Stress indicators
+if (lowerMessage.match(/\b(stressed|overwhelmed|too much|can't cope|burned out|pressure|deadline)\b/)) {
+conditions.push('stress');
+}
+
+// Loneliness indicators
+if (lowerMessage.match(/\b(lonely|alone|isolated|disconnected|no friends|nobody understands)\b/)) {
+conditions.push('loneliness');
+}
+
+// Relationship issues
+if (lowerMessage.match(/\b(relationship|breakup|partner|boyfriend|girlfriend|marriage|divorce|family problems)\b/)) {
+conditions.push('relationships');
+}
+
+// Work/career issues
+if (lowerMessage.match(/\b(work|job|career|boss|colleague|workplace|unemployed|fired|quit)\b/)) {
+conditions.push('work');
+}
+
+return conditions.length > 0 ? conditions : ['general'];
+}
+
+// Emotional tone analysis
+function analyzeEmotionalTone(message) {
+const lowerMessage = message.toLowerCase();
+
+if (lowerMessage.match(/\b(angry|mad|furious|rage|pissed|frustrated)\b/)) return 'angry';
+if (lowerMessage.match(/\b(sad|crying|tears|heartbroken|devastated)\b/)) return 'sad';
+if (lowerMessage.match(/\b(scared|terrified|frightened|afraid|fearful)\b/)) return 'fearful';
+if (lowerMessage.match(/\b(excited|happy|joy|great|amazing|wonderful)\b/)) return 'positive';
+if (lowerMessage.match(/\b(confused|lost|don't know|uncertain|mixed up)\b/)) return 'confused';
+
+return 'neutral';
+}
+
+// Context analysis
+function analyzeContext(message, history) {
+return {
+isFirstMessage: history.length === 0,
+previousTopics: history.slice(-3).map(h => h.user).join(' '),
+messageLength: message.length,
+timeOfDay: new Date().getHours()
+};
+}
+
+// Response selection system
+function selectResponse(conditions, tone, context) {
+const primaryCondition = conditions[0] || 'general';
+const responses = getResponseBank();
+
+// Get appropriate response bank
+const conditionResponses = responses[primaryCondition] || responses['general'];
+const responseOptions = context.isFirstMessage ? 
+conditionResponses.first_time || conditionResponses : 
+conditionResponses.returning || conditionResponses;
+
+// Select response
+let selectedResponse;
+if (Array.isArray(responseOptions)) {
+selectedResponse = responseOptions[Math.floor(Math.random() * responseOptions.length)];
+} else {
+selectedResponse = responseOptions;
+}
+
+// Add suggestions based on condition
+const suggestions = getSuggestions(primaryCondition);
+if (suggestions.length > 0) {
+const selectedSuggestions = suggestions.sort(() => 0.5 - Math.random()).slice(0, 2);
+selectedResponse += "\n\n" + formatSuggestions(selectedSuggestions);
+}
+
+return selectedResponse;
+}
+
+// Response bank
 function getResponseBank() {
 return {
 depression: {
 first_time: [
-"I can sense the heaviness you're carrying - depression can make everything feel like you're moving through thick fog. What's been the hardest part of your day-to-day experience lately? Sometimes when we're in this deep, even small steps toward feeling better can seem impossible, but there are gentle ways to start caring for yourself.",
+"I can sense the heaviness you're carrying - depression can make everything feel like you're moving through thick fog. What's been the hardest part of your day-to-day experience lately? You're not alone in this, and there are gentle ways to start caring for yourself.",
 
-"That sadness sounds so profound and exhausting. When depression settles in, it can feel like you're cut off from the parts of yourself that used to find meaning or joy. What activities or people used to bring you comfort? Even if they don't feel accessible right now, understanding what's shifted can help us think about small ways to reconnect.",
+"That sadness sounds so profound and exhausting. When depression settles in, it can feel like you're cut off from the parts of yourself that used to find meaning or joy. What activities or people used to bring you comfort? Even if they don't feel accessible right now, understanding what's shifted can help.",
 
-"The emptiness you're describing makes complete sense with depression - it's like your emotional world has gone gray. Are there any moments, even brief ones, when that heaviness lifts slightly? I'm wondering about your sleep, appetite, and energy levels too, as these physical aspects often need attention alongside the emotional pain.",
-
-"I hear you're dealing with depression, and that takes real courage to name and reach out about. What does your inner voice sound like when the depression is loudest? Sometimes depression tells us harsh things about our worth or future that aren't true. Understanding those patterns can be the first step toward responding differently."
+"The emptiness you're describing makes complete sense with depression - it's like your emotional world has gone gray. Are there any moments, even brief ones, when that heaviness lifts slightly? Taking care of the basics like sleep and gentle movement can sometimes help."
 ],
-
 returning: [
-"I remember you sharing about feeling depressed before, and I'm glad you came back. How has that weight been since we last talked? Sometimes depression shifts in subtle ways that are hard to notice day-to-day, but looking back over time can reveal changes.",
-
-"Thank you for continuing to trust this space with your depression experience. I recall how exhausting everything felt for you. Are you finding any small pockets of relief, or does everything still feel consistently heavy? Even tiny shifts can be meaningful in depression recovery.",
-
-"I've been thinking about our conversation about depression. How are you treating yourself these days? Depression often comes with harsh self-criticism, and I'm curious whether you're finding any moments of self-compassion."
-]
-},
-
-anxiety: {
-first_time: [
-"The anxiety you're experiencing sounds intense and all-consuming. When your nervous system is in constant alert mode, it can feel like danger is everywhere even when you're safe. What situations or thoughts seem to trigger the anxiety most? Understanding your specific patterns can help us develop targeted ways to calm your nervous system.",
-
-"I can almost feel the racing energy in your words. Anxiety often shows up both in our minds and bodies - racing thoughts paired with physical symptoms like rapid heartbeat or shallow breathing. What does anxiety feel like in your body? Sometimes working with the physical symptoms can be the fastest way to interrupt the anxiety cycle.",
-
-"That worry cycle sounds exhausting to live with. Anxiety has this way of creating 'what if' scenarios that feel urgent and real, even when they're unlikely. What fears seem to dominate your thoughts? Breaking down these worry patterns can help distinguish between realistic concerns and anxiety's false alarms.",
-
-"The overwhelm you're describing sounds like anxiety is really running the show right now. When everything feels threatening and urgent, it's hard to think clearly or feel calm. What helps you feel most grounded when the anxiety peaks? Even if nothing feels very effective right now, there are specific techniques that can help retrain an overactive nervous system."
-],
-
-returning: [
-"I remember you sharing about anxiety before, and I can hear it's still very present. How have those racing thoughts been lately? Have you noticed any patterns in what triggers your anxiety or times when it feels more manageable?",
-
-"Good to hear from you again. I recall how physically uncomfortable the anxiety was for you - that racing heart and tension. How has your body been feeling? Sometimes anxiety recovery involves learning to work with our nervous system differently.",
-
-"I remember the worry spirals you described. How has your relationship with those anxious thoughts evolved? Are you finding any success in stepping back from the anxiety and observing it rather than being completely caught up in it?"
-]
-},
-
-// I'll continue with a few more key conditions to show the pattern
-
-general: {
-first_time: [
-"I can sense something important is on your mind. What's been taking up the most mental and emotional space for you lately? Sometimes just having someone truly listen without judgment can help us understand our own experience better.",
-
-"There's something in your message that tells me you're processing something significant. What feels most pressing or confusing in your life right now? Whether it's a specific situation or just a general sense that something feels off, I'm here to explore it with you.",
-
-"I hear you reaching out, and I want you to know this is a safe space to share whatever is real for you. What brought you here today? Understanding what's driving you to seek support can help us figure out the most helpful direction to explore.",
-
-"Something has prompted you to seek support today, and that takes awareness and courage. What's been stirring beneath the surface for you? Sometimes our struggles don't fit neat categories, and that's completely normal - we can work with whatever you're experiencing."
-],
-
-returning: [
-"I'm really glad you came back to continue our conversation. What feels most important to explore today? I'm curious how things have been evolving for you since we last connected.",
-
-"Thank you for continuing to trust this space with your thoughts and feelings. What's been on your heart and mind lately? I'm here to listen and help you work through whatever you're experiencing.",
-
-"It's wonderful to see you again. What would be most helpful to focus on in our conversation today? I'm interested in hearing how you've been and what support might be most valuable right now."
-]
-}
-};
-}
+"I remember you sharing about feeling depressed before. How has that weight been since we last
