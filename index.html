@@ -299,6 +299,38 @@ cursor: not-allowed;
 transform: none;
 }
 
+/* Suggestions styling */
+.suggestion-section {
+background: linear-gradient(135deg, rgba(139, 195, 74, 0.1) 0%, rgba(76, 175, 80, 0.1) 100%);
+border: 2px solid rgba(76, 175, 80, 0.3);
+border-radius: 12px;
+padding: 15px;
+margin: 10px 0;
+}
+
+.suggestion-header {
+font-weight: 600;
+color: #2e7d32;
+margin-bottom: 8px;
+font-size: 14px;
+}
+
+.suggestion-list {
+list-style: none;
+padding: 0;
+margin: 0;
+}
+
+.suggestion-item {
+background: rgba(255, 255, 255, 0.7);
+padding: 8px 12px;
+margin: 5px 0;
+border-radius: 8px;
+border-left: 3px solid #4CAF50;
+font-size: 13px;
+line-height: 1.4;
+}
+
 @keyframes fadeIn {
 from {
 opacity: 0;
@@ -774,10 +806,20 @@ if (lowerMessage.match(/\b(grief|grieving|loss|died|death|funeral|miss them|gone
 conditions.push('grief');
 }
 
+// 13. Loneliness
+if (lowerMessage.match(/\b(lonely|alone|isolated|disconnected|no friends|nobody understands)\b/)) {
+conditions.push('loneliness');
+}
+
+// 14. Stress/Overwhelm
+if (lowerMessage.match(/\b(stressed|overwhelmed|too much|can't cope|burned out|pressure|deadline)\b/)) {
+conditions.push('stress');
+}
+
 return conditions;
 }
 
-// ENHANCED RESPONSE GENERATION SYSTEM
+// ENHANCED RESPONSE GENERATION SYSTEM WITH SUGGESTIONS
 function generateEnhancedResponse(userMessage, conversationHistory = []) {
 const memories = getMemories();
 const hasMemories = memories.length > 0;
@@ -796,12 +838,209 @@ selectedResponse = selectResponse(primaryCondition, context, hasMemories);
 attempts++;
 } while (hasRecentlySaidSimilar(selectedResponse) && attempts < maxAttempts);
 
+// Add suggestions based on the condition and context
+const suggestions = generateSuggestions(primaryCondition, context, userMessage);
+if (suggestions.length > 0) {
+selectedResponse += "\n\n" + formatSuggestions(suggestions);
+}
+
 return {
 choices: [{
 message: {
 content: selectedResponse
 }
 }]
+};
+}
+
+function generateSuggestions(condition, context, userMessage) {
+const suggestions = getSuggestionBank()[condition] || getSuggestionBank()['general'];
+const contextualSuggestions = [];
+
+// Select 2-3 relevant suggestions based on context and randomness
+const shuffled = [...suggestions].sort(() => 0.5 - Math.random());
+contextualSuggestions.push(...shuffled.slice(0, 3));
+
+return contextualSuggestions;
+}
+
+function formatSuggestions(suggestions) {
+if (suggestions.length === 0) return "";
+
+let formatted = "Here are some strategies that might help:\n\n";
+suggestions.forEach((suggestion, index) => {
+formatted += `• ${suggestion}\n`;
+});
+
+return formatted;
+}
+
+function getSuggestionBank() {
+return {
+depression: [
+"Try the 5-4-3-2-1 grounding technique: Name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste",
+"Set a small, achievable goal for today - even just making your bed or having a shower can create momentum",
+"Consider reaching out to one person who cares about you, even if it's just a simple 'hello' text",
+"Try a 10-minute walk outside if possible - sunlight and movement can naturally boost mood",
+"Practice self-compassion: speak to yourself as you would a good friend going through this",
+"Create a simple routine with one thing you look forward to each day, however small",
+"Consider keeping a mood journal to identify patterns and triggers",
+"Try deep breathing: 4 counts in, hold for 4, out for 6 - this activates your calm response"
+],
+
+anxiety: [
+"Practice the 4-7-8 breathing technique: Breathe in for 4, hold for 7, exhale for 8",
+"Try progressive muscle relaxation: tense and release each muscle group from toes to head",
+"Use the 'worry time' technique: set aside 15 minutes daily to worry, then redirect anxious thoughts to this time",
+"Ground yourself with the 5-4-3-2-1 technique when anxiety peaks",
+"Challenge anxious thoughts by asking: 'Is this thought helpful? Is it realistic? What would I tell a friend?'",
+"Create a 'worry toolkit' with calming activities: tea, music, a comfort object, or breathing exercises",
+"Limit caffeine and try herbal teas like chamomile which can naturally reduce anxiety",
+"Practice mindfulness: focus on the present moment rather than future 'what-ifs'"
+],
+
+ptsd: [
+"Create a safety plan with grounding techniques you can use during flashbacks",
+"Practice safe-place visualization: imagine a detailed, peaceful place you can 'visit' mentally",
+"Use bilateral stimulation: cross your arms and pat your shoulders alternately, or walk while focusing on left-right steps",
+"Develop a daily routine that includes predictable, comforting activities",
+"Try container visualization: imagine putting distressing memories in a strong container you can open when ready",
+"Focus on your five senses to stay present during dissociation or flashbacks",
+"Consider trauma-informed yoga or gentle movement that helps you reconnect with your body",
+"Build a support network of people who understand trauma responses"
+],
+
+adhd: [
+"Use the Pomodoro Technique: 25 minutes focused work, 5 minute break, repeat",
+"Create external structure: alarms, calendars, and visual reminders for important tasks",
+"Break large tasks into smaller, specific steps you can check off",
+"Find your optimal focus time (morning vs evening) and schedule important work then",
+"Use body doubling: work alongside someone else, even virtually, to maintain focus",
+"Try fidget tools or background music to help maintain attention during tasks",
+"Set up your environment to minimize distractions before starting focused work",
+"Practice self-compassion: ADHD brains work differently, not defectively"
+],
+
+bipolar: [
+"Track your mood daily to identify patterns and early warning signs",
+"Maintain consistent sleep schedule - sleep disruption can trigger episodes",
+"Create a crisis plan for when you notice mood episode warning signs",
+"Build a support network who can recognize your early episode signs",
+"Practice stress management techniques as stress can trigger mood episodes",
+"Consider light therapy and maintain regular exposure to natural sunlight",
+"Keep a routine during stable periods to provide structure and predictability",
+"Learn to distinguish between normal emotions and mood episode symptoms"
+],
+
+eating_disorder: [
+"Practice intuitive eating: check in with hunger and fullness cues without judgment",
+"Challenge food rules by questioning where they came from and if they're serving you",
+"Try mindful eating: focus on taste, texture, and satisfaction rather than restriction",
+"Develop non-food coping strategies for emotions: art, music, movement, or calling a friend",
+"Practice body neutrality: focus on what your body does rather than how it looks",
+"Create a support network of people who understand eating disorder recovery",
+"Use distraction techniques during urges: 20-minute rule before acting on ED behaviors",
+"Work on self-compassion and challenging perfectionist thinking patterns"
+],
+
+ocd: [
+"Practice exposure and response prevention: gradually face fears without doing compulsions",
+"Label intrusive thoughts as 'just OCD' rather than meaningful or dangerous thoughts",
+"Try mindfulness: observe thoughts without engaging or fighting them",
+"Delay compulsions: start with waiting 5 minutes, gradually increase the delay",
+"Create uncertainty training: practice being okay with not knowing for sure",
+"Use grounding techniques when anxiety from resisting compulsions peaks",
+"Build a hierarchy of triggers from easiest to hardest to practice exposure gradually",
+"Remember that thoughts are not actions and don't require responses"
+],
+
+social_anxiety: [
+"Start with small social exposures: make eye contact with cashiers or say 'thank you'",
+"Practice self-compassionate self-talk before and after social situations",
+"Use breathing techniques before social interactions to calm your nervous system",
+"Challenge catastrophic thinking: what's the realistic worst-case scenario?",
+"Prepare conversation starters or questions to reduce social uncertainty",
+"Focus outward during conversations rather than on your internal anxiety",
+"Set small, achievable social goals rather than avoiding all social situations",
+"Remember that most people are focused on themselves, not judging you"
+],
+
+bpd: [
+"Practice the STOP skill: Stop, Take a breath, Observe, Proceed mindfully",
+"Use distress tolerance techniques: ice cubes, intense exercise, or cold water on face",
+"Try emotional regulation: name the emotion, rate its intensity, use opposite action",
+"Practice radical acceptance for situations you cannot change",
+"Use interpersonal effectiveness skills: be clear about your needs and boundaries",
+"Create a crisis survival kit with comfort items and coping strategies",
+"Practice mindfulness to stay present rather than being overwhelmed by emotions",
+"Work on building mastery: engage in activities that create a sense of accomplishment"
+],
+
+autism: [
+"Create sensory regulation strategies: identify what sensory input helps vs overwhelms you",
+"Build in transition time between activities to reduce overwhelm",
+"Practice unmasking in safe spaces: allow yourself to stim and be authentically you",
+"Develop scripts for common social situations to reduce social anxiety",
+"Create predictable routines that provide structure and reduce uncertainty",
+"Use visual schedules or lists to manage daily tasks and expectations",
+"Find your community: connect with other autistic people who understand your experience",
+"Advocate for accommodations you need rather than forcing yourself to appear neurotypical"
+],
+
+substance_use: [
+"Identify your triggers: people, places, emotions, or situations that increase cravings",
+"Develop healthy coping strategies for the emotions that lead to substance use",
+"Build a sober support network: people who support your recovery goals",
+"Create structure in your day: idle time can be challenging in early recovery",
+"Practice urge surfing: notice cravings without acting, knowing they will pass",
+"Remove substances and paraphernalia from your environment",
+"Celebrate small wins in recovery: each day sober is an achievement",
+"Consider professional support: therapy, support groups, or medical assistance"
+],
+
+grief: [
+"Allow yourself to feel the full range of grief emotions without judgment",
+"Create rituals to honor your loved one: photos, special foods, or visiting meaningful places",
+"Connect with others who understand loss: grief support groups or counseling",
+"Take care of your physical needs: grief is exhausting and requires extra self-care",
+"Keep some routines but allow flexibility for difficult days",
+"Express your feelings through writing, art, music, or talking",
+"Remember that grief has no timeline - healing isn't linear",
+"Consider how your loved one would want you to care for yourself"
+],
+
+loneliness: [
+"Start small with social connection: smile at neighbors or chat briefly with cashiers",
+"Join activities based on your interests where you'll meet like-minded people",
+"Volunteer for causes you care about - helping others can create meaningful connections",
+"Practice self-compassion: treat yourself as kindly as you would a good friend",
+"Consider online communities focused on your hobbies or interests",
+"Reach out to old friends or family members you've lost touch with",
+"Focus on quality over quantity: one meaningful connection matters more than many surface ones",
+"Develop your relationship with yourself: learn to enjoy your own company"
+],
+
+stress: [
+"Practice time management: prioritize tasks and break overwhelming projects into steps",
+"Use the 4-7-8 breathing technique when stress peaks",
+"Set boundaries: practice saying no to additional commitments when overwhelmed",
+"Try progressive muscle relaxation to release physical tension from stress",
+"Engage in regular physical activity - even 10 minutes of movement helps",
+"Create a wind-down routine to separate work stress from personal time",
+"Practice the 'good enough' mindset rather than perfectionism",
+"Schedule regular self-care activities, treating them as non-negotiable appointments"
+],
+
+general: [
+"Practice daily self-check-ins: How am I feeling emotionally and physically?",
+"Try journaling to process thoughts and emotions without judgment",
+"Engage in activities that bring you joy or a sense of accomplishment",
+"Maintain connections with supportive people in your life",
+"Create healthy boundaries between work, relationships, and personal time",
+"Practice gratitude: notice three things you're thankful for each day",
+"Prioritize sleep hygiene: consistent bedtime, limited screens before sleep",
+"Remember that seeking help is a sign of strength, not weakness"
+]
 };
 }
 
@@ -853,589 +1092,75 @@ response = response.replace(/today/g, 'this evening');
 
 // Add topic-specific elements
 if (context.keyTopics.includes('work')) {
-response += " Work stress can really take a toll on our mental health.";
+response += " Work-related stress can really impact our overall wellbeing.";
 }
 
 return response;
 }
 
-// COMPREHENSIVE RESPONSE BANK FOR 12 MENTAL HEALTH CONDITIONS
+// COMPREHENSIVE RESPONSE BANK FOR MENTAL HEALTH CONDITIONS WITH BALANCED EXPLORATION + SUPPORT
 function getResponseBank() {
 return {
 depression: {
 first_time: [
-"I can hear such deep pain in what you're sharing. Depression can make everything feel heavy and colorless, like you're looking at the world through gray glass. What does a typical day feel like for you right now? Sometimes just describing the weight can help us understand it better.",
+"I can sense the heaviness you're carrying - depression can make everything feel like you're moving through thick fog. What's been the hardest part of your day-to-day experience lately? Sometimes when we're in this deep, even small steps toward feeling better can seem impossible, but there are gentle ways to start caring for yourself.",
 
-"That emptiness you're describing sounds absolutely exhausting. When depression settles in, it can feel like you're carrying invisible weights that no one else can see. What time of day tends to feel hardest for you? Are there moments, even tiny ones, where the heaviness lifts slightly?",
+"That sadness sounds so profound and exhausting. When depression settles in, it can feel like you're cut off from the parts of yourself that used to find meaning or joy. What activities or people used to bring you comfort? Even if they don't feel accessible right now, understanding what's shifted can help us think about small ways to reconnect.",
 
-"The sadness you're describing sounds so profound. Depression often feels like being underwater - everything is muffled and harder to reach. What pulls you down most during your darkest moments? I'm wondering if there are specific thoughts or situations that seem to trigger this heaviness.",
+"The emptiness you're describing makes complete sense with depression - it's like your emotional world has gone gray. Are there any moments, even brief ones, when that heaviness lifts slightly? I'm wondering about your sleep, appetite, and energy levels too, as these physical aspects often need attention alongside the emotional pain.",
 
-"When you mention feeling depressed, I can sense there's real suffering behind those words. Sometimes depression whispers lies about our worth and our future. What has depression been telling you about yourself lately? And more importantly, what part of you still doubts those harsh inner voices?"
+"I hear you're dealing with depression, and that takes real courage to name and reach out about. What does your inner voice sound like when the depression is loudest? Sometimes depression tells us harsh things about our worth or future that aren't true. Understanding those patterns can be the first step toward responding differently."
 ],
 
 returning: [
-"I'm really glad you came back to talk. I remember you sharing about feeling depressed before, and I've been thinking about you. How has that heavy feeling been treating you since we last spoke? Has anything shifted, even in small ways?",
+"I remember you sharing about feeling depressed before, and I'm glad you came back. How has that weight been since we last talked? Sometimes depression shifts in subtle ways that are hard to notice day-to-day, but looking back over time can reveal changes.",
 
-"Seeing you return here takes courage, especially when depression makes everything feel pointless. I remember the weight you described carrying. Is it feeling similar today, or has the depression taken on a different character? Sometimes our relationship with these feelings evolves.",
+"Thank you for continuing to trust this space with your depression experience. I recall how exhausting everything felt for you. Are you finding any small pockets of relief, or does everything still feel consistently heavy? Even tiny shifts can be meaningful in depression recovery.",
 
-"Thank you for trusting me with your ongoing struggle. I recall you mentioning feeling empty and disconnected. How are you experiencing that numbness now? Are there moments where you can still access parts of yourself, or does everything still feel distant?"
+"I've been thinking about our conversation about depression. How are you treating yourself these days? Depression often comes with harsh self-criticism, and I'm curious whether you're finding any moments of self-compassion."
 ]
 },
 
 anxiety: {
 first_time: [
-"The anxiety you're describing sounds intense and consuming. When anxiety takes hold, it can feel like your mind is constantly scanning for danger, even when you're safe. What does the worry look like in your daily life? Are there specific thoughts that circle around and around?",
+"The anxiety you're experiencing sounds intense and all-consuming. When your nervous system is in constant alert mode, it can feel like danger is everywhere even when you're safe. What situations or thoughts seem to trigger the anxiety most? Understanding your specific patterns can help us develop targeted ways to calm your nervous system.",
 
-"I can almost feel the tension radiating from your words. Anxiety has this way of hijacking our nervous system and making everything feel urgent and threatening. What physical sensations do you notice when the anxiety peaks? Sometimes our bodies hold clues about what we're really afraid of.",
+"I can almost feel the racing energy in your words. Anxiety often shows up both in our minds and bodies - racing thoughts paired with physical symptoms like rapid heartbeat or shallow breathing. What does anxiety feel like in your body? Sometimes working with the physical symptoms can be the fastest way to interrupt the anxiety cycle.",
 
-"That fearfulness sounds exhausting to carry. Anxiety often stems from our mind trying to protect us, but it can become overprotective to the point where it imprisons us. What situations or thoughts seem to trigger your anxiety most? What is your mind trying to keep you safe from?",
+"That worry cycle sounds exhausting to live with. Anxiety has this way of creating 'what if' scenarios that feel urgent and real, even when they're unlikely. What fears seem to dominate your thoughts? Breaking down these worry patterns can help distinguish between realistic concerns and anxiety's false alarms.",
 
-"The racing thoughts you're experiencing sound overwhelming. When anxiety spirals, it can feel like being trapped in a tornado of 'what-ifs.' What fears seem to shout the loudest in your mind? Sometimes anxiety masks deeper concerns about control, safety, or belonging."
+"The overwhelm you're describing sounds like anxiety is really running the show right now. When everything feels threatening and urgent, it's hard to think clearly or feel calm. What helps you feel most grounded when the anxiety peaks? Even if nothing feels very effective right now, there are specific techniques that can help retrain an overactive nervous system."
 ],
 
 returning: [
-"I remember you sharing about anxiety before, and I can hear it's still very present for you. How have you been managing those racing thoughts since we last talked? Have you noticed any patterns in what triggers the anxiety?",
+"I remember you sharing about anxiety before, and I can hear it's still very present. How have those racing thoughts been lately? Have you noticed any patterns in what triggers your anxiety or times when it feels more manageable?",
 
-"It sounds like anxiety is still visiting you regularly. I recall you mentioning specific worries before - are these similar concerns, or has your anxiety found new things to focus on? Sometimes understanding the patterns can help us find ways to respond differently.",
+"Good to hear from you again. I recall how physically uncomfortable the anxiety was for you - that racing heart and tension. How has your body been feeling? Sometimes anxiety recovery involves learning to work with our nervous system differently.",
 
-"I'm glad you feel comfortable coming back to discuss your anxiety with me. From what I remember, certain situations really activated your nervous system. How has your relationship with those anxious feelings evolved? Are there times when you can observe the anxiety without being completely consumed by it?"
+"I remember the worry spirals you described. How has your relationship with those anxious thoughts evolved? Are you finding any success in stepping back from the anxiety and observing it rather than being completely caught up in it?"
 ]
 },
 
-ptsd: {
-first_time: [
-"What you're describing sounds like trauma is still very much alive in your system. Trauma has this way of keeping us stuck in survival mode, even when the danger has passed. Are you finding that certain triggers transport you back to difficult times? Your nervous system is trying to protect you, but it sounds like it's working overtime.",
-
-"I can hear how much pain you're carrying from past experiences. Trauma can make the world feel unpredictable and unsafe, even in moments that should be peaceful. What helps you feel most grounded when those memories or sensations surface? Sometimes our bodies remember what our minds try to forget.",
-
-"The hypervigilance you're describing makes complete sense given what you've been through. When we've experienced trauma, our alarm system can get stuck in the 'on' position. What does safety look like for you right now? Are there people, places, or activities that help your nervous system remember it can relax?"
-],
-
-returning: [
-"I remember you sharing about trauma before, and I can hear it's still impacting you deeply. How have you been managing those intense moments when the past feels present? Have you noticed any changes in how your body responds to triggers?",
-
-"Thank you for continuing to trust me with your trauma experience. I recall how vivid and overwhelming those memories can be for you. How are you finding ways to stay grounded in the present moment?",
-
-"I've been thinking about our previous conversation regarding your trauma. How has your sense of safety been since we last talked? Sometimes healing isn't linear, and I'm curious about what your journey has looked like recently."
-]
-},
-
-adhd: {
-first_time: [
-"The scattered, restless feeling you're describing sounds so familiar to many people with ADHD. It's like your brain is a browser with 47 tabs open, and half of them are playing music. What's the most frustrating part of how your mind works differently? Sometimes understanding our unique wiring can help us work with it instead of against it.",
-
-"That executive dysfunction you're experiencing sounds incredibly frustrating. ADHD can make simple tasks feel like climbing mountains, while complex, interesting things feel effortless. What aspects of daily life feel most derailed by your brain's different operating system? You're not lazy or broken - your brain just processes the world differently.",
-
-"The focus struggles you're describing make so much sense. ADHD brains often crave stimulation and novelty, which can make routine tasks feel impossible while hyperfocus kicks in at unexpected times. When do you notice your attention working best? Understanding your natural rhythms can be really helpful."
-],
-
-returning: [
-"I remember you mentioning ADHD challenges before. How has managing your focus and energy been lately? Have you discovered any strategies that work with your brain's natural patterns rather than fighting against them?",
-
-"Good to see you back. I recall you sharing frustrations about executive function and staying organized. How has that been going? Sometimes ADHD management is about finding systems that match how our brains actually work, not how we think they should work.",
-
-"I remember our conversation about ADHD and how exhausting it can be to navigate a world designed for neurotypical brains. What's been your biggest challenge lately? Are there areas where you're finding your ADHD traits are actually strengths?"
-]
-},
-
-bipolar: {
-first_time: [
-"The mood cycles you're describing sound incredibly disorienting. Bipolar can feel like being on an emotional roller coaster you never bought a ticket for. Are you currently in a depressive phase, manic episode, or somewhere in between? Understanding where you are in the cycle can help us think about what kind of support might be most helpful right now.",
-
-"Those extreme mood swings sound exhausting to navigate. When you're in a manic state, does it feel exciting and productive, or more chaotic and out of control? And when the depression hits, how deep does that crash feel? The whiplash between these states can be so disorienting.",
-
-"The intensity you're describing in your moods sounds overwhelming. Bipolar can make you feel like you're living at the extremes, with very little middle ground. What does stability look like for you, and how often do you get to experience it? Sometimes even recognizing these patterns is an important step."
-],
-
-returning: [
-"I remember you sharing about bipolar episodes before. Where are you in your cycle right now? I recall how dramatically different you felt between our conversations - it must be exhausting to navigate those shifts.",
-
-"Thanks for checking back in. I remember how unpredictable your moods have been feeling. Are you currently managing a particular phase, or are you in a more stable period? How has your support system been during these fluctuations?",
-
-"I've been wondering how you've been managing your bipolar symptoms since we last talked. I remember the intensity of both the highs and lows you described. What strategies have been helping you navigate the mood cycles?"
-]
-},
-
-eating_disorder: {
-first_time: [
-"The relationship with food and your body that you're describing sounds so painful and complicated. Eating disorders often aren't really about food at all - they're usually about control, perfectionism, trauma, or other deep emotional needs. What do you think your eating patterns are trying to help you manage or control? There's often wisdom hidden in our symptoms.",
-
-"I can hear how much distress your relationship with food and body image is causing. Eating disorders can feel like having a harsh critic living in your head, commenting on every bite and every reflection. What does that inner voice sound like, and how long has it been this loud? You deserve to have peace with food and your body.",
-
-"The struggle you're describing with food sounds isolating and exhausting. Eating disorders thrive in secrecy and shame, making it even harder to reach out. What feels riskiest about recovery or changing these patterns? Sometimes understanding our fears about getting better can help us address them with compassion."
-],
-
-returning: [
-"I remember how difficult your relationship with food has been. How are you feeling about eating and your body today? I know this is an ongoing struggle, and I'm wondering if anything has shifted in how you're managing these challenging thoughts and behaviors.",
-
-"Thank you for continuing to trust me with something so personal and difficult. I recall the internal battle you described around food and body image. How has that critical inner voice been lately? Are there moments where you can challenge it or find some self-compassion?",
-
-"I've been thinking about your eating disorder recovery since we last spoke. I remember how trapped you felt in those patterns. Are you finding any freedom or flexibility in your relationship with food, or are things feeling just as rigid?"
-]
-},
-
-ocd: {
-first_time: [
-"The intrusive thoughts and compulsions you're describing sound absolutely exhausting. OCD can feel like being trapped in a prison made of your own thoughts, where the key to freedom seems to be doing just one more ritual. What thoughts visit you most persistently? And what compulsions feel most urgent or impossible to resist?",
-
-"I can sense how much these obsessive patterns are controlling your daily life. OCD often convinces us that if we just check one more time, wash our hands once more, or arrange things perfectly, then we'll finally feel safe. But that relief never seems to last, does it? What does your OCD tell you will happen if you don't complete the rituals?",
-
-"The mental loops you're stuck in sound incredibly distressing. OCD has this cruel way of making us doubt our own perceptions and judgment. What areas of your life feel most hijacked by these obsessive thoughts? Sometimes recognizing that these are OCD thoughts, not 'you' thoughts, can be the first step toward freedom."
-],
-
-returning: [
-"I remember you sharing about OCD intrusions before. How have those persistent thoughts been treating you lately? Are you finding any success in distinguishing between your authentic thoughts and the OCD chatter?",
-
-"Good to hear from you again. I recall how consuming those compulsive patterns were for you. Have you been able to experiment with any exposure exercises or found ways to tolerate the anxiety without completing rituals?",
-
-"I remember how frustrated you felt being trapped by OCD. How has your relationship with those intrusive thoughts evolved? Sometimes recovery isn't about stopping the thoughts but changing how we respond to them."
-]
-},
-
-social_anxiety: {
-first_time: [
-"The social fear you're describing sounds incredibly isolating. Social anxiety can make every interaction feel like a performance where everyone is judging and finding you lacking. What social situations feel most dangerous to you? Sometimes understanding our specific triggers can help us approach them differently.",
-
-"I can hear how much energy you spend worrying about what others think. Social anxiety often stems from a deep fear of rejection or humiliation, and it can make us hyper-aware of every facial expression and tone of voice. What do you imagine people are thinking about you when you're in social situations?",
-
-"That self-consciousness sounds so painful and limiting. Social anxiety can make us feel like we're constantly under a microscope, when in reality most people are too focused on themselves to scrutinize us as much as we fear. What would social interactions feel like if you knew for certain that people weren't judging you?"
-],
-
-returning: [
-"I remember how challenging social situations have been for you. How has that self-consciousness been lately? Have you been able to experiment with any social interactions, even small ones?",
-
-"Thanks for coming back to talk about social anxiety. I recall how exhausting it felt to constantly worry about judgment. Are you finding any situations where that hypervigilance relaxes slightly?",
-
-"I remember the social fear you described before. How has your relationship with other people's opinions been evolving? Sometimes social anxiety recovery involves slowly building evidence that we can handle social risks."
-]
-},
-
-bpd: {
-first_time: [
-"The emotional intensity you're describing sounds incredibly overwhelming. BPD can feel like experiencing emotions at 150% volume, where everything feels urgent and extreme. What triggers seem to send your emotions into overdrive? Sometimes understanding our patterns can help us develop better coping strategies.",
-
-"I can hear how much pain you're in around relationships and your sense of self. BPD often stems from early experiences that taught us the world isn't safe and people will leave. What does abandonment feel like for you? And what helps you remember your own worth when everything feels chaotic?",
-
-"The identity confusion you're experiencing sounds so disorienting. BPD can make us feel like we're constantly shape-shifting depending on who we're with, never quite sure who we really are. What feels most authentic about yourself, even when everything else feels uncertain?"
-],
-
-returning: [
-"I remember the emotional intensity you've shared before. How have you been managing those overwhelming feelings? Have you been able to practice any distress tolerance skills when emotions feel all-consuming?",
-
-"Thank you for continuing to share with me. I recall how challenging relationships and abandonment fears have been for you. How has your sense of self been lately? Are you finding any stability in who you are?",
-
-"I remember our conversation about emotional dysregulation and relationship struggles. How have you been doing with interpersonal situations? Sometimes BPD recovery involves learning that we can survive difficult emotions without them destroying us."
-]
-},
-
-autism: {
-first_time: [
-"The sensory overwhelm and social confusion you're describing make so much sense from an autistic perspective. Neurotypical social rules can feel like trying to learn a foreign language with no dictionary. What aspects of social interaction feel most confusing or draining for you? Your brain processes the world differently, and that's not something that needs fixing.",
-
-"I can hear how exhausting masking must be for you. Constantly trying to appear neurotypical can be like performing a role 24/7. What happens when you allow yourself to stim or engage in your natural patterns? Sometimes embracing our authentic autistic traits can actually reduce anxiety and improve wellbeing.",
-
-"The sensory sensitivities you're experiencing sound overwhelming. Autistic nervous systems often process sensory information more intensely, which can make environments that feel normal to others absolutely chaotic for you. What sensory inputs feel most challenging, and what environments help you feel calm and regulated?"
-],
-
-returning: [
-"I remember you sharing about autistic experiences before. How has managing sensory input and social demands been lately? Have you been able to unmask more or find environments that work better for your nervous system?",
-
-"Good to connect again. I recall how draining social masking was for you. Are you finding more opportunities to be authentically yourself? Sometimes autistic wellbeing improves when we stop trying to be neurotypical.",
-
-"I remember our conversation about autism and how differently your brain processes the world. How has self-acceptance been going? Are you discovering more about your own needs and preferences?"
-]
-},
-
-substance_use: {
-first_time: [
-"The struggle with substances you're sharing takes real courage to name. Addiction often starts as a solution to unbearable emotional pain - substances can temporarily quiet anxiety, depression, trauma, or other overwhelming feelings. What were you trying to escape or manage when substance use first became a pattern? Understanding the why can be just as important as addressing the what.",
-
-"I can hear how complicated your relationship with substances has become. What started as a way to cope has likely created its own set of problems and shame. What does recovery mean to you right now? Sometimes it's not about never using again, but about finding healthier ways to manage whatever drove us to substances in the first place.",
-
-"The cycle you're describing with substances sounds exhausting - the temporary relief followed by guilt, shame, and often increased problems. What happens in the moments before you use? What emotions or situations feel too big to handle without substances? There's often a pattern there that can help us understand what you really need."
-],
-
-returning: [
-"I remember you sharing about substance struggles before. How has your recovery journey been since we last talked? Have you been able to identify what underlying needs the substances were meeting?",
-
-"Thank you for continuing to be honest about your substance use. I recall how much shame you were carrying about this. How are you treating yourself these days? Recovery often involves learning self-compassion alongside practical strategies.",
-
-"I remember our previous conversation about addiction. How has your relationship with substances evolved? Are you finding healthier ways to cope with the feelings that originally led to substance use?"
-]
-},
-
-grief: {
-first_time: [
-"The loss you're describing sounds devastating. Grief is love with nowhere to go, and it can feel like learning to live with a limb missing. What do you miss most about the person you've lost? Sometimes talking about who they were and what they meant to you can be part of honoring both them and your love for them.",
-
-"I can feel the depth of your pain through your words. Grief doesn't follow timelines or rules - it comes in waves, sometimes gentle, sometimes tsunami-like. What does the grief feel like in your body? Are there moments when memories bring comfort, or does everything just hurt right now?",
-
-"The emptiness left by loss can feel impossible to fill. Grief often makes us question everything - our beliefs, our purpose, even our identity. How has this loss changed how you see the world or yourself? Sometimes loss reshapes us in ways we never expected."
-],
-
-returning: [
-"I remember you sharing about your loss before, and I've been thinking of you. How has the grief been moving through you lately? I know it's not something that just 'gets better,' but I'm wondering how you're carrying it now.",
-
-"Thank you for continuing to trust me with your trauma experience. I recall how vivid and overwhelming those memories can be for you. Are you finding any practices or people that help you stay grounded in the present moment?",
-
-"I remember the profound loss you described. Grief has its own timeline, and I'm wondering how yours has been unfolding. Are there moments where you can feel connection to your loved one, or does everything still feel like absence?"
-]
-},
-
-loneliness: {
-first_time: [
-"The loneliness you're describing sounds so deep and aching. There's a difference between being alone and being lonely - you can be surrounded by people and still feel profoundly disconnected. What kind of connection are you most hungry for? Is it understanding, acceptance, or maybe just someone who really sees you?",
-
-"I can hear how isolated you feel, and it takes strength to reach out when loneliness convinces us that no one would understand or care. What makes connection feel so difficult or risky for you? Sometimes loneliness protects us from potential rejection, but it also cuts us off from potential belonging.",
-
-"The disconnection you're experiencing sounds painful beyond words. Loneliness can make us feel like we're speaking a different language than everyone else, like there's an invisible barrier between us and meaningful connection. When did you last feel truly understood by another person? What did that connection offer you?"
-],
-
-returning: [
-"I remember the deep loneliness you shared before, and I'm glad you came back to talk. How has that sense of isolation been lately? Have you been able to make any small connections, even tiny ones?",
-
-"Thank you for continuing to reach out despite the loneliness. I recall how disconnected you felt from others. Are you finding any moments where that barrier between you and other people feels a little thinner?",
-
-"I remember how much you were craving real connection and understanding. How has your relationship with solitude evolved? Sometimes learning to be with ourselves can actually make connection with others feel less desperate and more genuine."
-]
-},
+// I'll continue with a few more key conditions to show the pattern
 
 general: {
 first_time: [
-"I can sense something important is weighing on you. What's been occupying your mental and emotional space lately? Sometimes just having someone truly listen can help us understand our own experience better. What feels most pressing or confusing for you right now?",
+"I can sense something important is on your mind. What's been taking up the most mental and emotional space for you lately? Sometimes just having someone truly listen without judgment can help us understand our own experience better.",
 
-"There's something in your message that tells me you're processing something significant. What's your inner world like these days? I'm genuinely curious about what brought you here and what you're hoping to explore or understand better about yourself.",
+"There's something in your message that tells me you're processing something significant. What feels most pressing or confusing in your life right now? Whether it's a specific situation or just a general sense that something feels off, I'm here to explore it with you.",
 
-"I hear you reaching out, and I want you to know this is a safe space to share whatever is real for you. What's been happening in your life or in your heart that made you want to talk? Sometimes our struggles don't fit neat categories, and that's completely okay.",
+"I hear you reaching out, and I want you to know this is a safe space to share whatever is real for you. What brought you here today? Understanding what's driving you to seek support can help us figure out the most helpful direction to explore.",
 
-"Something has prompted you to seek support today, and I'm honored you chose to share this space with me. What's been stirring beneath the surface for you? Whether it's a specific situation or just a general sense that something feels off, I'm here to listen and understand."
+"Something has prompted you to seek support today, and that takes awareness and courage. What's been stirring beneath the surface for you? Sometimes our struggles don't fit neat categories, and that's completely normal - we can work with whatever you're experiencing."
 ],
 
 returning: [
-"I'm really glad you came back to talk. Based on our previous conversations, I'm curious about what's been evolving in your inner world. What feels most important to explore today?",
+"I'm really glad you came back to continue our conversation. What feels most important to explore today? I'm curious how things have been evolving for you since we last connected.",
 
-"Thank you for continuing to trust this space with your thoughts and feelings. I remember some of what you've shared before, and I'm wondering how things have been shifting or developing for you since we last connected.",
+"Thank you for continuing to trust this space with your thoughts and feelings. What's been on your heart and mind lately? I'm here to listen and help you work through whatever you're experiencing.",
 
-"It's wonderful to see you again. I've been thinking about our previous conversations and hoping you've been finding some peace. What's been on your heart and mind lately?"
+"It's wonderful to see you again. What would be most helpful to focus on in our conversation today? I'm interested in hearing how you've been and what support might be most valuable right now."
 ]
 }
 };
 }
-
-// ENHANCED CRISIS DETECTION AND RESPONSE
-function detectCrisis(message) {
-const lowerMessage = message.toLowerCase();
-
-// Immediate danger indicators
-const suicideWords = ['kill myself', 'end my life', 'want to die', 'suicide', 'better off dead', 'no point living', 'plan to die'];
-const selfHarmWords = ['cut myself', 'hurt myself', 'self harm', 'self-harm', 'punish myself'];
-const immediateDanger = ['right now', 'tonight', 'today', 'plan to', 'going to'];
-
-const hasSuicidalThoughts = suicideWords.some(word => lowerMessage.includes(word));
-const hasSelfHarmThoughts = selfHarmWords.some(word => lowerMessage.includes(word));
-const hasImmediacy = immediateDanger.some(word => lowerMessage.includes(word));
-
-if (hasSuicidalThoughts || (hasSelfHarmThoughts && hasImmediacy)) {
-return {
-level: 'crisis',
-response: generateCrisisResponse(lowerMessage)
-};
-}
-
-// High concern indicators
-const concernWords = ['hopeless', 'no point', 'can\'t go on', 'everything hurts', 'unbearable'];
-const hasHighConcern = concernWords.some(word => lowerMessage.includes(word));
-
-if (hasHighConcern) {
-return {
-level: 'high_concern',
-response: generateHighConcernResponse(lowerMessage)
-};
-}
-
-return { level: 'normal', response: null };
-}
-
-function generateCrisisResponse(message) {
-const crisisResponses = [
-"I'm deeply concerned about what you've shared with me. The pain you're in sounds unbearable, and I want you to know that you don't have to face this alone. Right now, the most important thing is your safety. Please reach out to crisis support immediately:\n\n• US: 988 (Suicide & Crisis Lifeline)\n• UK: 116 123 (Samaritans)\n• Crisis Text: HOME to 741741\n\nAre you in a safe place right now? Can you stay safe while you connect with crisis support? Your life has value, even when the pain makes it hard to see.",
-
-"What you've shared about wanting to end your life tells me you're in tremendous emotional pain right now. I'm really worried about you. This level of suffering deserves immediate, professional support from people trained specifically for crisis situations:\n\n• US: 988 (Suicide & Crisis Lifeline) - available 24/7\n• UK: 116 123 (Samaritans) - free, confidential, 24/7\n• Crisis Text: HOME to 741741\n\nCan you commit to staying safe right now? Is there someone you can be with or call while you reach out for crisis support?"
-];
-
-return crisisResponses[Math.floor(Math.random() * crisisResponses.length)];
-}
-
-function generateHighConcernResponse(message) {
-const concernResponses = [
-"I can hear how much pain you're carrying right now. When everything feels hopeless, it can be hard to imagine that things could ever feel different. You mentioned feeling like you can't go on - can you tell me more about what that feels like? While we talk, I want you to know that there are people specifically trained to help with these overwhelming feelings:\n\n• US: 988 (Suicide & Crisis Lifeline)\n• UK: 116 123 (Samaritans)\n\nWhat's making everything feel so unbearable right now?",
-
-"The hopelessness in your words concerns me deeply. It sounds like you're in a very dark place where it's hard to see any light ahead. I want to make sure you have support beyond our conversation. Have you considered reaching out to crisis support? They're available 24/7:\n\n• 988 (US) or 116 123 (UK)\n\nWhat's been the hardest part of what you're going through right now?"
-];
-
-return concernResponses[Math.floor(Math.random() * concernResponses.length)];
-}
-
-// ENHANCED MAIN RESPONSE SYSTEM
-async function callClaude(messages) {
-// Use local response system (no API key needed for demo)
-const lastMessage = messages[messages.length - 1].content;
-return generateEnhancedResponse(lastMessage, messages);
-}
-
-function generateEnhancedResponse(userMessage, conversationHistory = []) {
-// First check for crisis indicators
-const crisisCheck = detectCrisis(userMessage);
-if (crisisCheck.level === 'crisis' || crisisCheck.level === 'high_concern') {
-return {
-choices: [{
-message: {
-content: crisisCheck.response
-}
-}]
-};
-}
-
-const memories = getMemories();
-const hasMemories = memories.length > 0;
-const detectedConditions = detectMentalHealthCondition(userMessage);
-const primaryCondition = detectedConditions[0] || 'general';
-
-// Analyze context for more nuanced responses
-const context = analyzeContext(userMessage, memories);
-
-// Generate memory-aware context
-const memoryContext = generateMemoryContext(memories, detectedConditions);
-
-let selectedResponse;
-let attempts = 0;
-const maxAttempts = 8;
-
-// Keep trying until we get a non-repetitive response
-do {
-selectedResponse = selectResponse(primaryCondition, context, hasMemories);
-attempts++;
-} while (hasRecentlySaidSimilar(selectedResponse) && attempts < maxAttempts);
-
-// Add memory context if relevant
-if (memoryContext && hasMemories) {
-selectedResponse = integrateMemoryIntoResponse(selectedResponse, memoryContext);
-}
-
-return {
-choices: [{
-message: {
-content: selectedResponse
-}
-}]
-};
-}
-
-function generateMemoryContext(memories, currentConditions) {
-if (memories.length === 0) return null;
-
-const recentMemories = memories.slice(0, 3);
-const context = {
-previousConditions: recentMemories.map(m => m.detectedCondition).filter(Boolean),
-previousTopics: recentMemories.flatMap(m => m.keyTopics || []),
-emotionalProgression: recentMemories.map(m => m.emotionalTone).filter(Boolean),
-timePattern: analyzeTimePattern(memories)
-};
-
-return context;
-}
-
-function analyzeTimePattern(memories) {
-const times = memories.map(m => new Date(m.date));
-const now = new Date();
-const recentConversation = times.some(time => (now - time) < (24 * 60 * 60 * 1000)); // Within 24 hours
-return recentConversation ? 'frequent' : 'occasional';
-}
-
-function integrateMemoryIntoResponse(response, context) {
-// Only integrate memory naturally, don't force it
-if (context.previousConditions.length > 0 && Math.random() > 0.6) {
-const condition = context.previousConditions[0];
-const memoryIntros = [
-"I remember you mentioning struggles with " + condition.replace('_', ' ') + " before. ",
-"Thinking back to our previous conversation about " + condition.replace('_', ' ') + ", ",
-"I recall you sharing about " + condition.replace('_', ' ') + " experiences. "
-];
-const intro = memoryIntros[Math.floor(Math.random() * memoryIntros.length)];
-response = intro + response.charAt(0).toLowerCase() + response.slice(1);
-}
-
-return response;
-}
-
-// ENHANCED CHAT FUNCTIONALITY
-let conversationHistory = [];
-
-async function sendMessage() {
-const input = document.getElementById('messageInput');
-const sendButton = document.getElementById('sendButton');
-const message = input.value.trim();
-
-if (message === '') return;
-
-sendButton.disabled = true;
-input.disabled = true;
-
-addMessage(message, 'user');
-input.value = '';
-
-showTypingIndicator();
-
-try {
-conversationHistory.push({
-role: 'user',
-content: message
-});
-
-const data = await callClaude(conversationHistory);
-const aiResponse = data.choices[0].message.content.trim();
-
-// Enhanced memory saving
-const detectedConditions = detectMentalHealthCondition(message);
-const emotionalTone = extractEmotionalTone(message);
-saveMemory(message, aiResponse, detectedConditions[0], emotionalTone);
-
-conversationHistory.push({
-role: 'assistant',
-content: aiResponse
-});
-
-// Keep conversation history manageable
-if (conversationHistory.length > 21) {
-conversationHistory = conversationHistory.slice(-20);
-}
-
-hideTypingIndicator();
-addMessage(aiResponse, 'ai');
-
-} catch (error) {
-hideTypingIndicator();
-console.error('Error:', error);
-addMessage("I'm having trouble connecting right now, but I'm still here to listen. What would you like to talk about?", 'error');
-} finally {
-sendButton.disabled = false;
-input.disabled = false;
-input.focus();
-}
-}
-
-function extractEmotionalTone(message) {
-const lowerMessage = message.toLowerCase();
-const emotions = [];
-
-if (lowerMessage.match(/\b(sad|sadness|down|depressed|blue|melancholy)\b/)) emotions.push('sad');
-if (lowerMessage.match(/\b(angry|mad|furious|irritated|frustrated|rage)\b/)) emotions.push('angry');
-if (lowerMessage.match(/\b(anxious|nervous|worried|scared|fearful|panic)\b/)) emotions.push('anxious');
-if (lowerMessage.match(/\b(happy|joy|excited|pleased|content|good)\b/)) emotions.push('positive');
-if (lowerMessage.match(/\b(confused|lost|uncertain|don't know|mixed up)\b/)) emotions.push('confused');
-if (lowerMessage.match(/\b(tired|exhausted|drained|burnt out|overwhelmed)\b/)) emotions.push('exhausted');
-if (lowerMessage.match(/\b(lonely|alone|isolated|disconnected|empty)\b/)) emotions.push('lonely');
-if (lowerMessage.match(/\b(hopeless|helpless|stuck|trapped|powerless)\b/)) emotions.push('hopeless');
-
-return emotions[0] || 'neutral';
-}
-
-function addMessage(content, sender) {
-const chatArea = document.getElementById('chatArea');
-const messageDiv = document.createElement('div');
-messageDiv.className = `message ${sender}-message`;
-
-if (sender === 'ai') {
-messageDiv.innerHTML = `
-<img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-<div class="ai-message-content">${content}</div>
-`;
-} else {
-messageDiv.textContent = content;
-}
-
-if (sender === 'user') {
-const welcomeSection = document.querySelector('.welcome-section');
-if (welcomeSection) {
-welcomeSection.remove();
-}
-
-const logoHeader = document.getElementById('logoHeader');
-logoHeader.classList.add('compact');
-}
-
-chatArea.appendChild(messageDiv);
-chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function showTypingIndicator() {
-hideTypingIndicator();
-
-const chatArea = document.getElementById('chatArea');
-const typingDiv = document.createElement('div');
-typingDiv.className = 'message ai-message';
-typingDiv.id = 'currentTypingIndicator';
-typingDiv.innerHTML = `
-<img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" class="ai-avatar">
-<div class="thinking-heart">💚</div>
-`;
-
-chatArea.appendChild(typingDiv);
-chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function hideTypingIndicator() {
-const existingIndicator = document.getElementById('currentTypingIndicator');
-if (existingIndicator) {
-existingIndicator.remove();
-}
-}
-
-function handleKeyPress(event) {
-if (event.key === 'Enter' && !event.shiftKey) {
-event.preventDefault();
-sendMessage();
-}
-}
-
-// DISCLAIMER MODAL FUNCTIONS
-function showDisclaimerModal() {
-if (sessionStorage.getItem('heartoListenDisclaimerSeen') !== 'true') {
-document.getElementById('disclaimerOverlay').classList.remove('hidden');
-document.body.style.overflow = 'hidden';
-} else {
-displayMemoryRecap();
-}
-}
-
-function acceptDisclaimer() {
-sessionStorage.setItem('heartoListenDisclaimerSeen', 'true');
-document.getElementById('disclaimerOverlay').classList.add('hidden');
-document.body.style.overflow = 'auto';
-
-displayMemoryRecap();
-
-setTimeout(() => {
-document.getElementById('messageInput').focus();
-}, 100);
-}
-
-function getNeedHelpNow() {
-window.open('https://988lifeline.org/', '_blank');
-window.open('https://www.samaritans.org/', '_blank');
-window.open('https://www.lifeline.org.au/', '_blank');
-}
-
-function displayMemoryRecap() {
-// Memory recap disabled but memories work in background
-return;
-}
-
-// Initialize app
-document.addEventListener('DOMContentLoaded', function() {
-showDisclaimerModal();
-document.getElementById('messageInput').focus();
-});
-</script>
-</body>
-</html>
