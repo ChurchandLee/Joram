@@ -750,20 +750,25 @@
                     relationshipDynamics: 'new'
                 };
 
-                // Analyze recent conversation
+                // Check if user has actual historical memories (from previous sessions)
+                const hasHistoricalMemories = memories.length > 0 && 
+                    memories.some(memory => memory.timestamp < Date.now() - (60 * 60 * 1000)); // More than 1 hour old
+
+                // Analyze current conversation context
                 if (conversationHistory.length > 0) {
                     context.relationshipDynamics = conversationHistory.length > 3 ? 'established' : 'developing';
                     conversationHistory.forEach(msg => {
-                        if (msg.themes) context.previousTopics.push(...msg.themes);
-                        if (msg.emotion) context.emotionalJourney.push(msg.emotion);
+                        if (msg.analysis?.themes) context.previousTopics.push(...msg.analysis.themes);
+                        if (msg.analysis?.emotion) context.emotionalJourney.push(msg.analysis.emotion);
                     });
                 }
 
-                // Analyze historical memories
-                if (memories.length > 0) {
+                // Only mark as 'returning' if they have genuine historical memories
+                if (hasHistoricalMemories) {
                     context.relationshipDynamics = 'returning';
                     memories.slice(0, 5).forEach(memory => {
                         if (memory.emotion) context.emotionalJourney.push(memory.emotion);
+                        if (memory.themes) context.previousTopics.push(...memory.themes);
                     });
                 }
 
@@ -1052,34 +1057,12 @@
         // Initialize app
         window.addEventListener('load', function() {
             if (checkUserLimit()) {
+                // Clear any demo memories on fresh load
+                memories = [];
+                currentConversation = [];
                 showDisclaimerModal();
             }
         });
-
-        // Add some sample memories for demonstration
-        setTimeout(() => {
-            if (memories.length === 0) {
-                // Add some sample previous conversations for demo
-                memories = [
-                    {
-                        id: Date.now() - 86400000,
-                        date: new Date(Date.now() - 86400000).toISOString(),
-                        userMessage: "I've been feeling really anxious about work lately",
-                        aiResponse: "It sounds like work has been weighing heavily on your mind...",
-                        emotion: "anxious",
-                        timestamp: Date.now() - 86400000
-                    },
-                    {
-                        id: Date.now() - 172800000,
-                        date: new Date(Date.now() - 172800000).toISOString(),
-                        userMessage: "Had a better day today, feeling more hopeful",
-                        aiResponse: "I'm so glad to hear you're feeling more hopeful...",
-                        emotion: "positive",
-                        timestamp: Date.now() - 172800000
-                    }
-                ];
-            }
-        }, 1000);
     </script>
 </body>
 </html>
