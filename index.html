@@ -1,60 +1,792 @@
-// Claude API call function with memory integration
-async function callClaude(messages) {
-    try {
-        // Add memory context to the system prompt
-        const memoryContext = generateMemoryContext();
-        let systemMessage = SYSTEM_PROMPT;
-        
-        // Add memory context to system message if available
-        if (memoryContext) {
-            systemMessage += memoryContext;
-        }
-        
-        // Convert messages for the serverless function (skip system message)
-        const messagesToSend = [];
-        for (let i = 1; i < messages.length; i++) {
-            const msg = messages[i];
-            messagesToSend.push({
-                role: msg.role === 'assistant' ? 'assistant' : 'user',
-                content: msg.content
-            });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartoListen - AI Mental Wellbeing Support</title>
+    <meta name="description" content="Free AI-powered Mental Wellbeing Support Companion. Your 24/7 safe, private and judgement-free space for mental wellness.">
+    <meta name="theme-color" content="#8eaf78">
+    
+    <!-- PWA and App Icon Meta Tags -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
+    <link rel="manifest" href="app-manifest.json">
+    
+    <!-- iOS specific -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HeartoListen">
+    
+    <!-- Android specific -->
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        // Call your Netlify function
-        const response = await fetch('/.netlify/functions/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                messages: messagesToSend,
-                systemMessage: systemMessage
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Function Error: ${response.status}`);
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-image: url('https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/fern background.png');
         }
-        
-        const data = await response.json();
-        const apiResponse = data.choices[0].message.content.trim();
-        
-        // Check if API gave generic unhelpful response and fall back to local responses
-        if (apiResponse.includes("I'm really sorry that you're feeling this way, but I'm unable to provide the help that you need") ||
-            apiResponse.includes("It's really important to talk things over with someone who can") ||
-            apiResponse.includes("mental health professional or a trusted person in your life") ||
-            apiResponse.includes("I'm not able to provide") ||
-            apiResponse.includes("I can't provide the support you need")) {
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 700px;
+        }
+
+        .logo-header {
+            background: linear-gradient(135deg, #5f795a 0%, #4CAF50 100%);
+            padding: 25px;
+            text-align: center;
+            color: white;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        /* Compact header state */
+        .logo-header.compact {
+            padding: 15px;
+        }
+
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px auto;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Compact logo state */
+        .logo-header.compact .logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-header h1 {
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo-header p {
+            opacity: 0.95;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        /* Hide text in compact mode */
+        .logo-header.compact h1,
+        .logo-header.compact p {
+            display: none;
+        }
+
+        .chat-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            animation: fadeIn 0.3s ease-out;
+            line-height: 1.6;
+            font-size: 15px;
+            white-space: pre-wrap;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 100%);
+            color: #274e13;
+            align-self: flex-start;
+            border-left: 4px solid #4CAF50;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px 20px;
+        }
+
+        .ai-message-content {
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+            object-fit: cover;
+            object-position: center;
+            flex-shrink: 0;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #8eaf78 0%, #45a049 100%);
+            color: white;
+            align-self: flex-end;
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.3);
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            color: #c62828;
+            align-self: flex-start;
+            border-left: 4px solid #f44336;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .thinking-heart {
+            font-size: 24px;
+            animation: heartPulse 1.5s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.08) 0%, rgba(139, 195, 74, 0.08) 100%);
+            border-radius: 15px;
+            border: 2px dashed rgba(76, 175, 80, 0.2);
+        }
+
+        .welcome-section h2 {
+            color: #8eaf78;
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .welcome-section p {
+            color: #5a6c57;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Memory recap section */
+        .memory-recap {
+            background: linear-gradient(135deg, rgba(142, 175, 120, 0.08) 0%, rgba(255, 223, 186, 0.08) 100%);
+            border: 2px dashed rgba(142, 175, 120, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #5a6c57;
+            text-align: left;
+        }
+
+        .memory-recap h4 {
+            color: #8eaf78;
+            margin-bottom: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .memory-recap ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .memory-recap li {
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .disclaimer {
+            background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 13px;
+            color: #8b4513;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .send-button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .send-button:active {
+            transform: translateY(0);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartPulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .container {
+                height: 90vh;
+                margin: 10px;
+            }
             
-            const lastUserMessage = messages[messages.length - 1].content;
-            return generateIntelligentResponse(lastUserMessage, messages);
+            .logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .logo-header.compact .logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .logo-header h1 {
+                font-size: 1.8em;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
         }
+
+        /* DISCLAIMER MODAL STYLES */
+        .disclaimer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .disclaimer-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: disclaimerSlideIn 0.4s ease-out;
+            border: 3px solid #8eaf78;
+        }
+
+        .disclaimer-modal h2 {
+            color: #8eaf78;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+
+        .disclaimer-modal .warning-icon {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .disclaimer-content {
+            color: #333;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .disclaimer-content p {
+            margin-bottom: 15px;
+        }
+
+        .disclaimer-content strong {
+            color: #2c5530;
+            font-weight: 600;
+        }
+
+        .emergency-section {
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+            border: 2px solid #e91e63;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .emergency-section h3 {
+            color: #c2185b;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .emergency-contacts {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .emergency-contacts li {
+            margin-bottom: 8px;
+            color: #880e4f;
+            font-weight: 500;
+        }
+
+        .important-notes {
+            background: linear-gradient(135deg, #fff8dc 0%, #ffeaa7 100%);
+            border: 2px solid #f39c12;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .important-notes h3 {
+            color: #e67e22;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .important-notes ul {
+            padding-left: 20px;
+        }
+
+        .important-notes li {
+            margin-bottom: 8px;
+            color: #8b4513;
+        }
+
+        .disclaimer-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-accept {
+            background: linear-gradient(135deg, #8eaf78 0%, #45a049 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .btn-accept:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(142, 175, 120, 0.3);
+        }
+
+        .btn-help {
+            background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .btn-help:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(233, 30, 99, 0.3);
+        }
+
+        @keyframes disclaimerSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .disclaimer-modal {
+                padding: 20px;
+                margin: 10px;
+                max-height: 90vh;
+            }
+            
+            .disclaimer-modal h2 {
+                font-size: 1.5em;
+            }
+            
+            .disclaimer-content {
+                font-size: 13px;
+            }
+            
+            .disclaimer-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-accept,
+            .btn-help {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- DISCLAIMER MODAL -->
+    <div id="disclaimerOverlay" class="disclaimer-overlay hidden">
+        <div class="disclaimer-modal">
+            <div class="warning-icon">⚠️</div>
+            <h2>Important Disclaimer</h2>
+            
+            <div class="disclaimer-content">
+                <p><strong>This app is designed to provide emotional support, encouragement, and validation. It is not a substitute for professional medical, psychiatric, or psychological treatment.</strong></p>
+                
+                <p>The content and features within this app are for general well-being, personal growth, and self-reflection purposes only. We are not medical professionals, and this app does not offer medical, clinical, or therapeutic advice.</p>
+                
+                <p>If you are experiencing significant distress, a mental health crisis, or believe you may have a condition requiring diagnosis or treatment, please seek help from a qualified healthcare provider.</p>
+                
+                <div class="important-notes">
+                    <h3>📋 Important Notes</h3>
+                    <ul>
+                        <li>The app does not provide diagnosis, treatment, prescriptions, or medical interventions.</li>
+                        <li>Use of this app is voluntary and should be considered a complementary tool to professional care, not a replacement.</li>
+                        <li>Any decisions you make based on the information, tools, or suggestions provided are your personal responsibility.</li>
+                    </ul>
+                </div>
+                
+                <p><strong>By using this app, you acknowledge and agree that it is intended to provide support, validation, and helpful resources, but it cannot and does not replace the care of licensed professionals.</strong></p>
+            </div>
+            
+            <div class="disclaimer-buttons">
+                <button class="btn-accept" onclick="acceptDisclaimer()">I Understand & Agree</button>
+                <button class="btn-help" onclick="getNeedHelpNow()">I Need Help Now</button>
+            </div>
+            
+            <div class="emergency-section">
+                <h3>🚨 Emergency Situations</h3>
+                <p><strong>If you are in immediate danger or experiencing thoughts of harming yourself or others, please call your local emergency number right away.</strong></p>
+                
+                <ul class="emergency-contacts">
+                    <li><strong>In the U.S.:</strong> you can dial 988 for the Suicide & Crisis Lifeline</li>
+                    <li><strong>In the U.K. & Ireland:</strong> you can call Samaritans at 116 123</li>
+                    <li><strong>In Australia:</strong> you can call Lifeline at 13 11 14</li>
+                </ul>
+                
+                <p>If you are outside these regions, please look up local emergency and crisis services in your area.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Logo Header Section -->
+        <div class="logo-header" id="logoHeader">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png" alt="HeartoListen Logo" style="width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 10;">
+            </div>   
+            <h1>HeartoListen</h1>
+            <p>AI Mental Wellbeing Support - Self Discovery for Positive Mental Health</p>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="chat-area" id="chatArea">
+            <!-- Welcome Message -->
+            <div class="welcome-section" id="welcomeSection">
+                <h2>Welcome to Hear to Listen</h2>
+                <div style="display: flex; align-items: center; gap: 15px; margin: 15px 0;">
+                    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid rgba(76, 175, 80, 0.3); object-fit: cover; object-position: center;">
+                    <p style="margin: 0;">I'm Eden and I am here to listen and support you through whatever you're experiencing. This is a safe, judgement-free space where you can share your thoughts and feelings.</p>
+                </div>
+
+                <!-- Memory Recap Section (hidden initially) -->
+                <div class="memory-recap" id="memoryRecap" style="display: none;">
+                    <h4>Previous conversations:</h4>
+                    <ul id="memoryList"></ul>
+                </div>
+                
+                <!-- Important Disclaimer -->
+                <div class="disclaimer">
+                    <strong>⚠️ Important Safety Information:</strong>
+                    <br><br>
+                    <strong>Crisis Support:</strong> If you're having thoughts of suicide or self-harm, please reach out immediately:
+                    <br>• <strong>UK:</strong> 999 (Emergency) | 116 123 (Samaritans - 24/7 free)
+                    <br>• <strong>USA:</strong> 911 (Emergency) | 988 (Suicide & Crisis Lifeline)
+                    <br>• <strong>Crisis Text:</strong> Text HOME to 741741
+                    <br><br>
+                    <strong>This app provides peer support and guidance, not professional medical advice.</strong> For ongoing mental health concerns, please seek professional Mental Wellbeing Support
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" 
+                   id="messageInput" 
+                   class="input-field" 
+                   placeholder="What's on your mind......" 
+                   onkeypress="handleKeyPress(event)">
+            <button id="sendButton" class="send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // MEMORY SYSTEM
+        const MEMORY_KEY = 'heartoListenMemories';
+        const MAX_MEMORIES = 10;
+        const MEMORY_EXPIRY_DAYS = 30;
         
-        return data;
-        
-    } catch (error) {
-        console.error('Netlify Function Error:', error);
-        const lastUserMessage = messages[messages.length - 1].content;
-        return generateIntelligentResponse(lastUserMessage, messages);
-    }
-}
+        // USER LIMITING SYSTEM
+        const MAX_USERS = 100;
+        const USER_TRACKING_KEY = 'heartoListenUserCount';
+
+        function checkUserLimit() {
+            let userCount = parseInt(localStorage.getItem(USER_TRACKING_KEY) || '0');
+            
+            if (userCount >= MAX_USERS) {
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); max-width: 500px;">
+                            <h2 style="color: #8eaf78; margin-bottom: 20px;">Beta Access Full</h2>
+                            <p style="color: #5a6c57; margin-bottom: 15px; line-height: 1.6;">This beta version of HeartoListen has reached its user limit of ${MAX_USERS} people.</p>
+                            <p style="color: #5a6c57; line-height: 1.6;">Thank you for your interest in our mental wellbeing support companion. We're working on expanding access soon.</p>
+                        </div>
+                    </div>
+                `;
+                return false;
+            }
+            
+            localStorage.setItem(USER_TRACKING_KEY, (userCount + 1).toString());
+            return true;
+        }
+
+        // Memory management functions
+        function saveMemory(userMessage, aiResponse, emotion = null) {
+            const memories = getMemories();
+            const newMemory = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                userMessage: userMessage,
+                aiResponse: aiResponse,
+                emotion: emotion,
+                timestamp: Date.now()
+            };
+            
+            memories.unshift(newMemory);
+            const recentMemories = memories.slice(0, MAX_MEMORIES);
+            
+            const now = Date.now();
+            const validMemories = recentMemories.filter(memory => {
+                const memoryAge = now - memory.timestamp;
+                const daysSinceMemory = memoryAge / (1000 * 60 * 60 * 24);
+                return daysSinceMemory <= MEMORY_EXPIRY_DAYS;
+            });
+            
+            localStorage.setItem(MEMORY_KEY, JSON.stringify(validMemories));
+        }
+
+        function getMemories() {
+            try {
+                const stored = localStorage.getItem(MEMORY_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch (error) {
+                console.error('Error retrieving memories:', error);
+                return [];
+            }
+        }
+
+        function extractEmotion(message) {
+            const lowerMessage = message.toLowerCase();
+            if (lowerMessage.includes('sad') || lowerMessage.includes('depressed') || lowerMessage.includes('down')) return 'sad';
+            if (lowerMessage.includes('anxious') || lowerMessage.includes('worried') || lowerMessage.includes('scared')) return 'anxious';
+            if (lowerMessage.includes('angry') || lowerMessage.includes('frustrated') || lowerMessage.includes('mad')) return 'angry';
+            if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) return 'lonely';
+            if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed')) return 'stressed';
+            if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('better')) return 'positive';
+            return null;
+        }
+
+        function generateMemoryContext() {
+            const memories = getMemories();
+            if (memories.length === 0) return '';
+            
+            let context = '\n\nRECENT CONVERSATION MEMORY:\n';
+            memories.slice(0, 5).forEach((memory, index) => {
+                const date = new Date(memory.date);
+                const relativeTime = getRelativeTime(date);
+                context += `${relativeTime}: User shared "${memory.userMessage.substring(0, 100)}..."\n`;
+                if (memory.emotion) {
+                    context += `- User was feeling ${memory.emotion}\n`;
+                }
+            });
+            
+            context += '\nPlease acknowledge and reference relevant previous conversations naturally in your response when appropriate.\n';
+            return context;
+        }
+
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffHours < 1) return 'Earlier today';
+            if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return 'Last week';
+        }
+
+        function displayMemoryRecap() {
+            return;
+        }
+
+        // DISCLAIMER MODAL FUNCTIONS
+        function showDisclaimerModal() {
+            const hasSeenDisclaimer = localStorage.getItem('heartoListenDisclaimerSeen');
+            if (hasSeenDisclaimer !== 'true') {
+                document.getElementById('disclaimerOverlay').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            } else {
+                displayMemoryRecap();
+            }
+        }
+
+        function acceptDisclaimer() {
+            localStorage.setItem('heartoListenDisclaimerSeen', 'true');
+            document.getElementById('disclaimerOverlay').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            
+            displayMemoryRecap();
+            
+            setTimeout(() => {
+                document.getElementById('messageInput').focus();
+            }, 100);
+        }
+
+        function getNeedHelpNow() {
+            window.open('https://988lifeline.org/', '_blank');
+            window.open('https://www.samaritans.org/', '_blank');
+            window.open('https://www.lifeline.org.au/', '_blank');
+        }
+
+        // Enhanced Mental Health System Prompt with Memory - Optimized for Claude
+        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts. You have memory of previous conversations and should reference them naturally when relevant.
+
+MEMORY USAGE:
+- When you see "RECENT CONVERSATION MEMORY" in the context, use this information to provide
