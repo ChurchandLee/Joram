@@ -638,36 +638,188 @@
     </div>
 
     <script>
-        // Memory system with in-memory storage for demo
+        // Enhanced Memory system with 30-day persistence
         let memories = [];
-        const MAX_MEMORIES = 10;
+        let currentConversation = [];
+        const MAX_MEMORIES = 50;
         const MAX_USERS = 100;
         let userCount = 0;
         let hasSeenDisclaimer = false;
+        const MEMORY_EXPIRY_DAYS = 30;
 
-        // AI Response system - simulated responses
-        const aiResponses = {
-            greeting: [
-                "Hello there! I'm Eden, and I'm really glad you're here. This is your safe space to share whatever is on your mind. How are you feeling today?",
-                "Hi! Welcome to our conversation. I'm here to listen without judgment and support you through whatever you're experiencing. What would you like to talk about?",
-                "Hello! I'm Eden, and I want you to know that this is a completely safe and private space for you. Whatever you're going through, I'm here to listen. How can I support you today?"
-            ],
-            emotional: [
-                "I hear you, and I want you to know that your feelings are completely valid. It takes courage to share what you're going through. Can you tell me more about what's been on your mind?",
-                "Thank you for trusting me with how you're feeling. Whatever you're experiencing right now is real and important. You're not alone in this. What has been the most challenging part for you?",
-                "I'm really glad you felt comfortable sharing that with me. Your feelings matter, and it's okay to feel whatever you're feeling right now. How long have you been dealing with this?"
-            ],
-            supportive: [
-                "You're being really brave by reaching out and talking about this. That shows a lot of strength, even if you might not feel strong right now. What do you think might help you feel a little better today?",
-                "I can hear how much this is affecting you, and I want you to know that seeking support is a sign of wisdom, not weakness. You're taking care of yourself by being here. What kind of support feels most helpful to you right now?",
-                "Thank you for being so open with me. It sounds like you're going through a really difficult time, and I'm honored that you're sharing this with me. What has been helping you cope, even in small ways?"
-            ],
-            encouragement: [
-                "I want to remind you that you've gotten through difficult times before, and that resilience is still within you. Sometimes we can't see our own strength when we're in the middle of struggles. What's one small thing that brought you even a moment of peace recently?",
-                "You're doing better than you think you are. Just being here and talking about your feelings shows that you're actively working on your wellbeing. That's something to be proud of. How can we build on that today?",
-                "I believe in your ability to navigate through this, even when it feels overwhelming. You don't have to have all the answers right now. What's one tiny step that feels manageable for you today?"
-            ]
-        };
+        // Enhanced AI Response System with Contextual Understanding
+        class EdenAI {
+            constructor() {
+                this.conversationContext = [];
+                this.userProfile = {
+                    commonThemes: [],
+                    emotionalPatterns: [],
+                    preferredSupport: null,
+                    currentStruggles: []
+                };
+            }
+
+            analyzeMessage(message) {
+                const analysis = {
+                    emotion: this.detectEmotion(message),
+                    themes: this.extractThemes(message),
+                    urgency: this.assessUrgency(message),
+                    tone: this.detectTone(message),
+                    keywords: this.extractKeywords(message)
+                };
+                return analysis;
+            }
+
+            detectEmotion(message) {
+                const lowerMessage = message.toLowerCase();
+                const emotions = {
+                    grief: ['grief', 'grieving', 'loss', 'died', 'death', 'funeral', 'miss', 'passed away'],
+                    anxiety: ['anxious', 'worried', 'panic', 'scared', 'nervous', 'afraid', 'fear'],
+                    depression: ['sad', 'depressed', 'hopeless', 'empty', 'numb', 'worthless', 'down'],
+                    anger: ['angry', 'frustrated', 'mad', 'furious', 'irritated', 'rage'],
+                    loneliness: ['lonely', 'alone', 'isolated', 'disconnected', 'nobody cares'],
+                    stress: ['stressed', 'overwhelmed', 'pressure', 'too much', 'exhausted'],
+                    hope: ['better', 'improving', 'hopeful', 'good day', 'progress'],
+                    gratitude: ['thank', 'grateful', 'appreciate', 'helped']
+                };
+
+                for (const [emotion, keywords] of Object.entries(emotions)) {
+                    if (keywords.some(keyword => lowerMessage.includes(keyword))) {
+                        return emotion;
+                    }
+                }
+                return 'neutral';
+            }
+
+            extractThemes(message) {
+                const lowerMessage = message.toLowerCase();
+                const themes = [];
+                
+                if (lowerMessage.match(/work|job|career|boss|colleague/)) themes.push('work');
+                if (lowerMessage.match(/family|parent|mother|father|sibling/)) themes.push('family');
+                if (lowerMessage.match(/relationship|partner|boyfriend|girlfriend|spouse/)) themes.push('relationships');
+                if (lowerMessage.match(/school|study|exam|university|college/)) themes.push('education');
+                if (lowerMessage.match(/health|sick|pain|medical|doctor/)) themes.push('health');
+                if (lowerMessage.match(/money|financial|job|unemployment|debt/)) themes.push('financial');
+                if (lowerMessage.match(/friend|social|party|people/)) themes.push('social');
+                
+                return themes;
+            }
+
+            assessUrgency(message) {
+                const lowerMessage = message.toLowerCase();
+                const highUrgency = ['suicide', 'kill myself', 'end it all', 'can\'t go on', 'hurt myself'];
+                const mediumUrgency = ['crisis', 'emergency', 'help me', 'desperate', 'can\'t cope'];
+                
+                if (highUrgency.some(phrase => lowerMessage.includes(phrase))) return 'high';
+                if (mediumUrgency.some(phrase => lowerMessage.includes(phrase))) return 'medium';
+                return 'low';
+            }
+
+            detectTone(message) {
+                const lowerMessage = message.toLowerCase();
+                if (lowerMessage.match(/\?/)) return 'questioning';
+                if (lowerMessage.match(/\!/)) return 'emotional';
+                if (lowerMessage.length < 20) return 'brief';
+                return 'narrative';
+            }
+
+            extractKeywords(message) {
+                const words = message.toLowerCase().split(/\s+/);
+                const meaningfulWords = words.filter(word => 
+                    word.length > 3 && 
+                    !['that', 'this', 'with', 'have', 'been', 'they', 'them', 'were', 'said', 'like', 'just', 'some', 'time'].includes(word)
+                );
+                return meaningfulWords.slice(0, 5);
+            }
+
+            generateContextualResponse(message, analysis, conversationHistory, memories) {
+                // Check for crisis situation first
+                if (analysis.urgency === 'high') {
+                    return "I'm really concerned about what you've shared. Your life has value and you matter. Please reach out to a crisis helpline right now - in the UK call 999 or Samaritans at 116 123, in the US call 988. I'm here too, but please get immediate professional support. You don't have to go through this alone.";
+                }
+
+                // Build context from conversation and memories
+                let context = this.buildContext(conversationHistory, memories, analysis);
+                
+                // Generate response based on emotion and context
+                return this.craftPersonalizedResponse(message, analysis, context);
+            }
+
+            buildContext(conversationHistory, memories, analysis) {
+                let context = {
+                    previousTopics: [],
+                    emotionalJourney: [],
+                    supportStrategies: [],
+                    relationshipDynamics: 'new'
+                };
+
+                // Analyze recent conversation
+                if (conversationHistory.length > 0) {
+                    context.relationshipDynamics = conversationHistory.length > 3 ? 'established' : 'developing';
+                    conversationHistory.forEach(msg => {
+                        if (msg.themes) context.previousTopics.push(...msg.themes);
+                        if (msg.emotion) context.emotionalJourney.push(msg.emotion);
+                    });
+                }
+
+                // Analyze historical memories
+                if (memories.length > 0) {
+                    context.relationshipDynamics = 'returning';
+                    memories.slice(0, 5).forEach(memory => {
+                        if (memory.emotion) context.emotionalJourney.push(memory.emotion);
+                    });
+                }
+
+                return context;
+            }
+
+            craftPersonalizedResponse(message, analysis, context) {
+                const { emotion, themes, tone } = analysis;
+                const isReturning = context.relationshipDynamics === 'returning';
+                const isEstablished = context.relationshipDynamics === 'established';
+
+                // Handle specific emotions with context awareness
+                switch (emotion) {
+                    case 'grief':
+                        if (isReturning) {
+                            return `I remember you've been carrying this weight of grief. Thank you for coming back and continuing to share with me. Grief isn't linear - some days feel harder than others. What's grief feeling like for you right now, today?`;
+                        }
+                        return `I can hear the heaviness in your words. Grief is one of the most profound human experiences, and it takes immense courage to even name it. There's no right or wrong way to grieve. Would you like to tell me about what you've lost, or would you prefer to talk about how the grief is affecting you day to day?`;
+
+                    case 'anxiety':
+                        if (isEstablished && context.emotionalJourney.includes('anxiety')) {
+                            return `I notice anxiety is visiting you again. We've talked about this before, and I want you to know that having recurring anxiety doesn't mean you're not making progress. What's triggering these anxious feelings today? Is it similar to what we discussed before, or something new?`;
+                        }
+                        return `Anxiety can feel so overwhelming, like your mind is racing ahead to all the things that could go wrong. I'm here with you in this moment. Can you tell me what's making you feel most anxious right now? Sometimes just naming it can help a little.`;
+
+                    case 'depression':
+                        if (themes.includes('work') || themes.includes('relationships')) {
+                            return `Depression has this way of making everything feel harder, especially ${themes.includes('work') ? 'work' : 'relationships'}. It's like trying to swim through thick water. You don't have to carry this alone. What's been the hardest part about getting through your days lately?`;
+                        }
+                        return `I can feel the weight you're carrying right now. Depression can make even small things feel impossibly difficult. You took a step by reaching out today, and that matters. What's one thing that's been especially hard for you recently?`;
+
+                    case 'hope':
+                        if (context.emotionalJourney.some(e => ['depression', 'anxiety', 'grief'].includes(e))) {
+                            return `It's really meaningful to hear some hope in your voice, especially after what you've been going through. These glimpses of hope are precious - they remind us that feelings do shift and change. What's contributing to this sense of hope today?`;
+                        }
+                        return `I can sense some hope and positivity in what you're sharing, and that's wonderful. It's beautiful when we can recognize these lighter moments. What's been helping you feel this way?`;
+
+                    default:
+                        // Contextual default responses
+                        if (isReturning) {
+                            return `It's good to have you back. I've been thinking about our previous conversations, and I'm glad you felt comfortable returning to share more with me. What's been on your mind since we last talked?`;
+                        } else if (isEstablished) {
+                            return `I'm really listening to what you're saying. Based on what you've shared with me, it sounds like you're processing something important. Can you help me understand what's most pressing for you right now?`;
+                        } else {
+                            return `Thank you for trusting me with your thoughts. I can sense there's something meaningful you want to talk about. I'm here to listen without judgment. What would feel most helpful to explore together?`;
+                        }
+                }
+            }
+        }
+
+        // Initialize Eden AI
+        const eden = new EdenAI();
 
         function checkUserLimit() {
             if (userCount >= MAX_USERS) {
@@ -702,34 +854,54 @@
             }
         }
 
-        function extractEmotion(message) {
-            const lowerMessage = message.toLowerCase();
-            if (lowerMessage.includes('sad') || lowerMessage.includes('depressed') || lowerMessage.includes('down')) return 'sad';
-            if (lowerMessage.includes('anxious') || lowerMessage.includes('worried') || lowerMessage.includes('scared')) return 'anxious';
-            if (lowerMessage.includes('angry') || lowerMessage.includes('frustrated') || lowerMessage.includes('mad')) return 'angry';
-            if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) return 'lonely';
-            if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed')) return 'stressed';
-            if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('better')) return 'positive';
-            return null;
+        function saveMemory(userMessage, aiResponse, analysis = null) {
+            const newMemory = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                userMessage: userMessage,
+                aiResponse: aiResponse,
+                emotion: analysis?.emotion || null,
+                themes: analysis?.themes || [],
+                timestamp: Date.now()
+            };
+            
+            memories.unshift(newMemory);
+            
+            // Keep only memories from last 30 days
+            const thirtyDaysAgo = Date.now() - (MEMORY_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+            memories = memories.filter(memory => memory.timestamp > thirtyDaysAgo);
+            
+            if (memories.length > MAX_MEMORIES) {
+                memories = memories.slice(0, MAX_MEMORIES);
+            }
+
+            // Add to current conversation context
+            currentConversation.push({
+                userMessage,
+                aiResponse,
+                analysis,
+                timestamp: Date.now()
+            });
+
+            // Keep conversation context manageable
+            if (currentConversation.length > 10) {
+                currentConversation = currentConversation.slice(-8);
+            }
         }
 
         function generateAIResponse(userMessage) {
-            const emotion = extractEmotion(userMessage);
-            const lowerMessage = userMessage.toLowerCase();
+            // Analyze the current message
+            const analysis = eden.analyzeMessage(userMessage);
             
-            // Simple keyword-based response selection
-            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
-                return aiResponses.greeting[Math.floor(Math.random() * aiResponses.greeting.length)];
-            } else if (emotion === 'sad' || emotion === 'anxious' || emotion === 'angry' || emotion === 'lonely' || emotion === 'stressed') {
-                return aiResponses.emotional[Math.floor(Math.random() * aiResponses.emotional.length)];
-            } else if (lowerMessage.includes('thank') || lowerMessage.includes('help') || lowerMessage.includes('support')) {
-                return aiResponses.supportive[Math.floor(Math.random() * aiResponses.supportive.length)];
-            } else if (emotion === 'positive') {
-                return aiResponses.encouragement[Math.floor(Math.random() * aiResponses.encouragement.length)];
-            } else {
-                // Default supportive response
-                return "I hear you, and I'm here to listen. Thank you for sharing that with me. Can you tell me more about what you're experiencing? I want to understand and support you as best I can.";
+            // Handle crisis situations immediately
+            if (analysis.urgency === 'high') {
+                return eden.generateContextualResponse(userMessage, analysis, currentConversation, memories);
             }
+
+            // Generate contextual response
+            const response = eden.generateContextualResponse(userMessage, analysis, currentConversation, memories);
+            
+            return response;
         }
 
         function showDisclaimerModal() {
@@ -863,15 +1035,15 @@
             const thinkingElement = showThinking();
             
             try {
-                // Simulate AI processing time
+                // Simulate realistic thinking time (1-3 seconds)
                 await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
                 
-                // Generate AI response
+                // Analyze message and generate response
+                const analysis = eden.analyzeMessage(message);
                 const aiResponse = generateAIResponse(message);
-                const emotion = extractEmotion(message);
                 
-                // Save to memory
-                saveMemory(message, aiResponse, emotion);
+                // Save to memory with analysis
+                saveMemory(message, aiResponse, analysis);
                 
                 // Hide thinking and show response
                 hideThinking();
