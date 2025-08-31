@@ -11,7 +11,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/earheart.png">
-    <link rel="manifest" href="app-manifest.json">
     
     <!-- iOS specific -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -61,7 +60,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Compact header state */
         .logo-header.compact {
             padding: 15px;
         }
@@ -78,7 +76,6 @@
             position: relative;
         }
 
-        /* Compact logo state */
         .logo-header.compact .logo {
             width: 60px;
             height: 60px;
@@ -104,7 +101,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Hide text in compact mode */
         .logo-header.compact h1,
         .logo-header.compact p {
             display: none;
@@ -202,7 +198,6 @@
             margin-bottom: 15px;
         }
 
-        /* Memory recap section */
         .memory-recap {
             background: linear-gradient(135deg, rgba(142, 175, 120, 0.08) 0%, rgba(255, 223, 186, 0.08) 100%);
             border: 2px dashed rgba(142, 175, 120, 0.3);
@@ -318,32 +313,6 @@
             50% {
                 transform: scale(1.3);
                 opacity: 1;
-            }
-        }
-
-        /* Responsive design */
-        @media (max-width: 600px) {
-            .container {
-                height: 90vh;
-                margin: 10px;
-            }
-            
-            .logo {
-                width: 120px;
-                height: 120px;
-            }
-
-            .logo-header.compact .logo {
-                width: 50px;
-                height: 50px;
-            }
-            
-            .logo-header h1 {
-                font-size: 1.8em;
-            }
-            
-            .message {
-                max-width: 95%;
             }
         }
 
@@ -515,8 +484,31 @@
             }
         }
 
-        /* Mobile responsiveness */
+        /* Responsive design */
         @media (max-width: 600px) {
+            .container {
+                height: 90vh;
+                margin: 10px;
+            }
+            
+            .logo {
+                width: 120px;
+                height: 120px;
+            }
+
+            .logo-header.compact .logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .logo-header h1 {
+                font-size: 1.8em;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+
             .disclaimer-modal {
                 padding: 20px;
                 margin: 10px;
@@ -646,18 +638,38 @@
     </div>
 
     <script>
-        // MEMORY SYSTEM
-        const MEMORY_KEY = 'heartoListenMemories';
+        // Memory system with in-memory storage for demo
+        let memories = [];
         const MAX_MEMORIES = 10;
-        const MEMORY_EXPIRY_DAYS = 30;
-        
-        // USER LIMITING SYSTEM
         const MAX_USERS = 100;
-        const USER_TRACKING_KEY = 'heartoListenUserCount';
+        let userCount = 0;
+        let hasSeenDisclaimer = false;
+
+        // AI Response system - simulated responses
+        const aiResponses = {
+            greeting: [
+                "Hello there! I'm Eden, and I'm really glad you're here. This is your safe space to share whatever is on your mind. How are you feeling today?",
+                "Hi! Welcome to our conversation. I'm here to listen without judgment and support you through whatever you're experiencing. What would you like to talk about?",
+                "Hello! I'm Eden, and I want you to know that this is a completely safe and private space for you. Whatever you're going through, I'm here to listen. How can I support you today?"
+            ],
+            emotional: [
+                "I hear you, and I want you to know that your feelings are completely valid. It takes courage to share what you're going through. Can you tell me more about what's been on your mind?",
+                "Thank you for trusting me with how you're feeling. Whatever you're experiencing right now is real and important. You're not alone in this. What has been the most challenging part for you?",
+                "I'm really glad you felt comfortable sharing that with me. Your feelings matter, and it's okay to feel whatever you're feeling right now. How long have you been dealing with this?"
+            ],
+            supportive: [
+                "You're being really brave by reaching out and talking about this. That shows a lot of strength, even if you might not feel strong right now. What do you think might help you feel a little better today?",
+                "I can hear how much this is affecting you, and I want you to know that seeking support is a sign of wisdom, not weakness. You're taking care of yourself by being here. What kind of support feels most helpful to you right now?",
+                "Thank you for being so open with me. It sounds like you're going through a really difficult time, and I'm honored that you're sharing this with me. What has been helping you cope, even in small ways?"
+            ],
+            encouragement: [
+                "I want to remind you that you've gotten through difficult times before, and that resilience is still within you. Sometimes we can't see our own strength when we're in the middle of struggles. What's one small thing that brought you even a moment of peace recently?",
+                "You're doing better than you think you are. Just being here and talking about your feelings shows that you're actively working on your wellbeing. That's something to be proud of. How can we build on that today?",
+                "I believe in your ability to navigate through this, even when it feels overwhelming. You don't have to have all the answers right now. What's one tiny step that feels manageable for you today?"
+            ]
+        };
 
         function checkUserLimit() {
-            let userCount = parseInt(localStorage.getItem(USER_TRACKING_KEY) || '0');
-            
             if (userCount >= MAX_USERS) {
                 document.body.innerHTML = `
                     <div style="text-align: center; padding: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
@@ -670,14 +682,11 @@
                 `;
                 return false;
             }
-            
-            localStorage.setItem(USER_TRACKING_KEY, (userCount + 1).toString());
+            userCount++;
             return true;
         }
 
-        // Memory management functions
         function saveMemory(userMessage, aiResponse, emotion = null) {
-            const memories = getMemories();
             const newMemory = {
                 id: Date.now(),
                 date: new Date().toISOString(),
@@ -688,25 +697,8 @@
             };
             
             memories.unshift(newMemory);
-            const recentMemories = memories.slice(0, MAX_MEMORIES);
-            
-            const now = Date.now();
-            const validMemories = recentMemories.filter(memory => {
-                const memoryAge = now - memory.timestamp;
-                const daysSinceMemory = memoryAge / (1000 * 60 * 60 * 24);
-                return daysSinceMemory <= MEMORY_EXPIRY_DAYS;
-            });
-            
-            localStorage.setItem(MEMORY_KEY, JSON.stringify(validMemories));
-        }
-
-        function getMemories() {
-            try {
-                const stored = localStorage.getItem(MEMORY_KEY);
-                return stored ? JSON.parse(stored) : [];
-            } catch (error) {
-                console.error('Error retrieving memories:', error);
-                return [];
+            if (memories.length > MAX_MEMORIES) {
+                memories = memories.slice(0, MAX_MEMORIES);
             }
         }
 
@@ -721,45 +713,27 @@
             return null;
         }
 
-        function generateMemoryContext() {
-            const memories = getMemories();
-            if (memories.length === 0) return '';
+        function generateAIResponse(userMessage) {
+            const emotion = extractEmotion(userMessage);
+            const lowerMessage = userMessage.toLowerCase();
             
-            let context = '\n\nRECENT CONVERSATION MEMORY:\n';
-            memories.slice(0, 5).forEach((memory, index) => {
-                const date = new Date(memory.date);
-                const relativeTime = getRelativeTime(date);
-                context += `${relativeTime}: User shared "${memory.userMessage.substring(0, 100)}..."\n`;
-                if (memory.emotion) {
-                    context += `- User was feeling ${memory.emotion}\n`;
-                }
-            });
-            
-            context += '\nPlease acknowledge and reference relevant previous conversations naturally in your response when appropriate.\n';
-            return context;
+            // Simple keyword-based response selection
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                return aiResponses.greeting[Math.floor(Math.random() * aiResponses.greeting.length)];
+            } else if (emotion === 'sad' || emotion === 'anxious' || emotion === 'angry' || emotion === 'lonely' || emotion === 'stressed') {
+                return aiResponses.emotional[Math.floor(Math.random() * aiResponses.emotional.length)];
+            } else if (lowerMessage.includes('thank') || lowerMessage.includes('help') || lowerMessage.includes('support')) {
+                return aiResponses.supportive[Math.floor(Math.random() * aiResponses.supportive.length)];
+            } else if (emotion === 'positive') {
+                return aiResponses.encouragement[Math.floor(Math.random() * aiResponses.encouragement.length)];
+            } else {
+                // Default supportive response
+                return "I hear you, and I'm here to listen. Thank you for sharing that with me. Can you tell me more about what you're experiencing? I want to understand and support you as best I can.";
+            }
         }
 
-        function getRelativeTime(date) {
-            const now = new Date();
-            const diffMs = now - date;
-            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-            
-            if (diffHours < 1) return 'Earlier today';
-            if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
-            if (diffDays === 1) return 'Yesterday';
-            if (diffDays < 7) return `${diffDays} days ago`;
-            return 'Last week';
-        }
-
-        function displayMemoryRecap() {
-            return;
-        }
-
-        // DISCLAIMER MODAL FUNCTIONS
         function showDisclaimerModal() {
-            const hasSeenDisclaimer = localStorage.getItem('heartoListenDisclaimerSeen');
-            if (hasSeenDisclaimer !== 'true') {
+            if (!hasSeenDisclaimer) {
                 document.getElementById('disclaimerOverlay').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
             } else {
@@ -768,7 +742,7 @@
         }
 
         function acceptDisclaimer() {
-            localStorage.setItem('heartoListenDisclaimerSeen', 'true');
+            hasSeenDisclaimer = true;
             document.getElementById('disclaimerOverlay').classList.add('hidden');
             document.body.style.overflow = 'auto';
             
@@ -785,8 +759,172 @@
             window.open('https://www.lifeline.org.au/', '_blank');
         }
 
-        // Enhanced Mental Health System Prompt with Memory - Optimized for Claude
-        const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts. You have memory of previous conversations and should reference them naturally when relevant.
+        function displayMemoryRecap() {
+            if (memories.length > 0) {
+                const memoryRecap = document.getElementById('memoryRecap');
+                const memoryList = document.getElementById('memoryList');
+                
+                memoryList.innerHTML = '';
+                memories.slice(0, 3).forEach(memory => {
+                    const li = document.createElement('li');
+                    const date = new Date(memory.date);
+                    const relativeTime = getRelativeTime(date);
+                    li.textContent = `${relativeTime}: "${memory.userMessage.substring(0, 50)}..."`;
+                    memoryList.appendChild(li);
+                });
+                
+                memoryRecap.style.display = 'block';
+            }
+        }
 
-MEMORY USAGE:
-- When you see "RECENT CONVERSATION MEMORY" in the context, use this information to provide
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            
+            if (diffHours < 1) return 'Earlier today';
+            if (diffHours < 24) return diffHours === 1 ? '1 hour ago' : `${diffHours} hours ago`;
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return 'Last week';
+        }
+
+        function addMessage(content, isUser = false, isError = false) {
+            const chatArea = document.getElementById('chatArea');
+            const messageDiv = document.createElement('div');
+            
+            if (isError) {
+                messageDiv.className = 'message error-message';
+                messageDiv.textContent = content;
+            } else if (isUser) {
+                messageDiv.className = 'message user-message';
+                messageDiv.textContent = content;
+            } else {
+                messageDiv.className = 'message ai-message';
+                messageDiv.innerHTML = `
+                    <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden" class="ai-avatar">
+                    <div class="ai-message-content">${content}</div>
+                `;
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // Compact header after first message
+            if (chatArea.children.length > 2) {
+                document.getElementById('logoHeader').classList.add('compact');
+                document.getElementById('welcomeSection').style.display = 'none';
+            }
+        }
+
+        function showThinking() {
+            const chatArea = document.getElementById('chatArea');
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'message ai-message';
+            thinkingDiv.id = 'thinking-message';
+            thinkingDiv.innerHTML = `
+                <img src="https://raw.githubusercontent.com/ChurchandLee/ubiquitous-guacamole/main/Eden.png" alt="Eden" class="ai-avatar">
+                <div class="ai-message-content">
+                    <div class="thinking-heart">💚</div>
+                </div>
+            `;
+            
+            chatArea.appendChild(thinkingDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            return thinkingDiv;
+        }
+
+        function hideThinking() {
+            const thinkingMessage = document.getElementById('thinking-message');
+            if (thinkingMessage) {
+                thinkingMessage.remove();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Disable input and button
+            input.disabled = true;
+            sendButton.disabled = true;
+            
+            // Add user message
+            addMessage(message, true);
+            
+            // Clear input
+            input.value = '';
+            
+            // Show thinking animation
+            const thinkingElement = showThinking();
+            
+            try {
+                // Simulate AI processing time
+                await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
+                
+                // Generate AI response
+                const aiResponse = generateAIResponse(message);
+                const emotion = extractEmotion(message);
+                
+                // Save to memory
+                saveMemory(message, aiResponse, emotion);
+                
+                // Hide thinking and show response
+                hideThinking();
+                addMessage(aiResponse);
+                
+            } catch (error) {
+                hideThinking();
+                addMessage('I apologize, but I encountered an issue. Please try again or consider reaching out to a mental health professional if you need immediate support.', false, true);
+            } finally {
+                // Re-enable input and button
+                input.disabled = false;
+                sendButton.disabled = false;
+                input.focus();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Initialize app
+        window.addEventListener('load', function() {
+            if (checkUserLimit()) {
+                showDisclaimerModal();
+            }
+        });
+
+        // Add some sample memories for demonstration
+        setTimeout(() => {
+            if (memories.length === 0) {
+                // Add some sample previous conversations for demo
+                memories = [
+                    {
+                        id: Date.now() - 86400000,
+                        date: new Date(Date.now() - 86400000).toISOString(),
+                        userMessage: "I've been feeling really anxious about work lately",
+                        aiResponse: "It sounds like work has been weighing heavily on your mind...",
+                        emotion: "anxious",
+                        timestamp: Date.now() - 86400000
+                    },
+                    {
+                        id: Date.now() - 172800000,
+                        date: new Date(Date.now() - 172800000).toISOString(),
+                        userMessage: "Had a better day today, feeling more hopeful",
+                        aiResponse: "I'm so glad to hear you're feeling more hopeful...",
+                        emotion: "positive",
+                        timestamp: Date.now() - 172800000
+                    }
+                ];
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
