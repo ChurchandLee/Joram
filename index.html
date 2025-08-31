@@ -606,11 +606,7 @@
                     <p style="margin: 0;">I'm Eden and I am here to listen and support you through whatever you're experiencing. This is a safe, judgement-free space where you can share your thoughts and feelings.</p>
                 </div>
 
-                <!-- Memory Recap Section (hidden initially) -->
-                <div class="memory-recap" id="memoryRecap" style="display: none;">
-                    <h4>Previous conversations:</h4>
-                    <ul id="memoryList"></ul>
-                </div>
+                <!-- Memory runs silently in background - no visual display needed -->
                 
                 <!-- Important Disclaimer -->
                 <div class="disclaimer">
@@ -932,21 +928,8 @@
         }
 
         function displayMemoryRecap() {
-            if (memories.length > 0) {
-                const memoryRecap = document.getElementById('memoryRecap');
-                const memoryList = document.getElementById('memoryList');
-                
-                memoryList.innerHTML = '';
-                memories.slice(0, 3).forEach(memory => {
-                    const li = document.createElement('li');
-                    const date = new Date(memory.date);
-                    const relativeTime = getRelativeTime(date);
-                    li.textContent = `${relativeTime}: "${memory.userMessage.substring(0, 50)}..."`;
-                    memoryList.appendChild(li);
-                });
-                
-                memoryRecap.style.display = 'block';
-            }
+            // Memory now runs silently in the background - no visual display
+            // Eden will reference memories naturally in conversation when relevant
         }
 
         function getRelativeTime(date) {
