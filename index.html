@@ -575,14 +575,18 @@ max-width: 250px;
 }
 }
 
-.hidden {
+.disclaimer-hidden {
 display: none !important;
+}
+
+.disclaimer-visible {
+display: flex !important;
 }
 </style>
 </head>
 <body>
 <!-- DISCLAIMER MODAL -->
-<div id="disclaimerOverlay" class="disclaimer-overlay" style="display: flex;">
+<div id="disclaimerOverlay" class="disclaimer-overlay disclaimer-visible">
 <div class="disclaimer-modal">
 <div class="warning-icon">⚠️</div>
 <h2>Important Disclaimer</h2>
@@ -672,33 +676,55 @@ onkeypress="handleKeyPress(event)">
 </div>
 
 <script>
-// ENHANCED MEMORY SYSTEM
+// Global variables
 let sessionMemories = [];
 let conversationHistory = [];
 let isFirstMessage = true;
+let disclaimerAccepted = false;
 
-// Show disclaimer modal on load
-window.onload = function() {
-    document.getElementById('disclaimerOverlay').style.display = 'flex';
-};
+// Initialize app when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    showDisclaimer();
+    
+    // Disable main app until disclaimer is accepted
+    document.getElementById('messageInput').disabled = true;
+    document.getElementById('sendButton').disabled = true;
+});
+
+function showDisclaimer() {
+    const overlay = document.getElementById('disclaimerOverlay');
+    overlay.className = 'disclaimer-overlay disclaimer-visible';
+    console.log('Disclaimer shown');
+}
 
 function acceptDisclaimer() {
-    document.getElementById('disclaimerOverlay').style.display = 'none';
+    const overlay = document.getElementById('disclaimerOverlay');
+    overlay.className = 'disclaimer-overlay disclaimer-hidden';
+    
+    // Enable the app
+    disclaimerAccepted = true;
+    document.getElementById('messageInput').disabled = false;
+    document.getElementById('sendButton').disabled = false;
+    document.getElementById('messageInput').focus();
+    
+    console.log('Disclaimer accepted');
 }
 
 function getNeedHelpNow() {
-    // Open multiple crisis resources
-    const resources = [
-        'https://www.samaritans.org/',
-        'https://suicidepreventionlifeline.org/',
-        'https://www.crisistextline.org/'
-    ];
+    // Show crisis resources immediately
+    const crisisMessage = `IMMEDIATE HELP AVAILABLE:\n\n` +
+        `🚨 EMERGENCY: Call your local emergency number\n\n` +
+        `CRISIS SUPPORT:\n` +
+        `• UK & Ireland: 116 123 (Samaritans - free, 24/7)\n` +
+        `• USA: 988 (Suicide & Crisis Lifeline)\n` +
+        `• Australia: 13 11 14 (Lifeline)\n` +
+        `• Crisis Text Line: Text "HOME" to 741741\n\n` +
+        `You are not alone. Help is available right now.`;
     
-    // Open the most appropriate resource based on likely location
+    alert(crisisMessage);
+    
+    // Open Samaritans website
     window.open('https://www.samaritans.org/', '_blank');
-    
-    // Also show local emergency numbers
-    alert('Emergency Numbers:\n\nUK: 999 (Emergency) | 116 123 (Samaritans)\nUSA: 911 (Emergency) | 988 (Crisis Lifeline)\nAustralia: 000 (Emergency) | 13 11 14 (Lifeline)\n\nText "HOME" to 741741 for Crisis Text Line');
 }
 
 // Handle key press
