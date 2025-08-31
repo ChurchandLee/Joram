@@ -650,6 +650,30 @@
         const MEMORY_KEY = 'heartoListenMemories';
         const MAX_MEMORIES = 10;
         const MEMORY_EXPIRY_DAYS = 30;
+        // USER LIMITING SYSTEM
+const MAX_USERS = 100; // Change this number to your desired limit
+const USER_TRACKING_KEY = 'heartoListenUserCount';
+
+function checkUserLimit() {
+    let userCount = parseInt(localStorage.getItem(USER_TRACKING_KEY) || '0');
+    
+    if (userCount >= MAX_USERS) {
+        document.body.innerHTML = `
+            <div style="text-align: center; padding: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); max-width: 500px;">
+                    <h2 style="color: #8eaf78; margin-bottom: 20px;">Beta Access Full</h2>
+                    <p style="color: #5a6c57; margin-bottom: 15px; line-height: 1.6;">This beta version of HeartoListen has reached its user limit of ${MAX_USERS} people.</p>
+                    <p style="color: #5a6c57; line-height: 1.6;">Thank you for your interest in our mental wellbeing support companion. We're working on expanding access soon.</p>
+                </div>
+            </div>
+        `;
+        return false;
+    }
+    
+    // Track this user
+    localStorage.setItem(USER_TRACKING_KEY, (userCount + 1).toString());
+    return true;
+}
 
         // Memory management functions
         function saveMemory(userMessage, aiResponse, emotion = null) {
@@ -1146,11 +1170,12 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             }
         }
 
-        // Initialize app with memory system
-        document.addEventListener('DOMContentLoaded', function() {
-            showDisclaimerModal();
-            document.getElementById('messageInput').focus();
-        });
+       // Initialize app with memory system and user limiting
+document.addEventListener('DOMContentLoaded', function() {
+    if (!checkUserLimit()) return; // Stop here if user limit reached
+    showDisclaimerModal();
+    document.getElementById('messageInput').focus();
+});
     </script>
 </body>
 </html>
