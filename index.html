@@ -650,30 +650,31 @@
         const MEMORY_KEY = 'heartoListenMemories';
         const MAX_MEMORIES = 10;
         const MEMORY_EXPIRY_DAYS = 30;
+        
         // USER LIMITING SYSTEM
-const MAX_USERS = 100; // Change this number to your desired limit
-const USER_TRACKING_KEY = 'heartoListenUserCount';
+        const MAX_USERS = 100; // Change this number to your desired limit
+        const USER_TRACKING_KEY = 'heartoListenUserCount';
 
-function checkUserLimit() {
-    let userCount = parseInt(localStorage.getItem(USER_TRACKING_KEY) || '0');
-    
-    if (userCount >= MAX_USERS) {
-        document.body.innerHTML = `
-            <div style="text-align: center; padding: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-                <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); max-width: 500px;">
-                    <h2 style="color: #8eaf78; margin-bottom: 20px;">Beta Access Full</h2>
-                    <p style="color: #5a6c57; margin-bottom: 15px; line-height: 1.6;">This beta version of HeartoListen has reached its user limit of ${MAX_USERS} people.</p>
-                    <p style="color: #5a6c57; line-height: 1.6;">Thank you for your interest in our mental wellbeing support companion. We're working on expanding access soon.</p>
-                </div>
-            </div>
-        `;
-        return false;
-    }
-    
-    // Track this user
-    localStorage.setItem(USER_TRACKING_KEY, (userCount + 1).toString());
-    return true;
-}
+        function checkUserLimit() {
+            let userCount = parseInt(localStorage.getItem(USER_TRACKING_KEY) || '0');
+            
+            if (userCount >= MAX_USERS) {
+                document.body.innerHTML = `
+                    <div style="text-align: center; padding: 50px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #8eaf78 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+                        <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); max-width: 500px;">
+                            <h2 style="color: #8eaf78; margin-bottom: 20px;">Beta Access Full</h2>
+                            <p style="color: #5a6c57; margin-bottom: 15px; line-height: 1.6;">This beta version of HeartoListen has reached its user limit of ${MAX_USERS} people.</p>
+                            <p style="color: #5a6c57; line-height: 1.6;">Thank you for your interest in our mental wellbeing support companion. We're working on expanding access soon.</p>
+                        </div>
+                    </div>
+                `;
+                return false;
+            }
+            
+            // Track this user
+            localStorage.setItem(USER_TRACKING_KEY, (userCount + 1).toString());
+            return true;
+        }
 
         // Memory management functions
         function saveMemory(userMessage, aiResponse, emotion = null) {
@@ -793,10 +794,10 @@ function checkUserLimit() {
             window.open('https://www.lifeline.org.au/', '_blank');
         }
 
-        // OpenAI API Configuration
-        const OPENAI_API_KEY = 'YOUR_API_KEY_HERE';
+        // Claude API Configuration
+        const ANTHROPIC_API_KEY = 'YOUR_ANTHROPIC_API_KEY_HERE';
 
-        // Enhanced Mental Health System Prompt with Memory
+        // Enhanced Mental Health System Prompt with Memory - Optimized for Claude
         const SYSTEM_PROMPT = `You are a compassionate AI mental health companion named "Eden" from HeartoListen. Your primary role is to provide supportive, exploratory conversations that help people process their feelings and thoughts. You have memory of previous conversations and should reference them naturally when relevant.
 
 MEMORY USAGE:
@@ -862,10 +863,7 @@ CONVERSATION FLOW:
 Remember: Your goal is meaningful conversation and exploration, not immediate problem-solving or professional referrals (unless crisis situation). Be genuinely curious about their unique experience. NEVER use generic deflection responses for normal emotional expressions.`;
 
         // Chat functionality with memory integration
-        let conversationHistory = [{
-            role: 'system',
-            content: SYSTEM_PROMPT
-        }];
+        let conversationHistory = [];
 
         // Track used responses to prevent repetition
         let usedResponses = {
@@ -992,35 +990,43 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             return { choices: [{ message: { content: selectedResponse } }] };
         }
 
-        // ChatGPT API call function with memory integration
-        async function callChatGPT(messages) {
+        // Claude API call function with memory integration
+        async function callClaude(messages) {
             try {
                 // Add memory context to the system prompt
                 const memoryContext = generateMemoryContext();
-                const enhancedMessages = [...messages];
                 
-                if (memoryContext && enhancedMessages.length > 1) {
-                    // Add memory context to the system message
-                    enhancedMessages[0] = {
-                        ...enhancedMessages[0],
-                        content: enhancedMessages[0].content + memoryContext
-                    };
+                // Convert OpenAI message format to Claude format
+                const claudeMessages = [];
+                let systemMessage = SYSTEM_PROMPT;
+                
+                // Add memory context to system message if available
+                if (memoryContext) {
+                    systemMessage += memoryContext;
+                }
+                
+                // Convert messages (skip system message as Claude handles it separately)
+                for (let i = 1; i < messages.length; i++) {
+                    const msg = messages[i];
+                    claudeMessages.push({
+                        role: msg.role === 'assistant' ? 'assistant' : 'user',
+                        content: msg.content
+                    });
                 }
 
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                        'x-api-key': ANTHROPIC_API_KEY,
                         'Content-Type': 'application/json',
+                        'anthropic-version': '2023-06-01'
                     },
                     body: JSON.stringify({
-                        model: "gpt-4",
-                        messages: enhancedMessages,
-                        temperature: 0.75,
-                        top_p: 0.9,
+                        model: "claude-3-5-sonnet-20241022",
                         max_tokens: 800,
-                        frequency_penalty: 0.3,
-                        presence_penalty: 0.1,
+                        temperature: 0.75,
+                        system: systemMessage,
+                        messages: claudeMessages
                     })
                 });
                 
@@ -1029,7 +1035,7 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                 }
                 
                 const data = await response.json();
-                const apiResponse = data.choices[0].message.content.trim();
+                const apiResponse = data.content[0].text.trim();
                 
                 // Check if API gave generic unhelpful response
                 if (apiResponse.includes("I'm really sorry that you're feeling this way, but I'm unable to provide the help that you need") ||
@@ -1042,10 +1048,17 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     return generateIntelligentResponse(lastUserMessage, messages);
                 }
                 
-                return data;
+                // Convert Claude response format to match OpenAI format for compatibility
+                return {
+                    choices: [{
+                        message: {
+                            content: apiResponse
+                        }
+                    }]
+                };
                 
             } catch (error) {
-                console.error('OpenAI API Error:', error);
+                console.error('Claude API Error:', error);
                 const lastUserMessage = messages[messages.length - 1].content;
                 return generateIntelligentResponse(lastUserMessage, messages);
             }
@@ -1072,7 +1085,8 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     content: message
                 });
 
-                const data = await callChatGPT(conversationHistory);
+                // Use Claude API instead of OpenAI
+                const data = await callClaude([{ role: 'system', content: SYSTEM_PROMPT }, ...conversationHistory]);
                 const aiResponse = data.choices[0].message.content.trim();
                 
                 // Save this interaction to memory
@@ -1084,11 +1098,9 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
                     content: aiResponse
                 });
 
-                if (conversationHistory.length > 21) {
-                    conversationHistory = [
-                        conversationHistory[0],
-                        ...conversationHistory.slice(-20)
-                    ];
+                // Keep conversation history manageable
+                if (conversationHistory.length > 20) {
+                    conversationHistory = conversationHistory.slice(-20);
                 }
 
                 hideTypingIndicator();
@@ -1170,12 +1182,12 @@ Remember: Your goal is meaningful conversation and exploration, not immediate pr
             }
         }
 
-       // Initialize app with memory system and user limiting
-document.addEventListener('DOMContentLoaded', function() {
-    if (!checkUserLimit()) return; // Stop here if user limit reached
-    showDisclaimerModal();
-    document.getElementById('messageInput').focus();
-});
+        // Initialize app with memory system and user limiting
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!checkUserLimit()) return; // Stop here if user limit reached
+            showDisclaimerModal();
+            document.getElementById('messageInput').focus();
+        });
     </script>
 </body>
 </html>
