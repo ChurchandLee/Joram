@@ -1,0 +1,15 @@
+{
+  "name": "heartolisten-app",
+  "version": "1.0.0",
+  "description": "AI Mental Wellbeing Support App",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build process needed'"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
