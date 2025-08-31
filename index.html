@@ -1178,15 +1178,9 @@ return concernResponses[Math.floor(Math.random() * concernResponses.length)];
 
 // ENHANCED MAIN RESPONSE SYSTEM
 async function callClaude(messages) {
-try {
-// For this demo, we'll use the enhanced local response system
-// In production, you would integrate with Claude API here
-return generateEnhancedResponse(messages[messages.length - 1].content, messages);
-
-} catch (error) {
-console.error('Error:', error);
-return generateEnhancedResponse(messages[messages.length - 1].content, messages);
-}
+// Use local response system (no API key needed for demo)
+const lastMessage = messages[messages.length - 1].content;
+return generateEnhancedResponse(lastMessage, messages);
 }
 
 function generateEnhancedResponse(userMessage, conversationHistory = []) {
