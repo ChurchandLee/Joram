@@ -681,6 +681,12 @@ if (lowerMessage.includes('angry') || lowerMessage.includes('frustrated') || low
 if (lowerMessage.includes('lonely') || lowerMessage.includes('alone') || lowerMessage.includes('isolated')) return 'lonely';
 if (lowerMessage.includes('stressed') || lowerMessage.includes('overwhelmed')) return 'stressed';
 if (lowerMessage.includes('happy') || lowerMessage.includes('good') || lowerMessage.includes('better')) return 'positive';
+// Mental health conditions
+if (lowerMessage.includes('bpd') || lowerMessage.includes('borderline')) return 'bpd';
+if (lowerMessage.includes('adhd') || lowerMessage.includes('add')) return 'adhd';
+if (lowerMessage.includes('autism') || lowerMessage.includes('autistic')) return 'autism';
+if (lowerMessage.includes('bipolar') || lowerMessage.includes('manic')) return 'bipolar';
+if (lowerMessage.includes('ptsd') || lowerMessage.includes('trauma')) return 'ptsd';
 return null;
 }
 
