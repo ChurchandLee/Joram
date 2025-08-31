@@ -914,7 +914,7 @@ first_time: [
 returning: [
 "I remember you sharing about trauma before, and I can hear it's still impacting you deeply. How have you been managing those intense moments when the past feels present? Have you noticed any changes in how your body responds to triggers?",
 
-"Thank you for continuing to trust me with your trauma experience. I recall how vivid and overwhelming those memories can be for you. Are you finding any practices or people that help you stay grounded in the present moment?",
+"Thank you for continuing to trust me with your trauma experience. I recall how vivid and overwhelming those memories can be for you. How are you finding ways to stay grounded in the present moment?",
 
 "I've been thinking about our previous conversation regarding your trauma. How has your sense of safety been since we last talked? Sometimes healing isn't linear, and I'm curious about what your journey has looked like recently."
 ]
@@ -1076,7 +1076,7 @@ first_time: [
 returning: [
 "I remember you sharing about your loss before, and I've been thinking of you. How has the grief been moving through you lately? I know it's not something that just 'gets better,' but I'm wondering how you're carrying it now.",
 
-"Thank you for trusting me again with something so tender. I recall the deep love you had for the person you lost. How are you finding ways to honor that relationship while also taking care of yourself?",
+"Thank you for continuing to trust me with your trauma experience. I recall how vivid and overwhelming those memories can be for you. Are you finding any practices or people that help you stay grounded in the present moment?",
 
 "I remember the profound loss you described. Grief has its own timeline, and I'm wondering how yours has been unfolding. Are there moments where you can feel connection to your loved one, or does everything still feel like absence?"
 ]
@@ -1399,7 +1399,8 @@ sendMessage();
 }
 
 // DISCLAIMER MODAL FUNCTIONS
-hasSeenDisclaimer !== 'true') {
+function showDisclaimerModal() {
+if (sessionStorage.getItem('heartoListenDisclaimerSeen') !== 'true') {
 document.getElementById('disclaimerOverlay').classList.remove('hidden');
 document.body.style.overflow = 'hidden';
 } else {
@@ -1435,3 +1436,6 @@ document.addEventListener('DOMContentLoaded', function() {
 showDisclaimerModal();
 document.getElementById('messageInput').focus();
 });
+</script>
+</body>
+</html>
